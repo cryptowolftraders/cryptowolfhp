@@ -378,17 +378,18 @@
     .tool-card { padding: 18px; }
     .tool-desc { min-height: 0; }
     .pricing-grid { grid-template-columns: 1fr; }
-    .dashboard { grid-template-columns: 1fr; }
-    .sidebar { display: none; }
-    .dashboard-main { padding: 16px 14px; }
+    .dashboard { display: block !important; grid-template-columns: none !important; min-height: 0; }
+    .sidebar { display: none !important; }
+    .dashboard-main { display: block; width: 100%; min-width: 0; box-sizing: border-box; padding: 16px 12px; overflow-x: hidden; }
     .dash-header { flex-wrap: wrap; gap: 8px; }
+    .dash-header > div { min-width: 0; }
     .dash-title { font-size: 19px; }
     .stats-row { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
     .quick-tools { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
     .tool-tabs { gap: 2px; }
     .tool-tab { padding: 9px 12px; font-size: 12px; }
-    .tool-viewer { height: calc(100dvh - 200px); min-height: 460px; max-width: 100%; }
-    .tool-frame { max-width: 100%; }
+    .tool-viewer { width: 100%; min-width: 0; max-width: 100%; box-sizing: border-box; height: calc(100dvh - 200px); min-height: 460px; }
+    .tool-frame { width: 100% !important; min-width: 0 !important; max-width: 100% !important; }
   }
 
   @media (max-width: 430px) {
