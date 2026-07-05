@@ -676,7 +676,7 @@ function toggleSidebar() {
     dash.classList.contains('collapsed') ? '»' : '«';
 }
 
-function openTool(key) {
+function openTool(key) { if (window.gtag) gtag('event', 'tarayici_secimi', { tarayici_id: key });
   // Sidebar active state
   document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
   const sbItem = document.querySelector('.sidebar-item[data-tool="' + key + '"]');
