@@ -413,6 +413,24 @@
     .tool-viewer { height: calc(100dvh - 190px); min-height: 420px; }
   }
 </style>
+<style id="tierRefactor">
+.tier-columns{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start;}
+.tier-col{display:flex;flex-direction:column;gap:14px;}
+.tier-col-head{font-size:12px;font-weight:800;letter-spacing:1.6px;padding:4px 2px 8px;border-bottom:1px solid var(--wolf-border);}
+.tier-col.tier-core .tier-col-head{color:#4ade80;}
+.tier-col.tier-pro .tier-col-head{color:var(--wolf-gold);}
+.tier-col.tier-elite .tier-col-head{color:#c084fc;}
+.sidebar-tier{font-weight:700;margin-top:10px;}
+.sidebar-tier.tier-core{color:#4ade80;}
+.sidebar-tier.tier-pro{color:var(--wolf-gold);}
+.sidebar-tier.tier-elite{color:#c084fc;}
+.quick-group-head{font-size:11px;font-weight:800;letter-spacing:1.6px;margin:16px 0 9px;}
+.quick-group-head:first-child{margin-top:0;}
+.quick-group-head.tier-core{color:#4ade80;}
+.quick-group-head.tier-pro{color:var(--wolf-gold);}
+.quick-group-head.tier-elite{color:#c084fc;}
+@media(max-width:760px){.tier-columns{grid-template-columns:1fr;}}
+</style>
 </head>
 <body>
 
@@ -424,6 +442,7 @@
     <div class="nav-links">
       <span class="nav-link active" data-nav="home" onclick="navigate('home')">Ana Sayfa</span>
       <span class="nav-link" data-nav="dashboard" onclick="navigate('dashboard')">Terminal</span>
+      <a class="nav-link" href="/rehber/" style="text-decoration:none">Akademi</a>
       <span class="nav-link" data-nav="pricing" onclick="navigate('pricing')">Hakkında</span>
     </div>
   </div>
@@ -456,74 +475,7 @@
         <div class="section-title">11 Profesyonel Tarayıcı</div>
         <div class="section-sub">Her biri farklı bir trading konseptine odaklı. Karta tıkla, terminalde aç.</div>
       </div>
-      <div class="tools-grid">
-        <div class="tool-card" onclick="openTool('harmonic')">
-          <div class="tool-icon">🦋</div>
-          <div class="tool-name">Harmonic Radar</div>
-          <div class="tool-desc">Gartley / Bat / Cypher XABCD pattern tarayıcı</div>
-          <div class="tool-tags"><span class="tag tag-elite">ELITE</span></div>
-        </div>
-        <div class="tool-card" onclick="openTool('mtf')">
-          <div class="tool-icon">📊</div>
-          <div class="tool-name">MTF Dashboard</div>
-          <div class="tool-desc">Multi-timeframe trend + FVG + Fibonacci OTE</div>
-          <div class="tool-tags"><span class="tag tag-core">CORE</span></div>
-        </div>
-        <div class="tool-card" onclick="openTool('candle')">
-          <div class="tool-icon">🕯️</div>
-          <div class="tool-name">Candle Theory</div>
-          <div class="tool-desc">4H Sweep + 5m FVG retest tarayıcı</div>
-          <div class="tool-tags"><span class="tag tag-pro">PRO</span></div>
-        </div>
-        <div class="tool-card" onclick="openTool('mafs')">
-          <div class="tool-icon">🔑</div>
-          <div class="tool-name">MAFS HunterKey</div>
-          <div class="tool-desc">BOS/CHoCH + Fibonacci + Divergence</div>
-          <div class="tool-tags"><span class="tag tag-pro">PRO</span></div>
-        </div>
-        <div class="tool-card" onclick="openTool('rsi')">
-          <div class="tool-icon">📈</div>
-          <div class="tool-name">RSI + MACD Scanner</div>
-          <div class="tool-desc">Skorlu divergence + pump/dump</div>
-          <div class="tool-tags"><span class="tag tag-core">CORE</span></div>
-        </div>
-        <div class="tool-card" onclick="openTool('ob')">
-          <div class="tool-icon">🎯</div>
-          <div class="tool-name">OB Oracle</div>
-          <div class="tool-desc">1H + 4H Order Block retest</div>
-          <div class="tool-tags"><span class="tag tag-pro">PRO</span></div>
-        </div>
-        <div class="tool-card" onclick="openTool('alpha')">
-          <div class="tool-icon">🐺</div>
-          <div class="tool-name">Alpha Predator</div>
-          <div class="tool-desc">RSI Hunter</div>
-          <div class="tool-tags"><span class="tag tag-core">CORE</span></div>
-        </div>
-        <div class="tool-card" onclick="openTool('setup')">
-          <div class="tool-icon">📋</div>
-          <div class="tool-name">Setup Planner</div>
-          <div class="tool-desc">Pozisyon planlama + risk yönetimi</div>
-          <div class="tool-tags"><span class="tag tag-pro">PRO</span></div>
-        </div>
-        <div class="tool-card" onclick="openTool('beta')">
-          <div class="tool-icon">📡</div>
-          <div class="tool-name">Beta Radar</div>
-          <div class="tool-desc">BTC beta + relative strength</div>
-          <div class="tool-tags"><span class="tag tag-elite">ELITE</span></div>
-        </div>
-        <div class="tool-card" onclick="openTool('whale')">
-          <div class="tool-icon">🐋</div>
-          <div class="tool-name">Whale Scanner</div>
-          <div class="tool-desc">Hyperliquid smart money takibi</div>
-          <div class="tool-tags"><span class="tag tag-elite">ELITE</span></div>
-        </div>
-        <div class="tool-card" onclick="openTool('diptepe')">
-          <div class="tool-icon">🏹</div>
-          <div class="tool-name">Dip &amp; Tepe Avcısı</div>
-          <div class="tool-desc">Dönüş confluence + Wolf AI yorumu</div>
-          <div class="tool-tags"><span class="tag tag-pro">PRO</span></div>
-        </div>
-      </div>
+      <div class="tier-columns" id="toolsColumns"></div>
     </div>
   </section>
 
@@ -546,18 +498,7 @@
       <div class="sidebar-item active" data-tool="home" data-label="Terminal Ana" onclick="openTool('home')">
         <span class="icon">🏠</span> <span class="label">Terminal Ana</span>
       </div>
-      <div class="sidebar-section">TARAYICILAR</div>
-      <div class="sidebar-item" data-tool="harmonic" data-label="Harmonic Radar" onclick="openTool('harmonic')"><span class="icon">🦋</span> <span class="label">Harmonic Radar</span></div>
-      <div class="sidebar-item" data-tool="mtf" data-label="MTF Dashboard" onclick="openTool('mtf')"><span class="icon">📊</span> <span class="label">MTF Dashboard</span></div>
-      <div class="sidebar-item" data-tool="candle" data-label="Candle Theory" onclick="openTool('candle')"><span class="icon">🕯️</span> <span class="label">Candle Theory</span></div>
-      <div class="sidebar-item" data-tool="mafs" data-label="MAFS HunterKey" onclick="openTool('mafs')"><span class="icon">🔑</span> <span class="label">MAFS HunterKey</span></div>
-      <div class="sidebar-item" data-tool="rsi" data-label="RSI + MACD Scanner" onclick="openTool('rsi')"><span class="icon">📈</span> <span class="label">RSI + MACD Scanner</span></div>
-      <div class="sidebar-item" data-tool="ob" data-label="OB Oracle" onclick="openTool('ob')"><span class="icon">🎯</span> <span class="label">OB Oracle</span></div>
-      <div class="sidebar-item" data-tool="alpha" data-label="Alpha Predator" onclick="openTool('alpha')"><span class="icon">🐺</span> <span class="label">Alpha Predator</span></div>
-      <div class="sidebar-item" data-tool="setup" data-label="Setup Planner" onclick="openTool('setup')"><span class="icon">📋</span> <span class="label">Setup Planner</span></div>
-      <div class="sidebar-item" data-tool="beta" data-label="Beta Radar" onclick="openTool('beta')"><span class="icon">📡</span> <span class="label">Beta Radar</span></div>
-      <div class="sidebar-item" data-tool="whale" data-label="Whale Scanner" onclick="openTool('whale')"><span class="icon">🐋</span> <span class="label">Whale Scanner</span></div>
-      <div class="sidebar-item" data-tool="diptepe" data-label="Dip & Tepe Avcısı" onclick="openTool('diptepe')"><span class="icon">🏹</span> <span class="label">Dip &amp; Tepe Avcısı</span></div>
+      <div id="sidebarTools"></div>
 
     </aside>
 
@@ -595,20 +536,7 @@
         </div>
 
         <h3 style="font-size: 13px; margin: 24px 0 12px; color: var(--wolf-text-dim); letter-spacing: 1px;">HIZLI ERİŞİM — TARAYICILAR</h3>
-        <div class="quick-tools">
-          <div class="quick-tool" onclick="openTool('harmonic')"><div class="quick-tool-icon">🦋</div><div class="quick-tool-name">Harmonic Radar</div></div>
-          <div class="quick-tool" onclick="openTool('mtf')"><div class="quick-tool-icon">📊</div><div class="quick-tool-name">MTF Dashboard</div></div>
-          <div class="quick-tool" onclick="openTool('candle')"><div class="quick-tool-icon">🕯️</div><div class="quick-tool-name">Candle Theory</div></div>
-          <div class="quick-tool" onclick="openTool('mafs')"><div class="quick-tool-icon">🔑</div><div class="quick-tool-name">MAFS HunterKey</div></div>
-          <div class="quick-tool" onclick="openTool('rsi')"><div class="quick-tool-icon">📈</div><div class="quick-tool-name">RSI + MACD Scanner</div></div>
-          <div class="quick-tool" onclick="openTool('ob')"><div class="quick-tool-icon">🎯</div><div class="quick-tool-name">OB Oracle</div></div>
-          <div class="quick-tool" onclick="openTool('alpha')"><div class="quick-tool-icon">🐺</div><div class="quick-tool-name">Alpha Predator</div></div>
-          <div class="quick-tool" onclick="openTool('setup')"><div class="quick-tool-icon">📋</div><div class="quick-tool-name">Setup Planner</div></div>
-          <div class="quick-tool" onclick="openTool('beta')"><div class="quick-tool-icon">📡</div><div class="quick-tool-name">Beta Radar</div></div>
-          <div class="quick-tool" onclick="openTool('whale')"><div class="quick-tool-icon">🐋</div><div class="quick-tool-name">Whale Scanner</div></div>
-          <div class="quick-tool" onclick="openTool('diptepe')"><div class="quick-tool-icon">🏹</div><div class="quick-tool-name">Dip &amp; Tepe Avcısı</div></div>
-
-        </div>
+        <div id="quickTools"></div>
       </div>
 
       <div id="toolViewer" class="tool-viewer" style="display:none; position: relative;">
@@ -638,17 +566,17 @@
 
 <script>
 const TOOL_META = {
-  harmonic: { name: "Harmonic Radar", desc: "Gartley / Bat / Cypher XABCD pattern tarayıcı", icon: "🦋", tier: "ELITE" },
-  mtf: { name: "MTF Dashboard", desc: "Multi-timeframe trend + FVG + Fibonacci OTE", icon: "📊", tier: "CORE" },
-  candle: { name: "Candle Theory", desc: "4H Sweep + 5m FVG retest tarayıcı", icon: "🕯️", tier: "PRO" },
-  mafs: { name: "MAFS HunterKey", desc: "BOS/CHoCH + Fibonacci + Divergence", icon: "🔑", tier: "PRO" },
-  rsi: { name: "RSI + MACD Scanner", desc: "Skorlu divergence + pump/dump", icon: "📈", tier: "CORE" },
-  ob: { name: "OB Oracle", desc: "1H + 4H Order Block retest", icon: "🎯", tier: "PRO" },
-  alpha: { name: "Alpha Predator", desc: "RSI Hunter", icon: "🐺", tier: "CORE" },
-  setup: { name: "Setup Planner", desc: "Pozisyon planlama + risk yönetimi", icon: "📋", tier: "PRO" },
+  harmonic: { name: "Harmonic Radar", desc: "Gartley / Bat / Cypher XABCD pattern tarayıcı", icon: "🦋", tier: "PRO" },
+  mtf: { name: "MTF Dashboard", desc: "Multi-timeframe trend + FVG + Fibonacci OTE", icon: "📊", tier: "PRO" },
+  candle: { name: "Candle Theory", desc: "4H Sweep + 5m FVG retest tarayıcı", icon: "🕯️", tier: "CORE" },
+  mafs: { name: "MAFS HunterKey", desc: "BOS/CHoCH + Fibonacci + Divergence", icon: "🔑", tier: "CORE" },
+  rsi: { name: "RSI + MACD Scanner", desc: "Skorlu divergence + pump/dump", icon: "📈", tier: "PRO" },
+  ob: { name: "OB Oracle", desc: "1H + 4H Order Block retest", icon: "🎯", tier: "CORE" },
+  alpha: { name: "Alpha Predator", desc: "RSI Hunter", icon: "🐺", tier: "PRO" },
+  setup: { name: "Setup Planner", desc: "Pozisyon planlama + risk yönetimi", icon: "📋", tier: "ELITE" },
   beta: { name: "Beta Radar", desc: "BTC beta + relative strength", icon: "📡", tier: "ELITE" },
   whale: { name: "Whale Scanner", desc: "Hyperliquid smart money takibi", icon: "🐋", tier: "ELITE" },
-  diptepe: { name: "Dip & Tepe Avcısı", desc: "Dönüş confluence + Wolf AI yorumu", icon: "🏹", tier: "PRO" },
+  diptepe: { name: "Dip & Tepe Avcısı", desc: "Dönüş confluence + Wolf AI yorumu", icon: "🏹", tier: "ELITE" },
 };
 
 const TOOL_HTML = {
@@ -808,6 +736,60 @@ async function fetchPrices() {
 }
 fetchPrices();
 setInterval(fetchPrices, 30000);
+
+/* --- tier auto-render --- */
+/* ===== Faz 1: kademe (CORE/PRO/ELITE) listelerini TOOL_META'dan otomatik üret ===== */
+(function(){
+  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function renderToolLists(){
+    if(typeof TOOL_META==='undefined') return;
+    var ORDER=['CORE','PRO','ELITE'];
+    var TAGCLS={CORE:'tag-core',PRO:'tag-pro',ELITE:'tag-elite'};
+    var groups={CORE:[],PRO:[],ELITE:[]};
+    for(var key in TOOL_META){ var t=TOOL_META[key]; if(!t||!t.tier) continue; (groups[t.tier]||groups.CORE).push([key,t]); }
+
+    // 1) Ana Sayfa — 3 dikey kolon
+    var col=document.getElementById('toolsColumns');
+    if(col){
+      col.innerHTML=ORDER.map(function(tier){
+        var cards=groups[tier].map(function(p){var key=p[0],t=p[1];
+          return '<div class="tool-card" onclick="openTool(\''+key+'\')">'
+            +'<div class="tool-icon">'+t.icon+'</div>'
+            +'<div class="tool-name">'+esc(t.name)+'</div>'
+            +'<div class="tool-desc">'+esc(t.desc)+'</div>'
+            +'<div class="tool-tags"><span class="tag '+TAGCLS[tier]+'">'+tier+'</span></div>'
+            +'</div>';
+        }).join('');
+        return '<div class="tier-col tier-'+tier.toLowerCase()+'"><div class="tier-col-head">'+tier+'</div>'+cards+'</div>';
+      }).join('');
+    }
+
+    // 2) Terminal sidebar — kademe başlıklı, CORE→PRO→ELITE
+    var sb=document.getElementById('sidebarTools');
+    if(sb){
+      sb.innerHTML=ORDER.map(function(tier){
+        var items=groups[tier].map(function(p){var key=p[0],t=p[1];
+          return '<div class="sidebar-item" data-tool="'+key+'" data-label="'+esc(t.name)+'" onclick="openTool(\''+key+'\')"><span class="icon">'+t.icon+'</span> <span class="label">'+esc(t.name)+'</span></div>';
+        }).join('');
+        return '<div class="sidebar-section sidebar-tier tier-'+tier.toLowerCase()+'">'+tier+'</div>'+items;
+      }).join('');
+    }
+
+    // 3) Hızlı erişim — kademe başlıklı, CORE→PRO→ELITE
+    var qt=document.getElementById('quickTools');
+    if(qt){
+      qt.innerHTML=ORDER.map(function(tier){
+        var items=groups[tier].map(function(p){var key=p[0],t=p[1];
+          return '<div class="quick-tool" onclick="openTool(\''+key+'\')"><div class="quick-tool-icon">'+t.icon+'</div><div class="quick-tool-name">'+esc(t.name)+'</div></div>';
+        }).join('');
+        return '<div class="quick-group-head tier-'+tier.toLowerCase()+'">'+tier+'</div><div class="quick-tools">'+items+'</div>';
+      }).join('');
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',renderToolLists);
+  else renderToolLists();
+})();
+
 </script>
 </body>
 </html>
