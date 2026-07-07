@@ -148,7 +148,7 @@
   .brand{font-family:"Cinzel",Georgia,serif;}
   .brand .mark{width:30px;height:30px;flex-shrink:0;background:var(--logo) center/contain no-repeat;
      filter:drop-shadow(0 0 5px rgba(45,212,191,.9)) drop-shadow(0 0 12px rgba(45,212,191,.45));}
-  .brand .wm{color:var(--gold);letter-spacing:.4px;} .brand .wm b{color:#fff;font-weight:700;}
+  .brand .wm{color:var(--gold);letter-spacing:.4px;font-weight:500;} .brand .wm b{color:#fff;font-weight:700;}
   .head-cta{margin-left:auto;font-size:13px;font-weight:600;color:#000;background:var(--gold);
      padding:7px 14px;border-radius:7px;}
   .head-cta:hover{text-decoration:none;filter:brightness(1.06);}
@@ -265,11 +265,18 @@
   .head-nav a:hover{color:var(--text);text-decoration:none;}
   .head-login{margin-left:auto;font-size:13px;font-weight:500;color:var(--text-dim);text-decoration:none;padding:8px 6px;white-space:nowrap;transition:color .15s;}
   .head-login:hover{color:var(--text);text-decoration:none;}
-  .site-head .head-cta{margin-left:0;white-space:nowrap;}
-  @media (max-width:980px){
-    .site-head .inner{flex-wrap:wrap;padding:12px 18px;}
-    .head-nav{order:3;width:100%;margin-left:0;margin-top:8px;padding-top:8px;gap:16px;flex-wrap:wrap;border-top:1px solid var(--border);}
-    .head-login{margin-left:auto;}
+  .site-head .head-cta{margin-left:0;white-space:nowrap;padding:8px 16px;border-radius:6px;font-weight:500;color:#1a1206;}
+  /* Hamburger — ana site gibi mobil menu */
+  .head-hamb{display:none;background:none;border:1px solid var(--border);color:var(--text);width:42px;height:40px;border-radius:8px;cursor:pointer;font-size:20px;line-height:1;align-items:center;justify-content:center;padding:0;margin-left:12px;}
+  .head-hamb:hover{border-color:var(--gold);color:var(--gold);}
+  @media (max-width:768px){
+    .site-head .inner{position:relative;flex-wrap:nowrap;padding:12px 18px;}
+    .head-hamb{display:flex;}
+    .site-head .head-cta{margin-left:auto;}
+    .head-login{display:none;}
+    .head-nav{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:0;margin:0;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);box-shadow:0 12px 28px rgba(0,0,0,.55);padding:6px 0;z-index:300;}
+    .site-head.nav-open .head-nav{display:flex;}
+    .head-nav a{padding:13px 24px;width:100%;box-sizing:border-box;font-size:15px;}
   }
 </style>
 </head>
@@ -287,6 +294,7 @@
     </nav>
     <a class="head-login" href="https://cryptowolfhp.com/">Giriş</a>
     <a class="head-cta" href="https://cryptowolfhp.com/#terminal">Terminale Git</a>
+    <button class="head-hamb" aria-label="Menü" onclick="toggleRehberNav(event)">☰</button>
   </div>
 </header>
 <main id="icerik">
@@ -348,5 +356,9 @@
     <span style="margin-left:auto;">© 2026 · Eğitim amaçlıdır, yatırım tavsiyesi değildir.</span>
   </div>
 </footer>
+<script>
+function toggleRehberNav(e){if(e)e.stopPropagation();var h=document.querySelector(".site-head");if(h)h.classList.toggle("nav-open");}
+document.addEventListener("click",function(e){var h=document.querySelector(".site-head");if(h&&h.classList.contains("nav-open")&&!h.contains(e.target))h.classList.remove("nav-open");});
+</script>
 </body>
 </html>
