@@ -185,12 +185,29 @@
   .gs{font-size:13px;color:var(--text-mute);line-height:1.5;}
   @media(max-width:640px){.hub-grid{grid-template-columns:1fr;}}
 </style>
+<style>
+  .head-nav{display:flex;align-items:center;gap:22px;margin-left:30px;flex-wrap:wrap;}
+  .head-nav a{font-size:13px;color:var(--text-dim);font-weight:500;text-decoration:none;transition:color .15s;}
+  .head-nav a:hover{color:var(--text);text-decoration:none;}
+  @media (max-width:760px){
+    .site-head .inner{flex-wrap:wrap;}
+    .head-nav{width:100%;order:3;margin-left:0;gap:16px;padding-top:8px;margin-top:2px;border-top:1px solid var(--border);}
+    .head-cta{margin-left:auto;}
+  }
+</style>
 </head>
 <body>
 <a class="skip" href="#icerik">İçeriğe geç</a>
 <header class="site-head">
   <div class="inner">
     <a class="brand" href="https://cryptowolfhp.com/"><span class="mark"></span><span class="wm"><b>CRYPTOWOLF</b> HP</span></a>
+    <nav class="head-nav">
+      <a href="https://cryptowolfhp.com/">Ana Sayfa</a>
+      <a href="https://cryptowolfhp.com/#terminal">Terminal</a>
+      <a href="https://cryptowolfhp.com/rehber/">Akademi</a>
+      <a href="https://cryptowolfhp.com/rehber/tarayicilar.html">Nasıl Kullanılır</a>
+      <a href="https://cryptowolfhp.com/#hakkinda">Hakkında</a>
+    </nav>
     <a class="head-cta" href="https://cryptowolfhp.com/#terminal">Terminale Git →</a>
   </div>
 </header>
