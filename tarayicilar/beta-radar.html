@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Wolf Beta Radar</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0a0e1a;
+  color: #e8edf5;
+  font-family: 'Consolas', 'Monaco', monospace;
+  padding: 20px;
+  min-height: 100vh;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #1a2233;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #f5b342;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo .wolf-icon {
+  font-size: 32px;
+  filter: drop-shadow(0 0 8px rgba(245,179,66,0.5));
+}
+.logo span { color: #e8edf5; }
+.btc-status {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.status-card {
+  background: #121826;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border-left: 3px solid #1f2740;
+}
+.status-card .label { font-size: 10px; color: #8892a8; text-transform: uppercase; }
+.status-card .value { font-size: 14px; font-weight: bold; margin-top: 2px; }
+.green { color: #22c55e; }
+.red { color: #ef4444; }
+.yellow { color: #f5b342; }
+.gray { color: #8892a8; }
+.purple { color: #2dd4bf; }
+
+.btc-direction-banner {
+  background: linear-gradient(90deg, #121826, #1a2233);
+  padding: 12px 18px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #1f2740;
+}
+.btc-direction-banner.bullish { border-color: #22c55e; }
+.btc-direction-banner.bearish { border-color: #ef4444; }
+.direction-text { font-size: 16px; font-weight: bold; }
+.direction-detail { font-size: 12px; color: #8892a8; margin-top: 3px; }
+
+.controls {
+  background: #121826;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.search-input {
+  background: #0a0e1a;
+  border: 2px solid #1f2740;
+  color: #e8edf5;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 15px;
+  outline: none;
+  flex: 1;
+  min-width: 250px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.search-input:focus { border-color: #f5b342; box-shadow: 0 0 15px rgba(245,179,66,0.3); }
+.search-input::placeholder { color: #8892a8; text-transform: none; font-weight: normal; }
+
+.btn {
+  background: #1f2740;
+  border: none;
+  color: #e8edf5;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+.btn:hover { background: #1f2740; }
+.btn.primary { background: #f5b342; color: #0a0e1a; }
+.btn.primary:hover { background: #f5b342; }
+
+.controls select {
+  background: #0a0e1a;
+  border: 1px solid #1f2740;
+  color: #e8edf5;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  cursor: pointer;
+}
+
+.auto-refresh-bar {
+  background: #121826;
+  padding: 12px 18px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  flex-wrap: wrap;
+  border: 1px solid #1a2233;
+}
+.auto-refresh-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.auto-refresh-label {
+  font-size: 13px;
+  color: #e8edf5;
+  font-weight: bold;
+}
+.auto-refresh-interval, .countdown-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.interval-label {
+  font-size: 12px;
+  color: #8892a8;
+  text-transform: uppercase;
+}
+.countdown {
+  background: #0a0e1a;
+  color: #f5b342;
+  padding: 5px 14px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 15px;
+  min-width: 60px;
+  text-align: center;
+  border: 1px solid #1f2740;
+  font-variant-numeric: tabular-nums;
+}
+.countdown.paused {
+  color: #8892a8;
+}
+.countdown.imminent {
+  color: #22c55e;
+  border-color: #22c55e;
+  animation: pulseGreen 1s ease-in-out infinite;
+}
+@keyframes pulseGreen {
+  0%, 100% { box-shadow: 0 0 0 rgba(34,197,94,0); }
+  50% { box-shadow: 0 0 12px rgba(34,197,94,0.6); }
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #1f2740;
+  transition: .3s;
+  border-radius: 26px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #8892a8;
+  transition: .3s;
+  border-radius: 50%;
+}
+input:checked + .slider {
+  background-color: #f5b342;
+}
+input:checked + .slider:before {
+  transform: translateX(24px);
+  background-color: #fff;
+}
+
+.delist-info {
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
+  font-size: 11px;
+  flex-wrap: wrap;
+}
+.delist-badge {
+  background: #0a0e1a;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid #1f2740;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+.delist-badge.has-changes {
+  border-color: #f5b342;
+  color: #f5b342;
+}
+.delist-badge .badge-count {
+  background: #f5b342;
+  color: #0a0e1a;
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 10px;
+}
+
+.changes-modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.changes-modal.active { display: flex; }
+.changes-content {
+  background: #121826;
+  padding: 25px;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 1px solid #1f2740;
+}
+.changes-content h2 {
+  color: #f5b342;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+.change-section {
+  margin-bottom: 20px;
+}
+.change-section h3 {
+  font-size: 13px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #1f2740;
+}
+.change-section h3.added { color: #22c55e; }
+.change-section h3.removed { color: #ef4444; }
+.change-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.change-item {
+  background: #0a0e1a;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+.change-item.added { color: #22c55e; border: 1px solid #22c55e; }
+.change-item.removed { color: #ef4444; border: 1px solid #ef4444; }
+.modal-close {
+  background: #f5b342;
+  color: #0a0e1a;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.filter-bar {
+  background: #121826;
+  padding: 12px 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.filter-btn {
+  background: #0a0e1a;
+  border: 1px solid #1f2740;
+  color: #8892a8;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+.filter-btn:hover { border-color: #f5b342; color: #f5b342; }
+.filter-btn.active { background: #f5b342; color: #0a0e1a; border-color: #f5b342; font-weight: bold; }
+.filter-btn .count {
+  background: rgba(0,0,0,0.3);
+  padding: 1px 6px;
+  border-radius: 10px;
+  margin-left: 5px;
+  font-size: 10px;
+}
+
+.progress-bar-container {
+  background: #121826;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  display: none;
+}
+.progress-bar-container.active { display: block; }
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+.progress-bar-track {
+  height: 8px;
+  background: #0a0e1a;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #f5b342, #22c55e);
+  width: 0%;
+  transition: width 0.3s;
+}
+
+.section-header {
+  font-size: 14px;
+  color: #f5b342;
+  margin: 20px 0 10px;
+  padding: 8px 12px;
+  background: #121826;
+  border-radius: 6px;
+  border-left: 3px solid #f5b342;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.coins-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 12px;
+}
+
+.coin-card {
+  background: #121826;
+  border-radius: 10px;
+  padding: 14px;
+  border: 1px solid #1a2233;
+  position: relative;
+  transition: all 0.3s;
+  scroll-margin-top: 20px;
+}
+.coin-card:hover { border-color: #f5b342; transform: translateY(-2px); }
+.coin-card.strong { border-left: 4px solid #22c55e; }
+.coin-card.weak { border-left: 4px solid #ef4444; }
+.coin-card.neutral { border-left: 4px solid #f5b342; }
+.coin-card.decoupled { border-left: 4px solid #2dd4bf; box-shadow: 0 0 15px rgba(45,212,191,0.15); }
+.coin-card.pump { border-left: 4px solid #22c55e; box-shadow: 0 0 15px rgba(34,197,94,0.2); }
+.coin-card.dump { border-left: 4px solid #ef4444; box-shadow: 0 0 15px rgba(239,68,68,0.2); }
+.coin-card.highlighted {
+  border: 2px solid #f5b342 !important;
+  box-shadow: 0 0 30px rgba(245,179,66,0.5);
+  animation: pulse 1.5s ease-in-out 2;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 30px rgba(245,179,66,0.5); }
+  50% { box-shadow: 0 0 50px rgba(245,179,66,0.9); }
+}
+
+.coin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.coin-symbol { font-size: 18px; font-weight: bold; color: #f5b342; }
+.coin-price { font-size: 13px; color: #e8edf5; }
+.coin-change { font-size: 11px; margin-top: 2px; }
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+  font-size: 12px;
+}
+.metric-label { color: #8892a8; }
+.metric-value { font-weight: bold; }
+
+.power-bar-container {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed #1f2740;
+}
+.power-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #8892a8;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+.power-bar {
+  height: 16px;
+  background: #0a0e1a;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 6px;
+}
+.power-bar-fill {
+  height: 100%;
+  transition: width 0.5s, background 0.5s;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 6px;
+  font-size: 10px;
+  font-weight: bold;
+  color: #0a0e1a;
+}
+
+.prediction {
+  margin-top: 8px;
+  padding: 8px;
+  background: #0a0e1a;
+  border-radius: 6px;
+  border: 1px dashed #1f2740;
+  font-size: 11px;
+}
+.prediction-label {
+  font-size: 9px;
+  color: #8892a8;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.prediction-text { font-weight: bold; }
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #8892a8;
+  background: #121826;
+  border-radius: 10px;
+  border: 2px dashed #1f2740;
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-size: 9px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+.tag.high-beta { background: #ef4444; color: #fff; }
+.tag.low-beta { background: #22c55e; color: #fff; }
+.tag.decoupled { background: #2dd4bf; color: #fff; }
+.tag.synced { background: #2dd4bf; color: #fff; }
+.tag.inverse { background: #f5b342; color: #fff; }
+.tag.pump-type { background: linear-gradient(90deg, #22c55e, #22c55e); color: #fff; }
+.tag.dump-type { background: linear-gradient(90deg, #ef4444, #ef4444); color: #fff; }
+
+.asym-beta-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 4px;
+}
+.asym-beta-box {
+  background: #0a0e1a;
+  border-radius: 6px;
+  padding: 8px;
+  border: 1px solid #1f2740;
+}
+.asym-beta-box.up { border-left: 3px solid #22c55e; }
+.asym-beta-box.down { border-left: 3px solid #ef4444; }
+.asym-beta-label {
+  font-size: 9px;
+  color: #8892a8;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+  letter-spacing: 0.5px;
+}
+.asym-beta-value {
+  font-size: 16px;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+}
+.asym-beta-value.up { color: #22c55e; }
+.asym-beta-value.down { color: #ef4444; }
+.asym-beta-bar {
+  height: 4px;
+  background: #1a2233;
+  border-radius: 2px;
+  margin-top: 5px;
+  overflow: hidden;
+}
+.asym-beta-bar-fill {
+  height: 100%;
+  transition: width 0.4s;
+}
+
+.search-results-info {
+  background: #121826;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  color: #f5b342;
+  font-size: 13px;
+  display: none;
+}
+.search-results-info.active { display: block; }
+
+.suggestions {
+  position: absolute;
+  background: #121826;
+  border: 1px solid #1f2740;
+  border-radius: 6px;
+  margin-top: 5px;
+  max-height: 250px;
+  overflow-y: auto;
+  display: none;
+  z-index: 1000;
+  min-width: 250px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+.suggestions.active { display: block; }
+.suggestion-item {
+  padding: 10px 15px;
+  cursor: pointer;
+  border-bottom: 1px solid #1a2233;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.suggestion-item:hover { background: #1a2233; }
+.suggestion-item:last-child { border-bottom: none; }
+.suggestion-symbol { color: #f5b342; font-weight: bold; }
+.suggestion-volume { color: #8892a8; font-size: 11px; }
+
+.search-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 250px;
+}
+</style>
+<style>
+.header,.header-row,.brand,.brand-row,.header-stats,.controls{flex-wrap:wrap;}
+.tf-group,.filter-group,.filter-row,.filter-pills,.filter-bar,.tabs,.actions,.tfgrid,.seg,.segmented,.tf-btns,.tf-list{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;}
+.tf-btn,.filter-btn,.tab,.pill,.seg-btn{flex-shrink:0;}
+.tablewrap,#tablewrap,.table-wrap,.tbl-wrap,.table-container,.feed{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch;}
+@media(max-width:860px){
+.header{height:auto!important;min-height:0;row-gap:8px;}
+.grid,.signals-grid,.tools-grid,.coins-grid,.card-grid,.dash-grid,.setup-grid,.portfolio-grid{grid-template-columns:1fr!important;}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo"><span class="wolf-icon"><img src="data:image/png;base64,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" alt="Wolf" style="width:38px;height:38px;vertical-align:middle;margin-right:9px;filter:drop-shadow(0 0 6px rgba(45,212,191,0.55)) drop-shadow(0 0 12px rgba(45,212,191,0.3))"></span>WOLF<span> BETA RADAR</span></div>
+  <div class="btc-status">
+    <div class="status-card">
+      <div class="label">BTC Fiyat</div>
+      <div class="value" id="btcPrice">--</div>
+    </div>
+    <div class="status-card">
+      <div class="label">BTC 24h</div>
+      <div class="value" id="btcChange">--</div>
+    </div>
+    <div class="status-card">
+      <div class="label">BTC.D</div>
+      <div class="value" id="btcDom">--</div>
+    </div>
+    <div class="status-card">
+      <div class="label">Toplam Coin</div>
+      <div class="value" id="totalCoins">--</div>
+    </div>
+    <div class="status-card">
+      <div class="label">Güncelleme</div>
+      <div class="value" id="lastUpdate" style="font-size:12px">--</div>
+    </div>
+  </div>
+</div>
+
+<div class="btc-direction-banner" id="btcBanner">
+  <div>
+    <div class="direction-text" id="btcDirectionText">BTC Yönü Hesaplanıyor...</div>
+    <div class="direction-detail" id="btcDirectionDetail">Son 1 saatlik trend analiz ediliyor</div>
+  </div>
+  <div style="text-align:right">
+    <div class="direction-detail">Piyasa Modu</div>
+    <div class="direction-text" id="marketMode">--</div>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="search-wrapper">
+    <input type="text" class="search-input" id="searchInput" placeholder="Coin ara (BTC, ETH, PEPE, 1000FLOKI...) - Yazınca direkt karta gider" autocomplete="off">
+    <div class="suggestions" id="suggestions"></div>
+  </div>
+  <select id="timeframe" onchange="recalculateAll()">
+    <option value="1h">1 saat</option>
+    <option value="4h" selected>4 saat</option>
+    <option value="1d">24 saat</option>
+    <option value="3d">3 gün</option>
+  </select>
+  <select id="coinCount" onchange="reloadAll()">
+    <option value="50">Top 50</option>
+    <option value="100">Top 100</option>
+    <option value="150" selected>Top 150</option>
+    <option value="200">Top 200</option>
+    <option value="300">Top 300</option>
+    <option value="9999">TÜMÜ (~400+)</option>
+  </select>
+  <button class="btn primary" onclick="reloadAll()">↻ YENİDEN TARA</button>
+</div>
+
+<div class="auto-refresh-bar">
+  <div class="auto-refresh-toggle">
+    <label class="switch">
+      <input type="checkbox" id="autoRefreshToggle" checked onchange="toggleAutoRefresh()">
+      <span class="slider"></span>
+    </label>
+    <span class="auto-refresh-label">⏱ Otomatik Tarama</span>
+  </div>
+  <div class="auto-refresh-interval">
+    <span class="interval-label">Periyot:</span>
+    <select id="autoRefreshInterval" onchange="changeRefreshInterval()">
+      <option value="30">30 sn</option>
+      <option value="60">1 dk</option>
+      <option value="90" selected>1.5 dk</option>
+      <option value="180">3 dk</option>
+      <option value="300">5 dk</option>
+      <option value="600">10 dk</option>
+    </select>
+  </div>
+  <div class="countdown-container">
+    <span class="interval-label">Sonraki tarama:</span>
+    <span class="countdown" id="countdown">--</span>
+  </div>
+  <div class="delist-info" id="delistInfo"></div>
+</div>
+
+<div class="progress-bar-container" id="progressContainer">
+  <div class="progress-info">
+    <span id="progressText">Coinler taranıyor...</span>
+    <span id="progressPercent">0%</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progressFill"></div>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <span style="color:#8892a8;font-size:11px;text-transform:uppercase;margin-right:5px">Filtre:</span>
+  <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">🌐 Hepsi <span class="count" id="count-all">0</span></button>
+  <button class="filter-btn" data-filter="pump" onclick="setFilter('pump')">🚀 PUMP <span class="count" id="count-pump">0</span></button>
+  <button class="filter-btn" data-filter="dump" onclick="setFilter('dump')">💀 DUMP <span class="count" id="count-dump">0</span></button>
+  <button class="filter-btn" data-filter="decoupled" onclick="setFilter('decoupled')">🟣 Ayrışmış <span class="count" id="count-decoupled">0</span></button>
+  <button class="filter-btn" data-filter="strong" onclick="setFilter('strong')">🟢 Güçlüler <span class="count" id="count-strong">0</span></button>
+  <button class="filter-btn" data-filter="weak" onclick="setFilter('weak')">🔴 Zayıflar <span class="count" id="count-weak">0</span></button>
+  <button class="filter-btn" data-filter="highbeta" onclick="setFilter('highbeta')">⚡ Yüksek Beta <span class="count" id="count-highbeta">0</span></button>
+  <button class="filter-btn" data-filter="lowbeta" onclick="setFilter('lowbeta')">🛡 Düşük Beta <span class="count" id="count-lowbeta">0</span></button>
+  <button class="filter-btn" data-filter="inverse" onclick="setFilter('inverse')">↔ Ters Hareket <span class="count" id="count-inverse">0</span></button>
+</div>
+
+<div class="search-results-info" id="searchInfo"></div>
+
+<div id="contentContainer">
+  <div class="empty-state">
+    <h3 style="color:#f5b342">🐺 Tarama hazırlanıyor...</h3>
+    <p>BTC ve coin verileri yükleniyor</p>
+  </div>
+</div>
+
+<div class="changes-modal" id="changesModal" onclick="if(event.target===this)closeChangesModal()">
+  <div class="changes-content">
+    <h2>📋 Coin Listesi Değişiklikleri</h2>
+    <div id="changesContent"></div>
+    <button class="modal-close" onclick="closeChangesModal()">Tamam, anladım</button>
+  </div>
+</div>
+
+<script>
+// State
+var allCoins = []; // {symbol, data, volume}
+var btcKlines = [];
+var btcCurrentPrice = 0;
+var btcChange24h = 0;
+var btcShortTrend = 0;
+var btcDominance = 0;
+var currentFilter = 'all';
+var refreshTimer = null;
+var countdownTimer = null;
+var countdownSeconds = 0;
+var autoRefreshEnabled = true;
+var availableSymbols = []; // Binance'da olan tüm sembol listesi (search için)
+var lastChanges = { added: [], removed: [] }; // Son liste değişiklikleri
+
+function getInterval() {
+  return document.getElementById('timeframe').value;
+}
+
+function getCoinCount() {
+  return parseInt(document.getElementById('coinCount').value);
+}
+
+function getKlineParams(timeframe) {
+  if (timeframe === '1h') return { interval: '5m', limit: 12 };
+  if (timeframe === '4h') return { interval: '15m', limit: 16 };
+  if (timeframe === '1d') return { interval: '1h', limit: 24 };
+  if (timeframe === '3d') return { interval: '4h', limit: 18 };
+  return { interval: '15m', limit: 16 };
+}
+
+async function fetchKlines(symbol, interval, limit) {
+  try {
+    const url = `https://web-production-2bdde.up.railway.app/fapi/v1/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`;
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    return await res.json();
+  } catch(e) {
+    return null;
+  }
+}
+
+async function fetchAll24hStats() {
+  // 24h verisi + exchangeInfo (temiz evren) → sadece aktif PERPETUAL USDT
+  try {
+    const [tRes, iRes] = await Promise.all([
+      fetch('https://web-production-2bdde.up.railway.app/fapi/v1/ticker/24hr'),
+      fetch('https://web-production-2bdde.up.railway.app/fapi/v1/exchangeInfo')
+    ]);
+    if (!tRes.ok || !iRes.ok) return null;
+    const tickers = await tRes.json();
+    const info = await iRes.json();
+    const validPerp = new Set(
+      (info.symbols || [])
+        .filter(s => s.contractType === 'PERPETUAL' && s.quoteAsset === 'USDT' && s.status === 'TRADING')
+        .map(s => s.symbol)
+    );
+    return tickers.filter(t => validPerp.has(t.symbol));
+  } catch(e) {
+    return null;
+  }
+}
+
+async function fetchBTCDominance() {
+  try {
+    const res = await fetch('https://web-production-2bdde.up.railway.app/coingecko/api/v3/global');
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.data.market_cap_percentage.btc;
+  } catch(e) {
+    return null;
+  }
+}
+
+function calculateReturns(klines) {
+  const returns = [];
+  for (let i = 1; i < klines.length; i++) {
+    const prev = parseFloat(klines[i-1][4]);
+    const curr = parseFloat(klines[i][4]);
+    returns.push(((curr - prev) / prev) * 100);
+  }
+  return returns;
+}
+
+function calculateBeta(coinReturns, btcReturns) {
+  const n = Math.min(coinReturns.length, btcReturns.length);
+  if (n < 3) return null;
+  
+  const coinSlice = coinReturns.slice(-n);
+  const btcSlice = btcReturns.slice(-n);
+  
+  const coinMean = coinSlice.reduce((a,b) => a+b, 0) / n;
+  const btcMean = btcSlice.reduce((a,b) => a+b, 0) / n;
+  
+  let cov = 0, varBtc = 0;
+  for (let i = 0; i < n; i++) {
+    cov += (coinSlice[i] - coinMean) * (btcSlice[i] - btcMean);
+    varBtc += (btcSlice[i] - btcMean) ** 2;
+  }
+  cov /= n;
+  varBtc /= n;
+  
+  if (varBtc === 0) return null;
+  return cov / varBtc;
+}
+
+// Up-Beta: Sadece BTC'nin yükseldiği mumlarda beta
+// Down-Beta: Sadece BTC'nin düştüğü mumlarda beta
+function calculateAsymmetricBeta(coinReturns, btcReturns) {
+  const n = Math.min(coinReturns.length, btcReturns.length);
+  if (n < 4) return { up: null, down: null };
+  
+  const coinSlice = coinReturns.slice(-n);
+  const btcSlice = btcReturns.slice(-n);
+  
+  // BTC yukarı / aşağı mumları ayır
+  const upCoin = [], upBtc = [];
+  const downCoin = [], downBtc = [];
+  
+  for (let i = 0; i < n; i++) {
+    if (btcSlice[i] > 0) {
+      upCoin.push(coinSlice[i]);
+      upBtc.push(btcSlice[i]);
+    } else if (btcSlice[i] < 0) {
+      downCoin.push(coinSlice[i]);
+      downBtc.push(btcSlice[i]);
+    }
+  }
+  
+  // En az 2 mum gerekli
+  function calcSimpleBeta(coinR, btcR) {
+    if (coinR.length < 2) return null;
+    const cMean = coinR.reduce((a,b) => a+b, 0) / coinR.length;
+    const bMean = btcR.reduce((a,b) => a+b, 0) / btcR.length;
+    let cov = 0, varB = 0;
+    for (let i = 0; i < coinR.length; i++) {
+      cov += (coinR[i] - cMean) * (btcR[i] - bMean);
+      varB += (btcR[i] - bMean) ** 2;
+    }
+    if (varB === 0) {
+      // Variance yoksa basit oran kullan
+      const avgCoin = cMean;
+      const avgBtc = bMean;
+      if (avgBtc === 0) return null;
+      return avgCoin / avgBtc;
+    }
+    return cov / varB;
+  }
+  
+  // Yeterli veri yoksa basit oran (toplam getiri/toplam getiri)
+  let upBeta = calcSimpleBeta(upCoin, upBtc);
+  let downBeta = calcSimpleBeta(downCoin, downBtc);
+  
+  // Fallback: sample sayısı çok azsa, ortalama oran kullan
+  if (upBeta === null && upBtc.length >= 1) {
+    const sumCoin = upCoin.reduce((a,b) => a+b, 0);
+    const sumBtc = upBtc.reduce((a,b) => a+b, 0);
+    if (sumBtc !== 0) upBeta = sumCoin / sumBtc;
+  }
+  if (downBeta === null && downBtc.length >= 1) {
+    const sumCoin = downCoin.reduce((a,b) => a+b, 0);
+    const sumBtc = downBtc.reduce((a,b) => a+b, 0);
+    if (sumBtc !== 0) downBeta = sumCoin / sumBtc;
+  }
+  
+  return { 
+    up: upBeta, 
+    down: downBeta,
+    upSamples: upBtc.length,
+    downSamples: downBtc.length
+  };
+}
+
+function calculateCorrelation(coinReturns, btcReturns) {
+  const n = Math.min(coinReturns.length, btcReturns.length);
+  if (n < 3) return null;
+  
+  const coinSlice = coinReturns.slice(-n);
+  const btcSlice = btcReturns.slice(-n);
+  
+  const coinMean = coinSlice.reduce((a,b) => a+b, 0) / n;
+  const btcMean = btcSlice.reduce((a,b) => a+b, 0) / n;
+  
+  let cov = 0, varCoin = 0, varBtc = 0;
+  for (let i = 0; i < n; i++) {
+    cov += (coinSlice[i] - coinMean) * (btcSlice[i] - btcMean);
+    varCoin += (coinSlice[i] - coinMean) ** 2;
+    varBtc += (btcSlice[i] - btcMean) ** 2;
+  }
+  
+  if (varCoin === 0 || varBtc === 0) return null;
+  return cov / Math.sqrt(varCoin * varBtc);
+}
+
+function calculateRelativeStrength(coinTotalReturn, btcTotalReturn) {
+  const diff = coinTotalReturn - btcTotalReturn;
+  let score = 50 + (diff * 5);
+  return Math.max(0, Math.min(100, score));
+}
+
+async function calculateBTCMetrics() {
+  const params = getKlineParams(getInterval());
+  btcKlines = await fetchKlines('BTCUSDT', params.interval, params.limit);
+  if (!btcKlines) return false;
+  
+  if (btcKlines.length >= 4) {
+    const recent = btcKlines.slice(-4);
+    const first = parseFloat(recent[0][4]);
+    const last = parseFloat(recent[recent.length-1][4]);
+    btcShortTrend = ((last - first) / first) * 100;
+  }
+  
+  const dom = await fetchBTCDominance();
+  if (dom) btcDominance = dom;
+  
+  return true;
+}
+
+function updateBTCDisplay() {
+  document.getElementById('btcPrice').textContent = '$' + btcCurrentPrice.toLocaleString('en-US', {maximumFractionDigits: 0});
+  
+  const changeEl = document.getElementById('btcChange');
+  changeEl.textContent = (btcChange24h >= 0 ? '+' : '') + btcChange24h.toFixed(2) + '%';
+  changeEl.className = 'value ' + (btcChange24h >= 0 ? 'green' : 'red');
+  
+  document.getElementById('btcDom').textContent = btcDominance ? btcDominance.toFixed(2) + '%' : '--';
+  document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('tr-TR');
+  document.getElementById('totalCoins').textContent = allCoins.length;
+  
+  const banner = document.getElementById('btcBanner');
+  const dirText = document.getElementById('btcDirectionText');
+  const dirDetail = document.getElementById('btcDirectionDetail');
+  const modeEl = document.getElementById('marketMode');
+  
+  banner.classList.remove('bullish', 'bearish');
+  
+  if (Math.abs(btcShortTrend) < 0.2) {
+    dirText.textContent = '⚡ BTC YATAY';
+    dirText.className = 'direction-text yellow';
+    dirDetail.textContent = `Son 1 saat: ${btcShortTrend.toFixed(2)}% - Karar verilmemiş bölge`;
+    modeEl.textContent = 'NÖTR';
+    modeEl.className = 'direction-text yellow';
+  } else if (btcShortTrend > 0) {
+    dirText.textContent = '🟢 BTC YÜKSELIYOR';
+    dirText.className = 'direction-text green';
+    dirDetail.textContent = `Son 1 saat: +${btcShortTrend.toFixed(2)}% - Yüksek beta altlar avantajlı`;
+    banner.classList.add('bullish');
+    modeEl.textContent = 'RISK-ON';
+    modeEl.className = 'direction-text green';
+  } else {
+    dirText.textContent = '🔴 BTC DÜŞÜYOR';
+    dirText.className = 'direction-text red';
+    dirDetail.textContent = `Son 1 saat: ${btcShortTrend.toFixed(2)}% - Düşük beta veya ayrışmış altlar daha güvenli`;
+    banner.classList.add('bearish');
+    modeEl.textContent = 'RISK-OFF';
+    modeEl.className = 'direction-text red';
+  }
+}
+
+async function analyzeCoinByKlines(symbol, klines, stat) {
+  const coinReturns = calculateReturns(klines);
+  const btcReturns = calculateReturns(btcKlines);
+  
+  const beta = calculateBeta(coinReturns, btcReturns);
+  const asymBeta = calculateAsymmetricBeta(coinReturns, btcReturns);
+  const correlation = calculateCorrelation(coinReturns, btcReturns);
+  
+  const firstClose = parseFloat(klines[0][4]);
+  const lastClose = parseFloat(klines[klines.length-1][4]);
+  const coinTotalReturn = ((lastClose - firstClose) / firstClose) * 100;
+  
+  const btcFirstClose = parseFloat(btcKlines[0][4]);
+  const btcLastClose = parseFloat(btcKlines[btcKlines.length-1][4]);
+  const btcTotalReturn = ((btcLastClose - btcFirstClose) / btcFirstClose) * 100;
+  
+  const strength = calculateRelativeStrength(coinTotalReturn, btcTotalReturn);
+  
+  // Asimetri tipi belirle (PUMP / DUMP / DENGELİ)
+  let asymType = 'balanced';
+  if (asymBeta.up !== null && asymBeta.down !== null) {
+    const upAbs = Math.abs(asymBeta.up);
+    const downAbs = Math.abs(asymBeta.down);
+    const diff = upAbs - downAbs;
+    
+    if (diff > 0.5) asymType = 'pump'; // Yükselişte agresif, düşüşte korunan
+    else if (diff < -0.5) asymType = 'dump'; // Yükselişte tembel, düşüşte sert düşen
+    else asymType = 'balanced';
+  }
+  
+  return {
+    symbol: symbol.replace('USDT',''),
+    fullSymbol: symbol,
+    price: parseFloat(stat.lastPrice),
+    change24h: parseFloat(stat.priceChangePercent),
+    beta: beta,
+    upBeta: asymBeta.up,
+    downBeta: asymBeta.down,
+    upSamples: asymBeta.upSamples,
+    downSamples: asymBeta.downSamples,
+    asymType: asymType,
+    correlation: correlation,
+    coinReturn: coinTotalReturn,
+    btcReturn: btcTotalReturn,
+    strength: strength,
+    volume24h: parseFloat(stat.quoteVolume)
+  };
+}
+
+async function massScan() {
+  const progressContainer = document.getElementById('progressContainer');
+  const progressText = document.getElementById('progressText');
+  const progressFill = document.getElementById('progressFill');
+  const progressPercent = document.getElementById('progressPercent');
+  
+  progressContainer.classList.add('active');
+  progressText.textContent = 'BTC verileri alınıyor...';
+  progressFill.style.width = '5%';
+  progressPercent.textContent = '5%';
+  
+  // BTC metrics
+  const btcOk = await calculateBTCMetrics();
+  if (!btcOk) {
+    alert('BTC verisi alınamadı');
+    progressContainer.classList.remove('active');
+    return;
+  }
+  
+  progressText.textContent = '24h piyasa verileri alınıyor...';
+  progressFill.style.width = '10%';
+  progressPercent.textContent = '10%';
+  
+  // Tüm 24h verilerini tek istekte al
+  const allStats = await fetchAll24hStats();
+  if (!allStats) {
+    alert('Piyasa verisi alınamadı');
+    progressContainer.classList.remove('active');
+    return;
+  }
+  
+  // BTC fiyat ve değişim
+  const btcStat = allStats.find(s => s.symbol === 'BTCUSDT');
+  if (btcStat) {
+    btcCurrentPrice = parseFloat(btcStat.lastPrice);
+    btcChange24h = parseFloat(btcStat.priceChangePercent);
+  }
+  
+  // Sadece USDT pariteleri ve hacme göre sırala
+  const usdtPairs = allStats
+    .filter(s => s.symbol.endsWith('USDT'))
+    .filter(s => !s.symbol.includes('_')) // Vadeli olanları çıkar
+    .sort((a, b) => parseFloat(b.quoteVolume) - parseFloat(a.quoteVolume));
+  
+  // Available symbols list (search için)
+  availableSymbols = usdtPairs.map(s => ({
+    symbol: s.symbol.replace('USDT',''),
+    fullSymbol: s.symbol,
+    volume: parseFloat(s.quoteVolume)
+  }));
+  
+  // Delist / yeni coin tespiti
+  const currentSymbolList = availableSymbols.map(s => s.symbol);
+  const changes = detectListChanges(currentSymbolList);
+  if (!changes.firstRun) {
+    lastChanges = { added: changes.added, removed: changes.removed };
+  }
+  updateDelistInfo();
+  
+  // Top N coin'i tara (TÜMÜ = 9999 → tüm coinler)
+  const limit = getCoinCount();
+  const topCoins = limit >= 9999 ? usdtPairs : usdtPairs.slice(0, limit);
+  const params = getKlineParams(getInterval());
+  
+  updateBTCDisplay();
+  
+  // Batch halinde paralel istek (10'arlı)
+  const batchSize = 10;
+  const results = [];
+  
+  for (let i = 0; i < topCoins.length; i += batchSize) {
+    const batch = topCoins.slice(i, i + batchSize);
+    const batchPromises = batch.map(async (stat) => {
+      const klines = await fetchKlines(stat.symbol, params.interval, params.limit);
+      if (!klines || klines.length < 5) return null;
+      return await analyzeCoinByKlines(stat.symbol, klines, stat);
+    });
+    
+    const batchResults = await Promise.all(batchPromises);
+    results.push(...batchResults.filter(r => r !== null));
+    
+    const progress = Math.min(95, 10 + ((i + batchSize) / topCoins.length) * 85);
+    progressFill.style.width = progress + '%';
+    progressPercent.textContent = Math.floor(progress) + '%';
+    progressText.textContent = `${results.length} / ${topCoins.length} coin tarandı...`;
+    
+    // Rate limit'e takılmamak için minik bekleme
+    if (i + batchSize < topCoins.length) {
+      await new Promise(r => setTimeout(r, 100));
+    }
+  }
+  
+  allCoins = results;
+  
+  progressFill.style.width = '100%';
+  progressPercent.textContent = '100%';
+  progressText.textContent = `✓ ${allCoins.length} coin başarıyla tarandı`;
+  
+  setTimeout(() => {
+    progressContainer.classList.remove('active');
+  }, 1500);
+  
+  updateBTCDisplay();
+  renderAll();
+  updateFilterCounts();
+}
+
+function getBetaTag(beta) {
+  if (beta === null) return '';
+  if (beta > 1.8) return '<span class="tag high-beta">YÜK.BETA</span>';
+  if (beta < 0.7 && beta > 0) return '<span class="tag low-beta">DÜŞ.BETA</span>';
+  if (beta < 0) return '<span class="tag inverse">TERS</span>';
+  return '';
+}
+
+function getAsymTag(asymType) {
+  if (asymType === 'pump') return '<span class="tag pump-type">🚀 PUMP</span>';
+  if (asymType === 'dump') return '<span class="tag dump-type">💀 DUMP</span>';
+  return '';
+}
+
+function getCorrelationTag(corr) {
+  if (corr === null) return '';
+  if (corr < 0.3 && corr > -0.3) return '<span class="tag decoupled">AYRIŞMIŞ</span>';
+  if (corr < -0.3) return '<span class="tag inverse">TERS</span>';
+  if (corr > 0.85) return '<span class="tag synced">SENKRON</span>';
+  return '';
+}
+
+function getPredictionText(data) {
+  const beta = data.beta;
+  const correlation = data.correlation;
+  const upBeta = data.upBeta;
+  const downBeta = data.downBeta;
+  
+  if (beta === null) return { text: 'Veri yetersiz', class: 'gray' };
+  
+  const isBtcDown = btcShortTrend < -0.2;
+  const isBtcUp = btcShortTrend > 0.2;
+  const isLowCorr = correlation !== null && Math.abs(correlation) < 0.4;
+  const isInverse = correlation !== null && correlation < -0.3;
+  
+  if (isInverse) {
+    return { 
+      text: `↔ BTC ile TERS hareket ediyor`, 
+      class: 'purple' 
+    };
+  }
+  
+  if (isLowCorr) {
+    return { 
+      text: `🟣 BTC'den bağımsız - kendi hikayesi var`, 
+      class: 'purple' 
+    };
+  }
+  
+  // Asimetrik beta varsa onu kullan, yoksa genel beta
+  if (isBtcDown) {
+    const useBeta = downBeta !== null ? Math.abs(downBeta) : beta;
+    if (useBeta > 1.5) {
+      return { text: `⚠ BTC %1↓ → ~%${useBeta.toFixed(1)}↓ (Down-beta riskli)`, class: 'red' };
+    } else if (useBeta < 0.7) {
+      return { text: `✓ BTC düşüşünde dirençli (~%${useBeta.toFixed(1)})`, class: 'green' };
+    } else {
+      return { text: `BTC ile orantılı düşüş (~%${useBeta.toFixed(1)})`, class: 'yellow' };
+    }
+  } else if (isBtcUp) {
+    const useBeta = upBeta !== null ? Math.abs(upBeta) : beta;
+    if (useBeta > 1.5) {
+      return { text: `🚀 BTC %1↑ → ~%${useBeta.toFixed(1)}↑ (Up-beta güçlü)`, class: 'green' };
+    } else if (useBeta < 0.7) {
+      return { text: `BTC yükselişini takip etmiyor (~%${useBeta.toFixed(1)})`, class: 'yellow' };
+    } else {
+      return { text: `BTC ile orantılı yükseliş (~%${useBeta.toFixed(1)})`, class: 'green' };
+    }
+  } else {
+    // BTC yatay - asimetri tipine göre yorum yap
+    if (data.asymType === 'pump') {
+      return { text: `🚀 PUMP profili - yükselişe hazır setup`, class: 'green' };
+    } else if (data.asymType === 'dump') {
+      return { text: `💀 DUMP profili - düşüşte savunmasız`, class: 'red' };
+    }
+    return { text: 'BTC yatay - dengeli profil', class: 'gray' };
+  }
+}
+
+function renderCoin(data) {
+  const isDecoupled = data.correlation !== null && Math.abs(data.correlation) < 0.4;
+  const isInverse = data.correlation !== null && data.correlation < -0.3;
+  
+  let cardClass = 'neutral';
+  if (isDecoupled || isInverse) cardClass = 'decoupled';
+  else if (data.strength >= 60) cardClass = 'strong';
+  else if (data.strength <= 40) cardClass = 'weak';
+  
+  // PUMP tipi yeşil sol bar, DUMP tipi kırmızı (override)
+  if (data.asymType === 'pump' && !isDecoupled && !isInverse) cardClass = 'pump';
+  if (data.asymType === 'dump' && !isDecoupled && !isInverse) cardClass = 'dump';
+  
+  const changeClass = data.change24h >= 0 ? 'green' : 'red';
+  const betaText = data.beta !== null ? data.beta.toFixed(2) : '--';
+  const corrText = data.correlation !== null ? data.correlation.toFixed(2) : '--';
+  const upBetaText = data.upBeta !== null ? data.upBeta.toFixed(2) : '--';
+  const downBetaText = data.downBeta !== null ? Math.abs(data.downBeta).toFixed(2) : '--';
+  
+  let powerColor;
+  if (data.strength >= 70) powerColor = '#22c55e';
+  else if (data.strength >= 55) powerColor = '#22c55e';
+  else if (data.strength >= 45) powerColor = '#f5b342';
+  else if (data.strength >= 30) powerColor = '#f5b342';
+  else powerColor = '#ef4444';
+  
+  const prediction = getPredictionText(data);
+  
+  const betaBarWidth = data.beta !== null ? Math.min(100, Math.abs(data.beta / 3) * 100) : 0;
+  let betaColor;
+  if (data.beta === null) betaColor = '#1f2740';
+  else if (data.beta < 0) betaColor = '#f5b342';
+  else if (data.beta > 2) betaColor = '#ef4444';
+  else if (data.beta > 1.3) betaColor = '#f5b342';
+  else if (data.beta > 0.7) betaColor = '#f5b342';
+  else betaColor = '#22c55e';
+  
+  const corrBarWidth = data.correlation !== null ? ((data.correlation + 1) / 2) * 100 : 50;
+  
+  // Up/Down beta bar widths (3'e kadar normalize)
+  const upBarW = data.upBeta !== null ? Math.min(100, (Math.abs(data.upBeta) / 3) * 100) : 0;
+  const downBarW = data.downBeta !== null ? Math.min(100, (Math.abs(data.downBeta) / 3) * 100) : 0;
+  
+  // Asimetri açıklama
+  let asymExplain = '';
+  if (data.upBeta !== null && data.downBeta !== null) {
+    const upAbs = Math.abs(data.upBeta);
+    const downAbs = Math.abs(data.downBeta);
+    if (data.asymType === 'pump') {
+      asymExplain = `🚀 Yükselişte agresif (${upAbs.toFixed(1)}x), düşüşte korunuyor (${downAbs.toFixed(1)}x)`;
+    } else if (data.asymType === 'dump') {
+      asymExplain = `💀 Yükselişte tembel (${upAbs.toFixed(1)}x), düşüşte sert düşüyor (${downAbs.toFixed(1)}x)`;
+    }
+  }
+  
+  return `
+    <div class="coin-card ${cardClass}" id="card-${data.symbol}" data-symbol="${data.symbol}">
+      <div class="coin-header">
+        <div>
+          <div class="coin-symbol">${data.symbol}USDT ${getBetaTag(data.beta)}${getAsymTag(data.asymType)}${getCorrelationTag(data.correlation)}</div>
+          <div class="coin-price">$${data.price.toLocaleString('en-US', {maximumFractionDigits: data.price < 1 ? 6 : 2})}</div>
+          <div class="coin-change ${changeClass}">${data.change24h >= 0 ? '+' : ''}${data.change24h.toFixed(2)}% (24s)</div>
+        </div>
+      </div>
+      
+      <div class="metric-row">
+        <span class="metric-label">Genel Beta:</span>
+        <span class="metric-value" style="color:${betaColor}">${betaText}x</span>
+      </div>
+      <div class="power-bar">
+        <div class="power-bar-fill" style="width:${betaBarWidth}%; background:${betaColor}">${betaText}x</div>
+      </div>
+      
+      <div class="asym-beta-row">
+        <div class="asym-beta-box up">
+          <div class="asym-beta-label">↗ BTC ↑ İken</div>
+          <div class="asym-beta-value up">${upBetaText}x</div>
+          <div class="asym-beta-bar">
+            <div class="asym-beta-bar-fill" style="width:${upBarW}%; background:#22c55e"></div>
+          </div>
+        </div>
+        <div class="asym-beta-box down">
+          <div class="asym-beta-label">↘ BTC ↓ İken</div>
+          <div class="asym-beta-value down">${downBetaText}x</div>
+          <div class="asym-beta-bar">
+            <div class="asym-beta-bar-fill" style="width:${downBarW}%; background:#ef4444"></div>
+          </div>
+        </div>
+      </div>
+      ${asymExplain ? `<div style="font-size:10px;color:#8892a8;margin-top:6px;text-align:center">${asymExplain}</div>` : ''}
+      
+      <div class="metric-row" style="margin-top:10px">
+        <span class="metric-label">Korelasyon:</span>
+        <span class="metric-value">${corrText}</span>
+      </div>
+      <div class="power-bar">
+        <div class="power-bar-fill" style="width:${corrBarWidth}%; background:#2dd4bf; color:#fff">${corrText}</div>
+      </div>
+      
+      <div class="metric-row">
+        <span class="metric-label">${getInterval()} Perf:</span>
+        <span class="metric-value ${data.coinReturn >= 0 ? 'green' : 'red'}">${data.coinReturn >= 0 ? '+' : ''}${data.coinReturn.toFixed(2)}%</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">BTC Aynı:</span>
+        <span class="metric-value ${data.btcReturn >= 0 ? 'green' : 'red'}">${data.btcReturn >= 0 ? '+' : ''}${data.btcReturn.toFixed(2)}%</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Hacim:</span>
+        <span class="metric-value">$${(data.volume24h/1000000).toFixed(1)}M</span>
+      </div>
+      
+      <div class="power-bar-container">
+        <div class="power-bar-label">
+          <span>BTC'ye Göre Güç</span>
+          <span>${data.strength.toFixed(0)} / 100</span>
+        </div>
+        <div class="power-bar">
+          <div class="power-bar-fill" style="width:${data.strength}%; background:${powerColor}">${data.strength.toFixed(0)}</div>
+        </div>
+      </div>
+      
+      <div class="prediction">
+        <div class="prediction-label">📊 Tahmin</div>
+        <div class="prediction-text ${prediction.class}">${prediction.text}</div>
+      </div>
+    </div>
+  `;
+}
+
+function getFilteredCoins() {
+  let filtered = [...allCoins];
+  
+  if (currentFilter === 'pump') {
+    filtered = filtered.filter(c => c.asymType === 'pump');
+  } else if (currentFilter === 'dump') {
+    filtered = filtered.filter(c => c.asymType === 'dump');
+  } else if (currentFilter === 'decoupled') {
+    filtered = filtered.filter(c => c.correlation !== null && Math.abs(c.correlation) < 0.4);
+  } else if (currentFilter === 'strong') {
+    filtered = filtered.filter(c => c.strength >= 60);
+  } else if (currentFilter === 'weak') {
+    filtered = filtered.filter(c => c.strength <= 40);
+  } else if (currentFilter === 'highbeta') {
+    filtered = filtered.filter(c => c.beta !== null && c.beta > 1.8);
+  } else if (currentFilter === 'lowbeta') {
+    filtered = filtered.filter(c => c.beta !== null && c.beta < 0.7 && c.beta > 0);
+  } else if (currentFilter === 'inverse') {
+    filtered = filtered.filter(c => c.correlation !== null && c.correlation < -0.3);
+  }
+  
+  return filtered;
+}
+
+function renderAll() {
+  const container = document.getElementById('contentContainer');
+  
+  if (allCoins.length === 0) {
+    container.innerHTML = '<div class="empty-state"><h3 style="color:#f5b342">Veri yok</h3><p>Yeniden tarayın</p></div>';
+    return;
+  }
+  
+  if (currentFilter === 'all') {
+    // Bölümlere ayır - PUMP ve DUMP en üstte (en değerli bilgi)
+    const pump = allCoins.filter(c => c.asymType === 'pump')
+      .sort((a, b) => (Math.abs(b.upBeta) - Math.abs(b.downBeta)) - (Math.abs(a.upBeta) - Math.abs(a.downBeta)));
+    const dump = allCoins.filter(c => c.asymType === 'dump')
+      .sort((a, b) => (Math.abs(b.downBeta) - Math.abs(b.upBeta)) - (Math.abs(a.downBeta) - Math.abs(a.upBeta)));
+    
+    const pumpSet = new Set(pump.map(c => c.symbol));
+    const dumpSet = new Set(dump.map(c => c.symbol));
+    
+    const decoupled = allCoins.filter(c => c.correlation !== null && Math.abs(c.correlation) < 0.4 && !pumpSet.has(c.symbol) && !dumpSet.has(c.symbol))
+      .sort((a, b) => b.volume24h - a.volume24h);
+    const inverse = allCoins.filter(c => c.correlation !== null && c.correlation < -0.3 && !pumpSet.has(c.symbol) && !dumpSet.has(c.symbol))
+      .sort((a, b) => b.volume24h - a.volume24h);
+    const strong = allCoins.filter(c => c.strength >= 60 && c.correlation !== null && Math.abs(c.correlation) >= 0.4 && c.correlation >= -0.3 && !pumpSet.has(c.symbol) && !dumpSet.has(c.symbol))
+      .sort((a, b) => b.strength - a.strength);
+    const weak = allCoins.filter(c => c.strength <= 40 && c.correlation !== null && Math.abs(c.correlation) >= 0.4 && c.correlation >= -0.3 && !pumpSet.has(c.symbol) && !dumpSet.has(c.symbol))
+      .sort((a, b) => a.strength - b.strength);
+    const others = allCoins.filter(c =>
+      !pumpSet.has(c.symbol) && !dumpSet.has(c.symbol) &&
+      !decoupled.includes(c) && !inverse.includes(c) && !strong.includes(c) && !weak.includes(c)
+    ).sort((a, b) => b.strength - a.strength);
+    
+    let html = '';
+    
+    if (pump.length > 0) {
+      html += `<div class="section-header">🚀 PUMP Profili (${pump.length}) — Yükselişte agresif, düşüşte korunan (LONG için ideal)</div>`;
+      html += '<div class="coins-grid">';
+      html += pump.map(renderCoin).join('');
+      html += '</div>';
+    }
+    
+    if (dump.length > 0) {
+      html += `<div class="section-header">💀 DUMP Profili (${dump.length}) — Yükselişte tembel, düşüşte sert (SHORT için aday)</div>`;
+      html += '<div class="coins-grid">';
+      html += dump.map(renderCoin).join('');
+      html += '</div>';
+    }
+    
+    if (decoupled.length > 0) {
+      html += `<div class="section-header">🟣 BTC'den Ayrışmış Coinler (${decoupled.length}) — Kendi hikayesi var</div>`;
+      html += '<div class="coins-grid">';
+      html += decoupled.map(renderCoin).join('');
+      html += '</div>';
+    }
+    
+    if (inverse.length > 0) {
+      html += `<div class="section-header">↔ BTC'ye TERS Hareket Edenler (${inverse.length})</div>`;
+      html += '<div class="coins-grid">';
+      html += inverse.map(renderCoin).join('');
+      html += '</div>';
+    }
+    
+    if (strong.length > 0) {
+      html += `<div class="section-header">🟢 BTC'den Güçlü Performans (${strong.length})</div>`;
+      html += '<div class="coins-grid">';
+      html += strong.map(renderCoin).join('');
+      html += '</div>';
+    }
+    
+    if (weak.length > 0) {
+      html += `<div class="section-header">🔴 BTC'den Zayıf Performans (${weak.length}) — Short fırsatları</div>`;
+      html += '<div class="coins-grid">';
+      html += weak.map(renderCoin).join('');
+      html += '</div>';
+    }
+    
+    if (others.length > 0) {
+      html += `<div class="section-header">⚪ Nötr / Senkron Coinler (${others.length})</div>`;
+      html += '<div class="coins-grid">';
+      html += others.map(renderCoin).join('');
+      html += '</div>';
+    }
+    
+    container.innerHTML = html;
+  } else {
+    // Tek liste, filtrelenmiş
+    const filtered = getFilteredCoins();
+    if (filtered.length === 0) {
+      container.innerHTML = '<div class="empty-state"><h3 style="color:#f5b342">Bu kategoride coin yok</h3></div>';
+      return;
+    }
+    // Filtre tipine göre sırala
+    if (currentFilter === 'pump') {
+      // En yüksek up-down farkı önce
+      filtered.sort((a, b) => {
+        const aDiff = Math.abs(a.upBeta || 0) - Math.abs(a.downBeta || 0);
+        const bDiff = Math.abs(b.upBeta || 0) - Math.abs(b.downBeta || 0);
+        return bDiff - aDiff;
+      });
+    } else if (currentFilter === 'dump') {
+      // En yüksek down-up farkı önce
+      filtered.sort((a, b) => {
+        const aDiff = Math.abs(a.downBeta || 0) - Math.abs(a.upBeta || 0);
+        const bDiff = Math.abs(b.downBeta || 0) - Math.abs(b.upBeta || 0);
+        return bDiff - aDiff;
+      });
+    } else if (currentFilter === 'highbeta' || currentFilter === 'lowbeta') {
+      filtered.sort((a, b) => Math.abs(b.beta) - Math.abs(a.beta));
+    } else if (currentFilter === 'weak') {
+      filtered.sort((a, b) => a.strength - b.strength);
+    } else if (currentFilter === 'decoupled' || currentFilter === 'inverse') {
+      filtered.sort((a, b) => b.volume24h - a.volume24h);
+    } else {
+      filtered.sort((a, b) => b.strength - a.strength);
+    }
+    
+    container.innerHTML = '<div class="coins-grid">' + filtered.map(renderCoin).join('') + '</div>';
+  }
+}
+
+function updateFilterCounts() {
+  document.getElementById('count-all').textContent = allCoins.length;
+  document.getElementById('count-pump').textContent = allCoins.filter(c => c.asymType === 'pump').length;
+  document.getElementById('count-dump').textContent = allCoins.filter(c => c.asymType === 'dump').length;
+  document.getElementById('count-decoupled').textContent = allCoins.filter(c => c.correlation !== null && Math.abs(c.correlation) < 0.4).length;
+  document.getElementById('count-strong').textContent = allCoins.filter(c => c.strength >= 60).length;
+  document.getElementById('count-weak').textContent = allCoins.filter(c => c.strength <= 40).length;
+  document.getElementById('count-highbeta').textContent = allCoins.filter(c => c.beta !== null && c.beta > 1.8).length;
+  document.getElementById('count-lowbeta').textContent = allCoins.filter(c => c.beta !== null && c.beta < 0.7 && c.beta > 0).length;
+  document.getElementById('count-inverse').textContent = allCoins.filter(c => c.correlation !== null && c.correlation < -0.3).length;
+}
+
+function setFilter(filter) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+  document.getElementById('searchInfo').classList.remove('active');
+  document.getElementById('searchInput').value = '';
+  hideSuggestions();
+  renderAll();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function scrollToCoin(symbol) {
+  const card = document.getElementById('card-' + symbol);
+  if (card) {
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    card.classList.add('highlighted');
+    setTimeout(() => card.classList.remove('highlighted'), 3500);
+    
+    const info = document.getElementById('searchInfo');
+    info.innerHTML = `✓ <strong>${symbol}USDT</strong> bulundu - kart vurgulandı`;
+    info.classList.add('active');
+  } else {
+    // Listede yok - mevcut filtre dışında olabilir
+    const coinExists = allCoins.find(c => c.symbol === symbol);
+    if (coinExists) {
+      // Filtreyi sıfırla ve tekrar dene
+      setFilter('all');
+      setTimeout(() => scrollToCoin(symbol), 100);
+    } else {
+      const info = document.getElementById('searchInfo');
+      info.innerHTML = `⚠ <strong>${symbol}USDT</strong> top ${getCoinCount()} listesinde değil. Daha geniş tarama için "Top 300" seçin ve yeniden tarayın.`;
+      info.classList.add('active');
+      info.style.color = '#f5b342';
+    }
+  }
+}
+
+function showSuggestions(query) {
+  const suggestions = document.getElementById('suggestions');
+  if (!query || query.length < 1) {
+    hideSuggestions();
+    return;
+  }
+  
+  const upperQ = query.toUpperCase();
+  const matches = availableSymbols
+    .filter(s => s.symbol.includes(upperQ))
+    .sort((a, b) => {
+      // Tam eşleşme önce, sonra başlayanlar, sonra hacme göre
+      const aExact = a.symbol === upperQ ? 0 : 1;
+      const bExact = b.symbol === upperQ ? 0 : 1;
+      if (aExact !== bExact) return aExact - bExact;
+      const aStarts = a.symbol.startsWith(upperQ) ? 0 : 1;
+      const bStarts = b.symbol.startsWith(upperQ) ? 0 : 1;
+      if (aStarts !== bStarts) return aStarts - bStarts;
+      return b.volume - a.volume;
+    })
+    .slice(0, 10);
+  
+  if (matches.length === 0) {
+    suggestions.innerHTML = '<div class="suggestion-item" style="color:#8892a8">Eşleşme yok</div>';
+    suggestions.classList.add('active');
+    return;
+  }
+  
+  suggestions.innerHTML = matches.map(m => {
+    const inList = allCoins.find(c => c.symbol === m.symbol);
+    const indicator = inList ? '✓' : '⚠';
+    const indicatorColor = inList ? '#22c55e' : '#f5b342';
+    return `<div class="suggestion-item" onclick="selectSuggestion('${m.symbol}')">
+      <span><span style="color:${indicatorColor}">${indicator}</span> <span class="suggestion-symbol">${m.symbol}</span></span>
+      <span class="suggestion-volume">$${(m.volume/1000000).toFixed(1)}M</span>
+    </div>`;
+  }).join('');
+  suggestions.classList.add('active');
+}
+
+function hideSuggestions() {
+  document.getElementById('suggestions').classList.remove('active');
+}
+
+function selectSuggestion(symbol) {
+  document.getElementById('searchInput').value = symbol;
+  hideSuggestions();
+  scrollToCoin(symbol);
+}
+
+async function reloadAll() {
+  await massScan();
+  if (autoRefreshEnabled) {
+    startAutoRefresh();
+  }
+}
+
+function recalculateAll() {
+  reloadAll();
+}
+
+// Event listeners
+document.getElementById('searchInput').addEventListener('input', function(e) {
+  showSuggestions(e.target.value);
+});
+
+document.getElementById('searchInput').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    const val = e.target.value.trim().toUpperCase().replace('USDT','');
+    if (val) {
+      hideSuggestions();
+      scrollToCoin(val);
+    }
+  }
+});
+
+document.getElementById('searchInput').addEventListener('blur', function() {
+  setTimeout(hideSuggestions, 200);
+});
+
+document.getElementById('searchInput').addEventListener('focus', function(e) {
+  if (e.target.value) showSuggestions(e.target.value);
+});
+
+// === DELIST / YENİ COIN YÖNETİMİ ===
+
+function getStoredSymbols() {
+  try {
+    const data = localStorage.getItem('wolf_beta_symbols');
+    if (!data) return null;
+    const parsed = JSON.parse(data);
+    return parsed;
+  } catch(e) { return null; }
+}
+
+function saveSymbols(symbols) {
+  try {
+    const data = {
+      symbols: symbols,
+      lastUpdate: new Date().toISOString()
+    };
+    localStorage.setItem('wolf_beta_symbols', JSON.stringify(data));
+  } catch(e) {}
+}
+
+function detectListChanges(currentSymbols) {
+  // currentSymbols: ['BTC', 'ETH', ...]
+  const stored = getStoredSymbols();
+  
+  if (!stored || !stored.symbols) {
+    // İlk açılış - kayıt yok, sadece kaydet
+    saveSymbols(currentSymbols);
+    return { added: [], removed: [], firstRun: true };
+  }
+  
+  // Son kontrol 24 saatten yeni mi?
+  const lastUpdate = new Date(stored.lastUpdate);
+  const now = new Date();
+  const hoursSince = (now - lastUpdate) / (1000 * 60 * 60);
+  
+  const oldSet = new Set(stored.symbols);
+  const newSet = new Set(currentSymbols);
+  
+  const added = currentSymbols.filter(s => !oldSet.has(s));
+  const removed = stored.symbols.filter(s => !newSet.has(s));
+  
+  // Liste değişti mi veya 24 saat geçti mi?
+  if (added.length > 0 || removed.length > 0 || hoursSince >= 24) {
+    saveSymbols(currentSymbols);
+  }
+  
+  return { added, removed, firstRun: false, hoursSince };
+}
+
+function showChangesModal() {
+  const modal = document.getElementById('changesModal');
+  const content = document.getElementById('changesContent');
+  
+  let html = '';
+  
+  if (lastChanges.added.length > 0) {
+    html += `<div class="change-section">
+      <h3 class="added">🆕 Yeni Eklenen Coinler (${lastChanges.added.length})</h3>
+      <div class="change-list">
+        ${lastChanges.added.map(s => `<span class="change-item added">${s}</span>`).join('')}
+      </div>
+    </div>`;
+  }
+  
+  if (lastChanges.removed.length > 0) {
+    html += `<div class="change-section">
+      <h3 class="removed">❌ Delist Olan Coinler (${lastChanges.removed.length})</h3>
+      <div class="change-list">
+        ${lastChanges.removed.map(s => `<span class="change-item removed">${s}</span>`).join('')}
+      </div>
+    </div>`;
+  }
+  
+  if (lastChanges.added.length === 0 && lastChanges.removed.length === 0) {
+    html = '<p style="color:#8892a8;text-align:center;padding:20px">Son taramada liste değişikliği yok</p>';
+  }
+  
+  content.innerHTML = html;
+  modal.classList.add('active');
+}
+
+function closeChangesModal() {
+  document.getElementById('changesModal').classList.remove('active');
+}
+
+function updateDelistInfo() {
+  const el = document.getElementById('delistInfo');
+  const totalChanges = lastChanges.added.length + lastChanges.removed.length;
+  
+  let html = '';
+  
+  if (totalChanges > 0) {
+    html = `<div class="delist-badge has-changes" onclick="showChangesModal()">
+      📋 Liste değişikliği <span class="badge-count">${totalChanges}</span>
+    </div>`;
+  } else {
+    html = `<div class="delist-badge" onclick="showChangesModal()">
+      ✓ Liste güncel
+    </div>`;
+  }
+  
+  el.innerHTML = html;
+}
+
+// === AUTO REFRESH SAYAÇ ===
+
+function getRefreshInterval() {
+  return parseInt(document.getElementById('autoRefreshInterval').value);
+}
+
+function startAutoRefresh() {
+  stopAutoRefresh();
+  if (!autoRefreshEnabled) return;
+  
+  countdownSeconds = getRefreshInterval();
+  updateCountdownDisplay();
+  
+  countdownTimer = setInterval(() => {
+    countdownSeconds--;
+    updateCountdownDisplay();
+    
+    if (countdownSeconds <= 0) {
+      reloadAll();
+    }
+  }, 1000);
+}
+
+function stopAutoRefresh() {
+  if (countdownTimer) {
+    clearInterval(countdownTimer);
+    countdownTimer = null;
+  }
+}
+
+function updateCountdownDisplay() {
+  const el = document.getElementById('countdown');
+  if (!autoRefreshEnabled) {
+    el.textContent = '⏸ DURDU';
+    el.className = 'countdown paused';
+    return;
+  }
+  
+  const mins = Math.floor(countdownSeconds / 60);
+  const secs = countdownSeconds % 60;
+  
+  if (mins > 0) {
+    el.textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
+  } else {
+    el.textContent = `${secs}sn`;
+  }
+  
+  el.className = 'countdown';
+  if (countdownSeconds <= 5) {
+    el.className = 'countdown imminent';
+  }
+}
+
+function toggleAutoRefresh() {
+  autoRefreshEnabled = document.getElementById('autoRefreshToggle').checked;
+  if (autoRefreshEnabled) {
+    startAutoRefresh();
+  } else {
+    stopAutoRefresh();
+    updateCountdownDisplay();
+  }
+}
+
+function changeRefreshInterval() {
+  if (autoRefreshEnabled) {
+    startAutoRefresh();
+  }
+}
+
+// === BAŞLATMA ===
+
+async function init() {
+  await massScan();
+  
+  // İlk tarama bitince auto-refresh sayacını başlat
+  startAutoRefresh();
+}
+
+init();
+</script>
+
+</body>
+</html>

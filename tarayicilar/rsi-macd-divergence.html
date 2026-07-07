@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>🐺 Wolf RSI + MACD RAW Divergence Scanner — Live</title>
+<style>
+  :root{
+    --bg:#0a0e1a;
+    --panel:#121826;
+    --panel2:#1a2233;
+    --line:#1f2740;
+    --text:#e8edf5;
+    --muted:#8892a8;
+    --gold:#f5b342;
+    --gold2:#f5b342;
+    --green:#22c55e;
+    --green-soft:rgba(34,197,94,.15);
+    --red:#ef4444;
+    --red-soft:rgba(239,68,68,.15);
+    --blue:#2dd4bf;
+    --blue-soft:rgba(45,212,191,.15);
+    --purple:#2dd4bf;
+    --purple-soft:rgba(45,212,191,.15);
+    --cyan:#2dd4bf;
+    --shadow:0 10px 30px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:radial-gradient(1200px 600px at 20% -10%,#1f2740 0%,transparent 60%),radial-gradient(900px 500px at 110% 10%,#1f2740 0%,transparent 55%),var(--bg);color:var(--text);font-family:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;min-height:100vh}
+  body{padding:24px 20px 80px}
+  .header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:18px}
+  .brand{display:flex;align-items:center;gap:14px}
+  .wolf{font-size:38px;filter:drop-shadow(0 0 12px rgba(245,179,66,.35))}
+  .title-block h1{margin:0;font-size:22px;font-weight:800;letter-spacing:-.5px;background:linear-gradient(90deg,#fff 0%,var(--gold) 70%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .title-block p{margin:2px 0 0;color:var(--muted);font-size:12px}
+  .badge{display:inline-block;padding:3px 8px;border-radius:6px;background:rgba(245,179,66,.12);color:var(--gold);font-size:10px;font-weight:700;letter-spacing:.6px;border:1px solid rgba(245,179,66,.25);margin-left:8px;text-transform:uppercase}
+
+  .controls{background:linear-gradient(180deg,var(--panel) 0%,var(--panel2) 100%);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px;box-shadow:var(--shadow)}
+  .ctl{display:flex;flex-direction:column;gap:6px}
+  .ctl label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:600}
+  .ctl select,.ctl input{background:#121826;border:1px solid var(--line);color:var(--text);padding:9px 10px;border-radius:8px;font-size:13px;font-family:inherit;outline:none;transition:border .2s}
+  .ctl select:focus,.ctl input:focus{border-color:var(--gold)}
+  .actions{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap}
+  .btn{cursor:pointer;border:none;font-family:inherit;font-weight:700;font-size:13px;padding:10px 16px;border-radius:9px;transition:.15s;letter-spacing:.3px}
+  .btn-primary{background:linear-gradient(135deg,var(--gold) 0%,#f5b342 100%);color:#121826;box-shadow:0 6px 16px rgba(245,179,66,.35)}
+  .btn-primary:hover{filter:brightness(1.08)}
+  .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+  .btn-ghost:hover{color:var(--text);border-color:var(--gold)}
+
+  .auto-panel{background:linear-gradient(180deg,var(--panel) 0%,var(--panel2) 100%);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin-bottom:14px;box-shadow:var(--shadow)}
+  .auto-left{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+  .toggle{display:inline-flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+  .toggle input{display:none}
+  .toggle-track{width:38px;height:20px;background:#1f2740;border-radius:99px;position:relative;transition:background .2s}
+  .toggle-track::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .2s,background .2s}
+  .toggle input:checked + .toggle-track{background:var(--gold)}
+  .toggle input:checked + .toggle-track::after{transform:translateX(18px);background:#121826}
+  .toggle-label{font-size:12px;font-weight:700;letter-spacing:.3px}
+  .auto-stat{font-size:11px;color:var(--muted)}
+  .auto-stat b{color:var(--gold);font-weight:700}
+  .countdown{font-family:"SF Mono",Menlo,monospace;font-size:13px;font-weight:700;color:var(--gold);min-width:46px;display:inline-block;text-align:center}
+  .auto-right{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .melody-row{display:flex;align-items:center;gap:8px}
+  .melody-row select{padding:6px 8px;font-size:12px}
+  .test-btn{padding:6px 10px;font-size:11px;border-radius:6px;background:#121826;border:1px solid var(--line);color:var(--text);cursor:pointer;font-weight:600}
+  .test-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+  .status-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:12px}
+  .status-bar .left{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted)}
+  .status-bar b{color:var(--text);font-weight:700}
+  .progress{flex:1;min-width:160px;height:6px;background:#121826;border-radius:99px;overflow:hidden}
+  .progress-bar{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));width:0%;transition:width .25s}
+  .pulse{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(34,197,94,.6);animation:pulse 1.5s infinite;margin-right:6px;vertical-align:middle}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.6)}70%{box-shadow:0 0 0 9px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+
+  .filter-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .pill{cursor:pointer;padding:6px 12px;border-radius:99px;font-size:11px;font-weight:600;background:var(--panel);border:1px solid var(--line);color:var(--muted);transition:.15s}
+  .pill:hover{color:var(--text)}
+  .pill.active{background:var(--gold);color:#121826;border-color:var(--gold)}
+  .pill .count{opacity:.7;margin-left:5px;font-weight:500}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+  .card{background:linear-gradient(180deg,var(--panel) 0%,#121826 100%);border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
+  .card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:opacity .2s}
+  .card:hover{transform:translateY(-2px);border-color:rgba(245,179,66,.45);box-shadow:0 12px 24px rgba(0,0,0,.4)}
+  .card:hover::before{opacity:1}
+  .card.bull{border-left:3px solid var(--green)}
+  .card.bear{border-left:3px solid var(--red)}
+  .card.is-new{animation:newSig 1.6s ease-out}
+  @keyframes newSig{0%{box-shadow:0 0 0 0 rgba(245,179,66,.85)}100%{box-shadow:0 0 0 14px rgba(245,179,66,0)}}
+
+  .card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+  .symbol{font-size:16px;font-weight:800;letter-spacing:-.3px;display:flex;align-items:center;gap:6px}
+  .new-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold);animation:pulse 1.5s infinite}
+  .price{text-align:right}
+  .price-val{font-size:14px;font-weight:700}
+  .price-chg{font-size:11px;font-weight:600;margin-top:2px}
+  .up{color:var(--green)}.down{color:var(--red)}
+
+  .div-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+  .tag{font-size:10px;font-weight:700;padding:3px 7px;border-radius:5px;letter-spacing:.4px;text-transform:uppercase;display:inline-flex;align-items:center;gap:4px}
+  .tag-bull{background:var(--green-soft);color:var(--green);border:1px solid rgba(34,197,94,.4)}
+  .tag-bear{background:var(--red-soft);color:var(--red);border:1px solid rgba(239,68,68,.4)}
+  .ind-pill{font-size:9px;font-weight:800;padding:2px 5px;border-radius:4px;letter-spacing:.4px;margin-left:4px;display:inline-block}
+  .ind-rsi{background:rgba(245,179,66,.15);color:var(--gold);border:1px solid rgba(245,179,66,.4)}
+  .ind-macd{background:var(--blue-soft);color:var(--blue);border:1px solid rgba(45,212,191,.4)}
+  .ind-hist{background:var(--purple-soft);color:var(--purple);border:1px solid rgba(45,212,191,.4)}
+  .triple-conf{background:linear-gradient(90deg,rgba(245,179,66,.18),rgba(45,212,191,.18));border:1px solid var(--gold);color:var(--gold);font-weight:800;padding:3px 8px;border-radius:5px;font-size:10px;letter-spacing:.5px;animation:flash 1.6s infinite}
+
+  /* ===== SCORE STYLES ===== */
+  .score-badge{position:absolute;top:10px;right:10px;width:48px;height:48px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;letter-spacing:-.3px;border:2px solid;z-index:2;box-shadow:0 4px 10px rgba(0,0,0,.4)}
+  .score-badge .num{font-size:18px;line-height:1}
+  .score-badge .lbl{font-size:8px;letter-spacing:.5px;margin-top:1px;opacity:.85}
+  .score-aplus{background:linear-gradient(135deg,#fff 0%,#f5b342 100%);color:#121826;border-color:#f5b342;box-shadow:0 0 20px rgba(245,179,66,.4)}
+  .score-a{background:linear-gradient(135deg,rgba(34,197,94,.25),rgba(34,197,94,.45));color:#e8edf5;border-color:var(--green)}
+  .score-b{background:linear-gradient(135deg,rgba(45,212,191,.25),rgba(45,212,191,.45));color:#e8edf5;border-color:var(--blue)}
+  .score-c{background:linear-gradient(135deg,rgba(245,179,66,.2),rgba(245,179,66,.35));color:var(--gold2);border-color:var(--gold)}
+  .score-d{background:linear-gradient(135deg,rgba(136,146,168,.2),rgba(136,146,168,.35));color:var(--muted);border-color:#1f2740}
+  .card{padding-right:64px}
+  .card-head{padding-right:0}
+
+  /* Score breakdown in modal */
+  .score-summary{background:linear-gradient(180deg,#121826 0%,#121826 100%);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
+  .score-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .score-big{font-size:42px;font-weight:900;letter-spacing:-1px;line-height:1}
+  .score-big-sub{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-top:2px}
+  .score-grade{padding:8px 14px;border-radius:8px;font-weight:800;font-size:14px;letter-spacing:.5px;border:2px solid}
+  .score-bars{display:grid;grid-template-columns:1fr;gap:6px}
+  .score-row{display:grid;grid-template-columns:140px 1fr 60px;gap:10px;align-items:center;font-size:11px}
+  .score-row .lab{color:var(--muted);font-weight:600;letter-spacing:.3px}
+  .score-row .bar-wrap{height:8px;background:#121826;border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+  .score-row .bar{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .3s}
+  .score-row .val{text-align:right;font-weight:700;color:var(--text);font-family:"SF Mono",Menlo,monospace}
+  .score-row.dim .lab{color:#8892a8}
+  .score-row.dim .val{color:#8892a8}
+
+  /* Sort & filter controls */
+  .sort-control{display:flex;align-items:center;gap:6px;margin-left:auto}
+  .sort-control select{background:#121826;border:1px solid var(--line);color:var(--text);padding:5px 8px;border-radius:6px;font-size:11px;font-family:inherit}
+  .min-score-input{display:flex;align-items:center;gap:6px}
+  .min-score-input input{width:50px;background:#121826;border:1px solid var(--line);color:var(--text);padding:4px 6px;border-radius:5px;font-size:11px;text-align:center}
+  .live-badge{font-size:9px;font-weight:800;padding:1px 5px;border-radius:3px;background:#f5b342;color:#121826;letter-spacing:.4px;animation:flash 1.6s infinite}
+  @keyframes flash{0%,100%{box-shadow:0 0 0 0 rgba(245,179,66,.7)}50%{box-shadow:0 0 0 5px rgba(245,179,66,0)}}
+
+  .info-line{background:#121826;border:1px solid var(--line);border-radius:6px;padding:6px 8px;margin-bottom:6px;font-size:11px;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+  .info-line .lab{color:var(--muted);font-weight:600}
+  .info-line .val{color:var(--text);font-weight:700;font-family:"SF Mono",Menlo,monospace}
+
+  .strength{background:linear-gradient(90deg,rgba(245,179,66,.08),transparent);border:1px solid rgba(245,179,66,.25);border-radius:6px;padding:6px 8px;font-size:11px;color:var(--gold);font-weight:600;margin-top:4px}
+
+  .modal{position:fixed;inset:0;background:rgba(10,14,26,.85);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:1000;padding:16px;animation:fadeIn .2s}
+  .modal.show{display:flex}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .modal-card{background:linear-gradient(180deg,var(--panel) 0%,var(--panel2) 100%);border:1px solid var(--line);border-radius:14px;width:100%;max-width:820px;max-height:92vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.6);animation:slideUp .25s}
+  @keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}
+  .modal-head h2{margin:0;font-size:20px;font-weight:800}
+  .close{cursor:pointer;background:none;border:none;color:var(--muted);font-size:26px;line-height:1;padding:0 6px}
+  .modal-body{padding:18px}
+  .modal-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:14px}
+  .info-cell{background:#121826;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+  .info-cell .lab{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .info-cell .val{font-size:14px;font-weight:700;margin-top:2px}
+  .chart-wrap{background:#0a0e1a;border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:12px}
+  .div-summary{background:#121826;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.7}
+  .div-summary h3{margin:0 0 8px;font-size:13px;color:var(--gold)}
+  .div-summary .item{margin:4px 0;color:var(--muted)}
+  .div-summary .item b{color:var(--text)}
+  .pivot-detail{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+  .pivot-box{background:#121826;border:1px solid var(--line);border-radius:6px;padding:8px 10px}
+  .pivot-box .lab{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+  .pivot-box .row{display:flex;justify-content:space-between;font-size:11px;margin:2px 0}
+  .pivot-box .row .k{color:var(--muted)}
+  .pivot-box .row .v{color:var(--text);font-weight:700;font-family:"SF Mono",Menlo,monospace}
+
+  .empty{text-align:center;padding:60px 20px;color:var(--muted)}
+  .empty .icon{font-size:54px;margin-bottom:12px}
+  ::-webkit-scrollbar{width:8px;height:8px}
+  ::-webkit-scrollbar-thumb{background:#1f2740;border-radius:4px}
+  @media(max-width:600px){.header{flex-direction:column;align-items:flex-start}.grid{grid-template-columns:1fr}body{padding:14px 12px 60px}.auto-panel{flex-direction:column;align-items:stretch}}
+</style>
+<style>
+.header,.header-row,.brand,.brand-row,.header-stats,.controls{flex-wrap:wrap;}
+.tf-group,.filter-group,.filter-row,.filter-pills,.filter-bar,.tabs,.actions,.tfgrid,.seg,.segmented,.tf-btns,.tf-list{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;}
+.tf-btn,.filter-btn,.tab,.pill,.seg-btn{flex-shrink:0;}
+.tablewrap,#tablewrap,.table-wrap,.tbl-wrap,.table-container,.feed{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch;}
+@media(max-width:860px){
+.header{height:auto!important;min-height:0;row-gap:8px;}
+.grid,.signals-grid,.tools-grid,.coins-grid,.card-grid,.dash-grid,.setup-grid,.portfolio-grid{grid-template-columns:1fr!important;}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">
+    <div class="wolf"><img src="data:image/png;base64,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" alt="Wolf" style="width:38px;height:38px;vertical-align:middle;margin-right:9px;filter:drop-shadow(0 0 6px rgba(45,212,191,0.55)) drop-shadow(0 0 12px rgba(45,212,191,0.3))"></div>
+    <div class="title-block">
+      <h1>Wolf RSI + MACD RAW Divergence Scanner</h1>
+      
+    </div>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="ctl">
+    <label>Timeframe</label>
+    <select id="tf">
+      <option value="1w">Haftalık (1W)</option>
+      <option value="3d" selected>3 Gün</option>
+      <option value="1d">1 Gün</option>
+      <option value="4h">4 Saat</option>
+      <option value="1h">1 Saat</option>
+    </select>
+  </div>
+  <div class="ctl">
+    <label>Anchor Pivot Lookback</label>
+    <input type="number" id="pivotLen" value="3" min="2" max="6" />
+  </div>
+  <div class="ctl">
+    <label>Anchor Yaşı (max bar)</label>
+    <input type="number" id="maxAnchorAge" value="40" min="5" max="100" />
+  </div>
+  <div class="ctl">
+    <label>Aranan İndikatörler</label>
+    <select id="indicatorMode">
+      <option value="any" selected>Herhangi biri (RSI veya MACD veya Hist)</option>
+      <option value="rsi">Sadece RSI(14)</option>
+      <option value="macd">Sadece MACD Çizgisi</option>
+      <option value="hist">Sadece MACD Histogram</option>
+      <option value="rsi_macd">RSI + MACD Çizgisi (ikisi de)</option>
+      <option value="all3">3'lü Konfluans (RSI + MACD + Hist)</option>
+    </select>
+  </div>
+  <div class="ctl actions">
+    <button id="scanBtn" class="btn btn-primary">⚡ Tarama Başlat</button>
+    <button id="stopBtn" class="btn btn-ghost" style="display:none">⏹ Durdur</button>
+  </div>
+</div>
+
+<div class="auto-panel">
+  <div class="auto-left">
+    <label class="toggle">
+      <input type="checkbox" id="autoToggle" />
+      <span class="toggle-track"></span>
+      <span class="toggle-label">⏱ Oto-Tarama (3dk)</span>
+    </label>
+    <span class="auto-stat">Sonraki: <b id="countdown" class="countdown">—</b></span>
+    <span class="auto-stat">Son tarama: <b id="lastRun">—</b></span>
+  </div>
+  <div class="auto-right">
+    <label class="toggle">
+      <input type="checkbox" id="soundToggle" checked />
+      <span class="toggle-track"></span>
+      <span class="toggle-label">🔊 Ses</span>
+    </label>
+    <div class="melody-row">
+      <span style="font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.3px">MELODI</span>
+      <select id="melody">
+        <option value="wolf">🐺 Wolf Howl</option>
+        <option value="alert" selected>📢 Klasik Alarm</option>
+        <option value="bell">🔔 Çan Sesi</option>
+        <option value="chime">🎐 Chime</option>
+        <option value="arpeggio">🎵 Arpej</option>
+      </select>
+      <button id="testSound" class="test-btn">▶ Test</button>
+    </div>
+  </div>
+</div>
+
+<div class="status-bar">
+  <div class="left">
+    <span><span class="pulse" id="pulse" style="display:none"></span><b id="statusText">Hazır</b></span>
+    <span>Taranan: <b id="scanned">0</b>/<b id="total">0</b></span>
+    <span>CANLI sinyal: <b id="found">0</b></span>
+    <span>Yeni: <b id="newCount" style="color:var(--gold)">0</b></span>
+  </div>
+  <div class="progress"><div class="progress-bar" id="progBar"></div></div>
+</div>
+
+<div class="filter-pills" id="filters">
+  <div class="pill active" data-filter="all">Tümü <span class="count" id="c-all">0</span></div>
+  <div class="pill" data-filter="bull">🟢 BULL <span class="count" id="c-bull">0</span></div>
+  <div class="pill" data-filter="bear">🔴 BEAR <span class="count" id="c-bear">0</span></div>
+  <div class="pill" data-filter="rsi">RSI <span class="count" id="c-rsi">0</span></div>
+  <div class="pill" data-filter="macd">MACD <span class="count" id="c-macd">0</span></div>
+  <div class="pill" data-filter="hist">HIST <span class="count" id="c-hist">0</span></div>
+  <div class="pill" data-filter="triple">⭐ 3'lü <span class="count" id="c-triple">0</span></div>
+  <div class="pill" data-filter="new">✨ Yeni <span class="count" id="c-new">0</span></div>
+  <div class="sort-control">
+    <span style="font-size:10px;color:var(--muted);letter-spacing:.5px;font-weight:600">SIRALA</span>
+    <select id="sortMode">
+      <option value="score_desc" selected>Skor ↓ (Yüksek)</option>
+      <option value="score_asc">Skor ↑ (Düşük)</option>
+      <option value="symbol">Sembol (A-Z)</option>
+      <option value="change_desc">Değişim ↓</option>
+      <option value="rsi_desc">RSI ↓</option>
+    </select>
+  </div>
+  <div class="min-score-input">
+    <span style="font-size:10px;color:var(--muted);letter-spacing:.5px;font-weight:600">MİN SKOR</span>
+    <input type="number" id="minScore" value="0" min="0" max="100" step="5" />
+  </div>
+</div>
+
+<div id="grid" class="grid"></div>
+
+<div id="empty" class="empty">
+  <div class="icon">🐺</div>
+  <div>Tarama henüz başlamadı.<br><br>
+  <b>Mantık:</b> RSI(14), MACD Çizgisi (12,26) ve MACD Histogram için ayrı ayrı uyumsuzluk taranır.<br>
+  <b>3'lü konfluans</b> sinyali, üç göstergenin de aynı yönde uyumsuzluk verdiği yüksek olasılıklı setup'tır.</div>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h2 id="m-symbol">—</h2>
+      <button class="close" id="closeBtn">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-info" id="m-info"></div>
+      <div class="chart-wrap"><canvas id="chart" width="780" height="560"></canvas></div>
+      <div class="div-summary">
+        <h3>📊 CANLI RAW Uyumsuzluk Detayı</h3>
+        <div id="m-divs"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   WOLF RSI + MACD RAW DIVERGENCE SCANNER v6
+   - RSI(14), MACD Line(12,26), MACD Histogram divergences
+   - Live-only signals (current bar = new extreme, indicator does not confirm)
+   - Triple confluence detection (RSI + MACD + Histogram)
+   - Chart: Price / RSI / MACD panels
+   ============================================================ */
+
+const FAPI = "https://web-production-2bdde.up.railway.app";
+const RSI_LEN = 14;
+const MACD_FAST = 12;
+const MACD_SLOW = 26;
+const MACD_SIGNAL = 9;
+const state = {
+  scanning:false, abort:false, results:[], filter:"all",
+  knownKeys: new Set(),
+  newKeys: new Set(),
+  autoTimer:null, countdownTimer:null, nextRunAt:0,
+  audioCtx:null
+};
+const AUTO_INTERVAL_MS = 3*60*1000;
+
+/* ========================== SCORE CALCULATION ==========================
+   Standart ağırlıklar:
+   1. Konfluans (indikatör sayısı)         : 0-30 puan
+   2. Anchor yaşı (pivot tazeliği)          : 0-15 puan
+   3. İndikatör gap şiddeti                 : 0-20 puan
+   4. Fiyat hareketi şiddeti                : 0-15 puan
+   5. Aşırı bölge konumu (RSI)              : 0-10 puan
+   6. Histogram yön değişimi (momentum)     : 0-10 puan
+   TOPLAM                                   : 0-100 puan
+============================================================ */
+function calculateScore(types, side, histArr){
+  const breakdown = {
+    confluence: 0,
+    anchor_age: 0,
+    gap_strength: 0,
+    price_move: 0,
+    extreme_zone: 0,
+    momentum_flip: 0
+  };
+
+  // Filter to types matching this side
+  const sideTypes = types.filter(t => t.k === side);
+  if(sideTypes.length === 0){
+    return { total: 0, breakdown, grade: "D", side };
+  }
+
+  // ---- 1. CONFLUENCE (0-30) ----
+  const indSet = new Set(sideTypes.map(t => t.ind));
+  const indCount = indSet.size;
+  if(indCount >= 3)      breakdown.confluence = 30;
+  else if(indCount === 2) breakdown.confluence = 20;
+  else                    breakdown.confluence = 10;
+
+  // ---- 2. ANCHOR AGE (0-15) ----
+  // Use the FRESHEST (smallest age) anchor among side types
+  const ages = sideTypes.map(t => (t.newIdx - t.anchorIdx));
+  const minAge = Math.min(...ages);
+  if(minAge <= 15)      breakdown.anchor_age = 15;
+  else if(minAge <= 30) breakdown.anchor_age = 10;
+  else if(minAge <= 50) breakdown.anchor_age = 6;
+  else                  breakdown.anchor_age = 2;
+
+  // ---- 3. INDICATOR GAP STRENGTH (0-20) ----
+  // For RSI: absolute gap. For MACD/HIST: percentage of anchor magnitude.
+  // Take MAX score across all indicator types of this side (best gap wins)
+  let maxGapScore = 0;
+  for(const t of sideTypes){
+    let gapScore = 0;
+    if(t.ind === "rsi"){
+      const g = Math.abs(t.indGap);
+      if(g >= 20)       gapScore = 20;
+      else if(g >= 10)  gapScore = 15;
+      else if(g >= 5)   gapScore = 10;
+      else              gapScore = 5;
+    } else {
+      // MACD/HIST: normalize by anchor magnitude
+      const denom = Math.max(Math.abs(t.indAnchor), 1e-12);
+      const gapPct = (Math.abs(t.indGap) / denom) * 100;
+      if(gapPct >= 60)      gapScore = 20;
+      else if(gapPct >= 30) gapScore = 15;
+      else if(gapPct >= 10) gapScore = 10;
+      else                  gapScore = 5;
+    }
+    if(gapScore > maxGapScore) maxGapScore = gapScore;
+  }
+  breakdown.gap_strength = maxGapScore;
+
+  // ---- 4. PRICE MOVE STRENGTH (0-15) ----
+  // Use the price-side extreme: bull -> priceDropPct, bear -> priceRisePct
+  let pricePct = 0;
+  for(const t of sideTypes){
+    const v = (side === "bull") ? t.priceDropPct : t.priceRisePct;
+    if(v != null && v > pricePct) pricePct = v;
+  }
+  if(pricePct >= 7)      breakdown.price_move = 15;
+  else if(pricePct >= 3) breakdown.price_move = 12;
+  else if(pricePct >= 1) breakdown.price_move = 8;
+  else                   breakdown.price_move = 3;
+
+  // ---- 5. EXTREME ZONE (RSI position) (0-10) ----
+  // Find the RSI anchor value (if RSI divergence exists in this side)
+  // If no RSI divergence: use current RSI value as fallback proxy
+  let rsiAnchorVal = null;
+  const rsiType = sideTypes.find(t => t.ind === "rsi");
+  if(rsiType) rsiAnchorVal = rsiType.indAnchor;
+
+  if(rsiAnchorVal != null){
+    if(side === "bear"){
+      if(rsiAnchorVal >= 70)      breakdown.extreme_zone = 10;
+      else if(rsiAnchorVal >= 60) breakdown.extreme_zone = 6;
+      else                        breakdown.extreme_zone = 2;
+    } else {
+      if(rsiAnchorVal <= 30)      breakdown.extreme_zone = 10;
+      else if(rsiAnchorVal <= 40) breakdown.extreme_zone = 6;
+      else                        breakdown.extreme_zone = 2;
+    }
+  } else {
+    // No RSI divergence on this side: partial credit only
+    breakdown.extreme_zone = 3;
+  }
+
+  // ---- 6. HISTOGRAM MOMENTUM FLIP (0-10) ----
+  // Bear: histogram should be DECREASING in last 2-3 bars (momentum dying)
+  // Bull: histogram should be INCREASING in last 2-3 bars (momentum building)
+  if(histArr && histArr.length >= 4){
+    const N = histArr.length;
+    const h0 = histArr[N-1], h1 = histArr[N-2], h2 = histArr[N-3];
+    if(h0 != null && h1 != null && h2 != null){
+      if(side === "bear"){
+        // momentum loss: each bar smaller than prev (or histogram turning negative)
+        if(h0 < h1 && h1 < h2)        breakdown.momentum_flip = 10;
+        else if(h0 < h1)              breakdown.momentum_flip = 6;
+        else                          breakdown.momentum_flip = 0;
+      } else {
+        if(h0 > h1 && h1 > h2)        breakdown.momentum_flip = 10;
+        else if(h0 > h1)              breakdown.momentum_flip = 6;
+        else                          breakdown.momentum_flip = 0;
+      }
+    }
+  }
+
+  const total = breakdown.confluence + breakdown.anchor_age + breakdown.gap_strength
+              + breakdown.price_move + breakdown.extreme_zone + breakdown.momentum_flip;
+
+  let grade;
+  if(total >= 80)      grade = "A+";
+  else if(total >= 65) grade = "A";
+  else if(total >= 50) grade = "B";
+  else if(total >= 35) grade = "C";
+  else                 grade = "D";
+
+  return { total, breakdown, grade, side, anchorAge: minAge };
+}
+
+function gradeClass(grade){
+  if(grade === "A+") return "score-aplus";
+  if(grade === "A")  return "score-a";
+  if(grade === "B")  return "score-b";
+  if(grade === "C")  return "score-c";
+  return "score-d";
+}
+
+/* ========================== RSI(14) Wilder ========================== */
+function calcRSI(closes, length){
+  const out = new Array(closes.length).fill(null);
+  if(closes.length < length+1) return out;
+  let gain=0, loss=0;
+  for(let i=1;i<=length;i++){
+    const d = closes[i]-closes[i-1];
+    if(d>=0) gain+=d; else loss+=-d;
+  }
+  let avgG = gain/length, avgL = loss/length;
+  out[length] = avgL===0 ? 100 : 100 - 100/(1+avgG/avgL);
+  for(let i=length+1;i<closes.length;i++){
+    const d = closes[i]-closes[i-1];
+    const g = d>0?d:0, l = d<0?-d:0;
+    avgG = (avgG*(length-1)+g)/length;
+    avgL = (avgL*(length-1)+l)/length;
+    out[i] = avgL===0 ? 100 : 100 - 100/(1+avgG/avgL);
+  }
+  return out;
+}
+
+/* ========================== EMA ========================== */
+function calcEMA(values, length){
+  const out = new Array(values.length).fill(null);
+  if(values.length < length) return out;
+  // SMA seed
+  let sum = 0;
+  for(let i=0;i<length;i++) sum += values[i];
+  out[length-1] = sum/length;
+  const k = 2/(length+1);
+  for(let i=length;i<values.length;i++){
+    out[i] = values[i]*k + out[i-1]*(1-k);
+  }
+  return out;
+}
+
+/* ========================== MACD(12,26,9) ========================== */
+// returns { macd: [], signal: [], hist: [] }
+function calcMACD(closes, fast=12, slow=26, signal=9){
+  const emaFast = calcEMA(closes, fast);
+  const emaSlow = calcEMA(closes, slow);
+  const macd = closes.map((_,i)=>{
+    if(emaFast[i]==null || emaSlow[i]==null) return null;
+    return emaFast[i] - emaSlow[i];
+  });
+  // Signal line = EMA(macd, 9), only on non-null portion
+  const firstValid = macd.findIndex(v => v!==null);
+  let sig = new Array(closes.length).fill(null);
+  if(firstValid >= 0){
+    const macdValid = macd.slice(firstValid);
+    const sigValid = calcEMA(macdValid, signal);
+    for(let i=0;i<sigValid.length;i++){
+      sig[firstValid+i] = sigValid[i];
+    }
+  }
+  const hist = macd.map((m,i)=>{
+    if(m==null || sig[i]==null) return null;
+    return m - sig[i];
+  });
+  return { macd, signal: sig, hist };
+}
+
+/* ========================== LIVE-ONLY RAW DIVERGENCE ==========================
+   age=0 means: the LAST bar (live) is the new extreme.
+   - Anchor = latest confirmed pivot BEFORE last bar, within maxAnchorAge
+   - LOW side: lows[N-1] < anchor low  AND  ind[N-1] > ind[anchor]   → BULL
+   - HIGH side: highs[N-1] > anchor high AND ind[N-1] < ind[anchor]  → BEAR
+   - Indicator can be: RSI, MACD line, MACD histogram
+*/
+// Find the LOCAL extreme of an array within a small window around targetIdx.
+// side="low" -> returns index of MIN; side="high" -> index of MAX.
+// Window goes back `lookback` bars from targetIdx (inclusive).
+function localExtremeIdx(arr, targetIdx, lookback, side){
+  let bestIdx = targetIdx, bestVal = arr[targetIdx];
+  if(bestVal == null) return targetIdx;
+  const start = Math.max(0, targetIdx - lookback);
+  for(let i = start; i <= targetIdx; i++){
+    const v = arr[i];
+    if(v == null) continue;
+    if(side==="low"  && v < bestVal){ bestVal = v; bestIdx = i; }
+    if(side==="high" && v > bestVal){ bestVal = v; bestIdx = i; }
+  }
+  return bestIdx;
+}
+
+// Generic divergence detector for any indicator array
+// Returns { bull: {...}|false, bear: {...}|false }
+function detectDivergenceForIndicator(highs, lows, indArr, pivotLen, maxAnchorAge, indName){
+  const N = highs.length;
+  const out = { bull:false, bear:false };
+  const IND_LOCAL_WIN = pivotLen + 1;
+
+  // ---- LOW side (Bull divergence: dip-to-dip) ----
+  const anchorLow = findLatestPivotBefore(lows, pivotLen, "low", N-2);
+  if(anchorLow !== null){
+    const age = (N-1) - anchorLow;
+    if(age <= maxAnchorAge){
+      const liveLow = lows[N-1];
+      if(liveLow < lows[anchorLow]){
+        const indAnchorIdx = nearestLocalExtreme(indArr, anchorLow, pivotLen, "low");
+        const indNewIdx = localExtremeIdx(indArr, N-1, IND_LOCAL_WIN, "low");
+        const iA = indArr[indAnchorIdx], iN = indArr[indNewIdx];
+        if(iA != null && iN != null && indAnchorIdx !== indNewIdx && iN > iA){
+          out.bull = {
+            indicator: indName,
+            anchorIdx: anchorLow, newIdx: N-1,
+            anchorVal: lows[anchorLow], newVal: liveLow,
+            indAnchorIdx, indNewIdx,
+            indAnchor: iA, indNew: iN, age: 0,
+            priceDropPct: (lows[anchorLow]-liveLow)/lows[anchorLow]*100,
+            indGap: iN - iA
+          };
+        }
+      }
+    }
+  }
+
+  // ---- HIGH side (Bear divergence: peak-to-peak) ----
+  const anchorHigh = findLatestPivotBefore(highs, pivotLen, "high", N-2);
+  if(anchorHigh !== null){
+    const age = (N-1) - anchorHigh;
+    if(age <= maxAnchorAge){
+      const liveHigh = highs[N-1];
+      if(liveHigh > highs[anchorHigh]){
+        const indAnchorIdx = nearestLocalExtreme(indArr, anchorHigh, pivotLen, "high");
+        const indNewIdx = localExtremeIdx(indArr, N-1, IND_LOCAL_WIN, "high");
+        const iA = indArr[indAnchorIdx], iN = indArr[indNewIdx];
+        if(iA != null && iN != null && indAnchorIdx !== indNewIdx && iN < iA){
+          out.bear = {
+            indicator: indName,
+            anchorIdx: anchorHigh, newIdx: N-1,
+            anchorVal: highs[anchorHigh], newVal: liveHigh,
+            indAnchorIdx, indNewIdx,
+            indAnchor: iA, indNew: iN, age: 0,
+            priceRisePct: (liveHigh-highs[anchorHigh])/highs[anchorHigh]*100,
+            indGap: iA - iN
+          };
+        }
+      }
+    }
+  }
+
+  return out;
+}
+
+// Backwards-compatible RSI-only detector (returns rsiAnchor/rsiNew keys)
+function detectLiveRaw(highs, lows, rsiArr, pivotLen, maxAnchorAge){
+  const d = detectDivergenceForIndicator(highs, lows, rsiArr, pivotLen, maxAnchorAge, "RSI");
+  const out = { bull:false, bear:false };
+  if(d.bull){
+    out.bull = {
+      ...d.bull,
+      rsiAnchorIdx: d.bull.indAnchorIdx, rsiNewIdx: d.bull.indNewIdx,
+      rsiAnchor: d.bull.indAnchor, rsiNew: d.bull.indNew,
+      rsiGap: d.bull.indGap
+    };
+  }
+  if(d.bear){
+    out.bear = {
+      ...d.bear,
+      rsiAnchorIdx: d.bear.indAnchorIdx, rsiNewIdx: d.bear.indNewIdx,
+      rsiAnchor: d.bear.indAnchor, rsiNew: d.bear.indNew,
+      rsiGap: d.bear.indGap
+    };
+  }
+  return out;
+}
+
+// Find local extreme index in arr near targetIdx (within ±radius)
+function nearestLocalExtreme(arr, targetIdx, radius, side){
+  let bestIdx = targetIdx, bestVal = arr[targetIdx];
+  if(bestVal == null){
+    // fall back: scan window
+    bestVal = side==="low" ? Infinity : -Infinity;
+  }
+  const start = Math.max(0, targetIdx - radius);
+  const end   = Math.min(arr.length-1, targetIdx + radius);
+  for(let i = start; i <= end; i++){
+    const v = arr[i];
+    if(v == null) continue;
+    if(side==="low"  && v < bestVal){ bestVal = v; bestIdx = i; }
+    if(side==="high" && v > bestVal){ bestVal = v; bestIdx = i; }
+  }
+  return bestIdx;
+}
+
+function findLatestPivotBefore(arr, len, side, maxIdx){
+  if(maxIdx < len) return null;
+  const upper = Math.min(maxIdx, arr.length-len-1);
+  for(let i = upper; i >= len; i--){
+    if(arr[i] == null) continue;
+    let ok = true;
+    for(let k=1;k<=len;k++){
+      const lv = arr[i-k], rv = arr[i+k];
+      if(lv==null || rv==null){ ok=false; break; }
+      if(side==="low"  && (lv <= arr[i] || rv <= arr[i])){ ok=false; break; }
+      if(side==="high" && (lv >= arr[i] || rv >= arr[i])){ ok=false; break; }
+    }
+    if(ok) return i;
+  }
+  return null;
+}
+
+/* ========================== Fetch & Pool ========================== */
+async function getSymbols(){
+  const r = await fetch(FAPI+"/fapi/v1/exchangeInfo");
+  const j = await r.json();
+  return j.symbols
+    .filter(s => s.status==="TRADING" && s.contractType==="PERPETUAL" && s.quoteAsset==="USDT")
+    .map(s => s.symbol);
+}
+async function getKlines(symbol, interval, limit=200){
+  const url = `${FAPI}/fapi/v1/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`;
+  const r = await fetch(url);
+  if(!r.ok) throw new Error("klines "+r.status);
+  return r.json();
+}
+async function runPool(items, worker, concurrency, onProgress){
+  let idx=0, done=0;
+  const total = items.length;
+  const workers = Array(Math.min(concurrency,total)).fill(0).map(async ()=>{
+    while(idx<total && !state.abort){
+      const myIdx = idx++;
+      try{ await worker(items[myIdx]); }catch(e){}
+      done++;
+      onProgress && onProgress(done,total);
+    }
+  });
+  await Promise.all(workers);
+}
+
+/* ========================== Scan ========================== */
+async function scan(isAuto=false){
+  if(state.scanning) return;
+  state.scanning=true; state.abort=false;
+  const prevKeys = new Set(state.results.map(r => r.symbol+":"+r.types.map(t=>t.k).join(",")));
+  state.results=[];
+  state.newKeys = new Set();
+
+  $("scanBtn").style.display="none"; $("stopBtn").style.display="inline-flex";
+  $("pulse").style.display="inline-block";
+  $("statusText").textContent = isAuto ? "🔄 Oto-tarama: semboller alınıyor..." : "Semboller alınıyor...";
+  $("grid").innerHTML=""; $("empty").style.display="none";
+  $("progBar").style.width = "0%";
+  updateCounts();
+
+  const tf = $("tf").value;
+  const pivotLen = Math.max(2, parseInt($("pivotLen").value)||3);
+  const maxAnchorAge = Math.max(5, parseInt($("maxAnchorAge").value)||40);
+  const indicatorMode = $("indicatorMode").value;
+
+  let symbols;
+  try{ symbols = await getSymbols(); }
+  catch(e){ $("statusText").textContent="❌ Sembol listesi alınamadı (VPN dene)"; resetScan(); return; }
+
+  $("total").textContent = symbols.length;
+  $("statusText").textContent = `${symbols.length} coin taranıyor (${tf})...`;
+
+  await runPool(symbols, async (sym)=>{
+    if(state.abort) return;
+    let kl;
+    try{ kl = await getKlines(sym, tf, 200); }catch(e){ return; }
+    if(!kl || kl.length < 60) return;
+
+    const closes = kl.map(k=>parseFloat(k[4]));
+    const opens  = kl.map(k=>parseFloat(k[1]));
+    const highs  = kl.map(k=>parseFloat(k[2]));
+    const lows   = kl.map(k=>parseFloat(k[3]));
+
+    // Indicators
+    const rsi = calcRSI(closes, RSI_LEN);
+    const macdData = calcMACD(closes, MACD_FAST, MACD_SLOW, MACD_SIGNAL);
+
+    // Detect divergences for each indicator separately
+    const dRSI  = detectDivergenceForIndicator(highs, lows, rsi,            pivotLen, maxAnchorAge, "RSI");
+    const dMACD = detectDivergenceForIndicator(highs, lows, macdData.macd,  pivotLen, maxAnchorAge, "MACD");
+    const dHIST = detectDivergenceForIndicator(highs, lows, macdData.hist,  pivotLen, maxAnchorAge, "HIST");
+
+    const types = [];
+    if(dRSI.bull)  types.push({ k:"bull", ind:"rsi",  ...dRSI.bull });
+    if(dRSI.bear)  types.push({ k:"bear", ind:"rsi",  ...dRSI.bear });
+    if(dMACD.bull) types.push({ k:"bull", ind:"macd", ...dMACD.bull });
+    if(dMACD.bear) types.push({ k:"bear", ind:"macd", ...dMACD.bear });
+    if(dHIST.bull) types.push({ k:"bull", ind:"hist", ...dHIST.bull });
+    if(dHIST.bear) types.push({ k:"bear", ind:"hist", ...dHIST.bear });
+
+    if(types.length===0) return;
+
+    // Apply indicator filter mode
+    const indSet = new Set(types.map(t => t.ind));
+    const sideSet = new Set(types.map(t => t.k));
+    let pass = true;
+    if(indicatorMode === "rsi")       pass = indSet.has("rsi");
+    else if(indicatorMode === "macd") pass = indSet.has("macd");
+    else if(indicatorMode === "hist") pass = indSet.has("hist");
+    else if(indicatorMode === "rsi_macd"){
+      // RSI and MACD line both present, on the SAME side
+      pass = (sideSet.size === 1) && indSet.has("rsi") && indSet.has("macd");
+    }
+    else if(indicatorMode === "all3"){
+      // All three on same side
+      pass = (sideSet.size === 1) && indSet.has("rsi") && indSet.has("macd") && indSet.has("hist");
+    }
+    if(!pass) return;
+
+    const livePrice = closes[closes.length-1];
+    const baseIdx = Math.max(0, closes.length-25);
+    const chg = ((livePrice - closes[baseIdx]) / closes[baseIdx]) * 100;
+
+    // Triple confluence flag
+    const isTriple = (sideSet.size === 1) && indSet.has("rsi") && indSet.has("macd") && indSet.has("hist");
+
+    // ---- SCORE: compute per side, take max if both sides present ----
+    const sides = [...sideSet];
+    const scores = sides.map(s => calculateScore(types, s, macdData.hist));
+    // Pick the dominant side score (highest); show it on the card
+    scores.sort((a,b) => b.total - a.total);
+    const primaryScore = scores[0];
+
+    const sigKey = sym+":"+types.map(t=>t.k+"-"+t.ind).join(",");
+    const isNew = !prevKeys.has(sigKey);
+    if(isNew) state.newKeys.add(sigKey);
+
+    const result = {
+      symbol: sym, price: livePrice, change: chg,
+      rsi: rsi[rsi.length-1],
+      macd: macdData.macd[macdData.macd.length-1],
+      macdSignal: macdData.signal[macdData.signal.length-1],
+      hist: macdData.hist[macdData.hist.length-1],
+      types, closes, opens, highs, lows,
+      rsiArr: rsi,
+      macdArr: macdData.macd,
+      sigArr: macdData.signal,
+      histArr: macdData.hist,
+      tf, pivotLen, maxAnchorAge, isNew, sigKey, isTriple,
+      score: primaryScore,
+      allScores: scores
+    };
+    state.results.push(result);
+    renderCard(result);
+    updateCounts();
+  }, 10, (done,total)=>{
+    $("scanned").textContent = done;
+    $("progBar").style.width = ((done/total)*100)+"%";
+  });
+
+  const newCount = state.newKeys.size;
+  $("statusText").textContent = state.abort
+    ? `⏹ Durduruldu — ${state.results.length} CANLI sinyal`
+    : `✅ Tarama tamam — ${state.results.length} CANLI sinyal${newCount>0?` (${newCount} YENİ)`:""}`;
+
+  // Sort cards by current sort mode
+  sortAndRender();
+
+  if(!state.abort && newCount > 0 && prevKeys.size > 0){
+    playAlarm();
+    flashTitle(`🚨 ${newCount} yeni sinyal!`);
+  }
+
+  $("lastRun").textContent = new Date().toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  resetScan();
+}
+
+function resetScan(){
+  state.scanning=false;
+  $("scanBtn").style.display="inline-flex"; $("stopBtn").style.display="none";
+  $("pulse").style.display="none";
+  if(state.results.length===0 && !state.abort){
+    $("empty").style.display="block";
+    $("empty").innerHTML = '<div class="icon">🔍</div><div>Şu an CANLI RAW divergence yapan coin yok. Anchor Yaşı\'nı arttır veya farklı zaman dilimini dene.</div>';
+  }
+}
+
+/* ========================== Render ========================== */
+function renderCard(r){
+  const card = document.createElement("div");
+  // Dominant side: prefer bull if exists, else bear (or whatever's first)
+  const sideSet = new Set(r.types.map(t=>t.k));
+  const dominantType = sideSet.has("bull") && !sideSet.has("bear") ? "bull"
+                      : sideSet.has("bear") && !sideSet.has("bull") ? "bear"
+                      : r.types[0].k;
+  card.className = "card "+dominantType + (r.isNew ? " is-new" : "") + (r.isTriple ? " triple" : "");
+  card.dataset.symbol = r.symbol;
+  card.dataset.types = r.types.map(t=>t.k).join(",");
+  card.dataset.inds = r.types.map(t=>t.ind).join(",");
+  card.dataset.isNew = r.isNew ? "1":"0";
+  card.dataset.isTriple = r.isTriple ? "1":"0";
+  card.dataset.score = r.score?.total ?? 0;
+
+  const indMap = {
+    rsi:  {cls:"ind-rsi",  txt:"RSI"},
+    macd: {cls:"ind-macd", txt:"MACD"},
+    hist: {cls:"ind-hist", txt:"HIST"}
+  };
+  const sideMap = {
+    bull: {cls:"tag-bull", txt:"🟢 BULL"},
+    bear: {cls:"tag-bear", txt:"🔴 BEAR"}
+  };
+
+  // Group by side -> list of indicators
+  const grouped = {};
+  for(const t of r.types){
+    if(!grouped[t.k]) grouped[t.k] = [];
+    grouped[t.k].push(t);
+  }
+  const tagsHtml = Object.entries(grouped).map(([side,arr])=>{
+    const indPills = arr.map(t=>`<span class="ind-pill ${indMap[t.ind].cls}">${indMap[t.ind].txt}</span>`).join("");
+    return `<span class="tag ${sideMap[side].cls}">${sideMap[side].txt} ${indPills} <span class="live-badge">CANLI</span></span>`;
+  }).join("");
+
+  const newDot = r.isNew ? '<span class="new-dot" title="Yeni!"></span>' : '';
+  const tripleBadge = r.isTriple ? '<span class="triple-conf">⭐ 3\'LÜ KONFLUANS</span>' : '';
+
+  // Score badge
+  const scoreHtml = r.score
+    ? `<div class="score-badge ${gradeClass(r.score.grade)}" title="Skor: ${r.score.total}/100 (${r.score.grade})">
+         <div class="num">${r.score.total}</div>
+         <div class="lbl">${r.score.grade}</div>
+       </div>`
+    : "";
+
+  // Build the labeled detail rows — show one summary row per indicator
+  const detailRows = r.types.map(t=>{
+    const indTxt = indMap[t.ind].txt;
+    const arrow = t.k==="bull" ? "↘ Dip" : "↗ Tepe";
+    const fmtIndVal = (v)=>{
+      if(t.ind === "rsi") return v.toFixed(1);
+      if(Math.abs(v) >= 1)   return v.toFixed(4);
+      if(Math.abs(v) >= 0.001) return v.toFixed(6);
+      return v.toExponential(2);
+    };
+    return `
+      <div class="info-line"><span class="lab">${indTxt} · ${arrow}</span><span class="val">${fmtPrice(t.anchorVal)} → ${fmtPrice(t.newVal)}</span></div>
+      <div class="info-line"><span class="lab">${indTxt} değeri</span><span class="val">${fmtIndVal(t.indAnchor)} → ${fmtIndVal(t.indNew)}</span></div>`;
+  }).join("");
+
+  const macdNow = r.macd!=null ? r.macd.toFixed(Math.abs(r.macd)>=1 ? 4 : 6) : "-";
+  const histNow = r.hist!=null ? r.hist.toFixed(Math.abs(r.hist)>=1 ? 4 : 6) : "-";
+
+  card.innerHTML = `
+    ${scoreHtml}
+    <div class="card-head">
+      <div class="symbol">${newDot}${r.symbol}</div>
+      <div class="price">
+        <div class="price-val">${fmtPrice(r.price)}</div>
+        <div class="price-chg ${r.change>=0?'up':'down'}">${r.change>=0?'+':''}${r.change.toFixed(2)}%</div>
+      </div>
+    </div>
+    ${tripleBadge ? `<div style="margin-bottom:8px">${tripleBadge}</div>`: ''}
+    <div class="div-tags">${tagsHtml}</div>
+    ${detailRows}
+    <div class="strength">RSI: <b>${r.rsi?.toFixed(1)??'-'}</b> · MACD: <b>${macdNow}</b> · HIST: <b>${histNow}</b></div>
+  `;
+  card.addEventListener("click", ()=>openModal(r));
+  applyFilterToCard(card);
+  $("grid").appendChild(card);
+}
+
+function fmtPrice(p){
+  if(p>=1) return p.toFixed(4);
+  if(p>=0.01) return p.toFixed(5);
+  return p.toFixed(7);
+}
+
+function updateCounts(){
+  const c={bull:0,bear:0,nu:0,rsi:0,macd:0,hist:0,triple:0};
+  state.results.forEach(r=>{
+    const sides = new Set(r.types.map(t=>t.k));
+    const inds  = new Set(r.types.map(t=>t.ind));
+    if(sides.has("bull")) c.bull++;
+    if(sides.has("bear")) c.bear++;
+    if(inds.has("rsi"))   c.rsi++;
+    if(inds.has("macd"))  c.macd++;
+    if(inds.has("hist"))  c.hist++;
+    if(r.isTriple) c.triple++;
+    if(r.isNew) c.nu++;
+  });
+  $("c-all").textContent = state.results.length;
+  $("c-bull").textContent = c.bull;
+  $("c-bear").textContent = c.bear;
+  $("c-rsi").textContent = c.rsi;
+  $("c-macd").textContent = c.macd;
+  $("c-hist").textContent = c.hist;
+  $("c-triple").textContent = c.triple;
+  $("c-new").textContent = c.nu;
+  $("found").textContent = state.results.length;
+  $("newCount").textContent = c.nu;
+}
+
+/* ========================== Filters ========================== */
+function applyFilter(f){
+  state.filter = f;
+  document.querySelectorAll(".pill").forEach(p=>p.classList.toggle("active", p.dataset.filter===f));
+  document.querySelectorAll(".card").forEach(applyFilterToCard);
+}
+function applyFilterToCard(card){
+  const f = state.filter;
+  const minScore = parseFloat($("minScore").value) || 0;
+  const cardScore = parseFloat(card.dataset.score) || 0;
+
+  // Min score gate (always applies)
+  if(cardScore < minScore){
+    card.style.display = "none";
+    return;
+  }
+
+  if(f==="all"){ card.style.display=""; return; }
+  if(f==="new"){ card.style.display = card.dataset.isNew==="1" ? "" : "none"; return; }
+  if(f==="triple"){ card.style.display = card.dataset.isTriple==="1" ? "" : "none"; return; }
+  if(f==="bull" || f==="bear"){
+    card.style.display = card.dataset.types.split(",").includes(f) ? "" : "none";
+    return;
+  }
+  if(f==="rsi" || f==="macd" || f==="hist"){
+    card.style.display = card.dataset.inds.split(",").includes(f) ? "" : "none";
+    return;
+  }
+  card.style.display = "";
+}
+
+/* ========================== Sort ========================== */
+function sortAndRender(){
+  const mode = $("sortMode").value;
+  const sorted = [...state.results];
+  if(mode === "score_desc"){
+    sorted.sort((a,b)=> (b.score?.total||0) - (a.score?.total||0));
+  } else if(mode === "score_asc"){
+    sorted.sort((a,b)=> (a.score?.total||0) - (b.score?.total||0));
+  } else if(mode === "symbol"){
+    sorted.sort((a,b)=> a.symbol.localeCompare(b.symbol));
+  } else if(mode === "change_desc"){
+    sorted.sort((a,b)=> b.change - a.change);
+  } else if(mode === "rsi_desc"){
+    sorted.sort((a,b)=> (b.rsi||0) - (a.rsi||0));
+  }
+  // Re-render
+  $("grid").innerHTML = "";
+  sorted.forEach(r => renderCard(r));
+}
+
+/* ========================== Modal & Chart ========================== */
+function openModal(r){
+  $("m-symbol").textContent = r.symbol+" · "+r.tf.toUpperCase();
+  const macdNow = r.macd!=null ? (Math.abs(r.macd)>=1 ? r.macd.toFixed(4) : r.macd.toFixed(6)) : "-";
+  const histNow = r.hist!=null ? (Math.abs(r.hist)>=1 ? r.hist.toFixed(4) : r.hist.toFixed(6)) : "-";
+  $("m-info").innerHTML = `
+    <div class="info-cell"><div class="lab">Fiyat (canlı)</div><div class="val">${fmtPrice(r.price)}</div></div>
+    <div class="info-cell"><div class="lab">RSI(14)</div><div class="val">${r.rsi?.toFixed(2)}</div></div>
+    <div class="info-cell"><div class="lab">MACD</div><div class="val">${macdNow}</div></div>
+    <div class="info-cell"><div class="lab">Histogram</div><div class="val ${r.hist>=0?'up':'down'}">${histNow}</div></div>
+    <div class="info-cell"><div class="lab">Timeframe</div><div class="val">${r.tf.toUpperCase()}</div></div>
+    <div class="info-cell"><div class="lab">24h Değişim</div><div class="val ${r.change>=0?'up':'down'}">${r.change>=0?'+':''}${r.change.toFixed(2)}%</div></div>
+  `;
+
+  // ===== Score breakdown panel =====
+  const scoreHtml = renderScoreBreakdown(r);
+
+  const indNameMap = { rsi: "RSI(14)", macd: "MACD Çizgisi", hist: "MACD Histogram" };
+  const itemsHtml = r.types.map(t=>{
+    const indName = indNameMap[t.ind] || t.ind;
+    const pivotLabel = t.k==="bull" ? "Pivot Dip (Anchor)" : "Pivot Tepe (Anchor)";
+    const newLabel = t.k==="bull" ? "Yeni Dip (Canlı)" : "Yeni Tepe (Canlı)";
+    const tagTxt = t.k==="bull"
+      ? `🟢 BULL DIVERGENCE — ${indName}`
+      : `🔴 BEAR DIVERGENCE — ${indName}`;
+    const fmtIndVal = (v)=>{
+      if(t.ind === "rsi") return v.toFixed(2);
+      if(Math.abs(v) >= 1)   return v.toFixed(4);
+      if(Math.abs(v) >= 0.001) return v.toFixed(6);
+      return v.toExponential(2);
+    };
+    const explain = t.k==="bull"
+      ? `Fiyat <b>${t.priceDropPct.toFixed(2)}%</b> daha derin LL yaptı, ${indName} ise <b>+${(t.indGap).toFixed(t.ind==="rsi"?1:6)}</b> daha yüksek (HL).`
+      : `Fiyat <b>+${t.priceRisePct.toFixed(2)}%</b> daha yüksek HH yaptı, ${indName} ise <b>-${(t.indGap).toFixed(t.ind==="rsi"?1:6)}</b> daha düşük (LH).`;
+    return `
+      <div class="item" style="margin-top:10px"><b>${tagTxt}</b></div>
+      <div class="item">${explain}</div>
+      <div class="pivot-detail">
+        <div class="pivot-box">
+          <div class="lab">${pivotLabel}</div>
+          <div class="row"><span class="k">Mum index:</span><span class="v">-${(r.closes.length-1)-t.anchorIdx} bar</span></div>
+          <div class="row"><span class="k">Fiyat:</span><span class="v">${fmtPrice(t.anchorVal)}</span></div>
+          <div class="row"><span class="k">${indName}:</span><span class="v">${fmtIndVal(t.indAnchor)}</span></div>
+        </div>
+        <div class="pivot-box">
+          <div class="lab">${newLabel}</div>
+          <div class="row"><span class="k">Mum index:</span><span class="v">CANLI (0)</span></div>
+          <div class="row"><span class="k">Fiyat:</span><span class="v">${fmtPrice(t.newVal)}</span></div>
+          <div class="row"><span class="k">${indName}:</span><span class="v">${fmtIndVal(t.indNew)}</span></div>
+        </div>
+      </div>`;
+  }).join("");
+
+  const tripleTag = r.isTriple ? `<div class="item" style="margin-bottom:10px"><span class="triple-conf">⭐ 3'LÜ KONFLUANS — RSI + MACD + HIST aynı yönde uyumsuz</span></div>` : "";
+  $("m-divs").innerHTML = scoreHtml + tripleTag + itemsHtml + `<div class="item" style="margin-top:10px;color:var(--gold);font-style:italic">⚡ Bu sinyal şu anki mumda oluştu. Grafikte kesikli çizgi = pivot henüz teyitli değil.</div>`;
+
+  drawChart(r);
+  $("modal").classList.add("show");
+}
+
+function renderScoreBreakdown(r){
+  if(!r.score) return "";
+  const s = r.score;
+  const b = s.breakdown;
+  const max = { confluence:30, anchor_age:15, gap_strength:20, price_move:15, extreme_zone:10, momentum_flip:10 };
+  const labelMap = {
+    confluence:    "🎯 Konfluans",
+    anchor_age:    "⏰ Anchor Tazeliği",
+    gap_strength:  "💪 İndikatör Şiddeti",
+    price_move:    "📈 Fiyat Hareketi",
+    extreme_zone:  "🔥 Aşırı Bölge (RSI)",
+    momentum_flip: "🌀 Hist. Momentum"
+  };
+  const helpMap = {
+    confluence:    s.breakdown.confluence===30 ? "3 indikatör (RSI+MACD+HIST)" : s.breakdown.confluence===20 ? "2 indikatör" : "1 indikatör",
+    anchor_age:    `${s.anchorAge} bar önceki anchor`,
+    gap_strength:  "İndikatör değer farkı",
+    price_move:    "LL/HH derinliği %",
+    extreme_zone:  "RSI aşırı alım/satım bölgesinde mi",
+    momentum_flip: "Histogram yön değiştiriyor mu"
+  };
+  const rows = Object.keys(max).map(k=>{
+    const val = b[k];
+    const m = max[k];
+    const pct = (val/m)*100;
+    const dim = val === 0 ? "dim" : "";
+    return `
+      <div class="score-row ${dim}">
+        <div class="lab" title="${helpMap[k]}">${labelMap[k]}</div>
+        <div class="bar-wrap"><div class="bar" style="width:${pct}%"></div></div>
+        <div class="val">${val}/${m}</div>
+      </div>`;
+  }).join("");
+
+  const sideLbl = s.side === "bull" ? "🟢 BULL" : "🔴 BEAR";
+  const gradeColor = s.grade === "A+" ? "#f5b342"
+                    : s.grade === "A" ? "var(--green)"
+                    : s.grade === "B" ? "var(--blue)"
+                    : s.grade === "C" ? "var(--gold)"
+                    : "var(--muted)";
+  const gradeBg = `rgba(${s.grade==="A+"?"251,191,36":s.grade==="A"?"34,197,94":s.grade==="B"?"59,130,246":s.grade==="C"?"245,179,66":"139,148,168"},0.15)`;
+
+  // Show second-side score if present
+  let secondSideHtml = "";
+  if(r.allScores && r.allScores.length > 1){
+    const s2 = r.allScores[1];
+    const s2Side = s2.side === "bull" ? "🟢 BULL" : "🔴 BEAR";
+    secondSideHtml = `<div style="margin-top:8px;font-size:11px;color:var(--muted);text-align:center">İkincil yön: ${s2Side} ${s2.total}/100 (${s2.grade})</div>`;
+  }
+
+  return `
+    <div class="score-summary">
+      <div class="score-header">
+        <div>
+          <div class="score-big" style="color:${gradeColor}">${s.total}<span style="font-size:18px;color:var(--muted);font-weight:600">/100</span></div>
+          <div class="score-big-sub">${sideLbl} · Sinyal Skoru</div>
+        </div>
+        <div class="score-grade" style="color:${gradeColor};border-color:${gradeColor};background:${gradeBg}">
+          ${s.grade} ${s.grade==="A+"?"PREMIUM":s.grade==="A"?"GÜÇLÜ":s.grade==="B"?"ORTA":s.grade==="C"?"ZAYIF":"ÇÖP"}
+        </div>
+      </div>
+      <div class="score-bars">${rows}</div>
+      ${secondSideHtml}
+    </div>`;
+}
+function closeModal(){ $("modal").classList.remove("show"); }
+
+function drawChart(r){
+  const cv = $("chart");
+  const ctx = cv.getContext("2d");
+  const W = cv.width, H = cv.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = "#0a0e1a"; ctx.fillRect(0,0,W,H);
+
+  const padL=58, padR=12, padT=10, padB=22;
+  const usable = H - padT - padB;
+  // 3 panels: Price 50%, RSI 22%, MACD 28% (with small gaps)
+  const gap = 8;
+  const priceH = (usable - gap*2) * 0.50;
+  const rsiH   = (usable - gap*2) * 0.22;
+  const macdH  = (usable - gap*2) * 0.28;
+  const priceTop = padT;
+  const rsiTop   = priceTop + priceH + gap;
+  const macdTop  = rsiTop + rsiH + gap;
+
+  // Determine how far back to draw (cover earliest anchor)
+  const minAnchorIdx = Math.min(...r.types.map(t => Math.min(t.anchorIdx, t.indAnchorIdx)));
+  const N_data = r.closes.length;
+  const need = Math.max(80, (N_data-1) - minAnchorIdx + 10);
+  const N = Math.min(N_data, need);
+  const off = N_data - N;
+
+  const closes = r.closes.slice(off);
+  const opens  = r.opens.slice(off);
+  const highs  = r.highs.slice(off);
+  const lows   = r.lows.slice(off);
+  const rsi    = r.rsiArr.slice(off);
+  const macd   = r.macdArr.slice(off);
+  const sigArr = r.sigArr.slice(off);
+  const hist   = r.histArr.slice(off);
+
+  const pMax = Math.max(...highs);
+  const pMin = Math.min(...lows);
+  const pRng = pMax-pMin || 1;
+
+  const cw = (W-padL-padR)/N;
+  const bodyW = Math.max(1.2, cw*0.7);
+
+  // ============ PRICE PANEL ============
+  ctx.strokeStyle = "#1a2233"; ctx.lineWidth = 1;
+  ctx.fillStyle = "#8892a8"; ctx.font = "10px Inter,system-ui"; ctx.textAlign = "right";
+  for(let i=0;i<=4;i++){
+    const y = priceTop + (priceH*i/4);
+    ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(W-padR,y); ctx.stroke();
+    const v = pMax - (pRng*i/4);
+    ctx.fillText(fmtPrice(v), padL-4, y+3);
+  }
+
+  for(let i=0;i<N;i++){
+    const x = padL + cw*i + cw/2;
+    const yH = priceTop + ((pMax-highs[i])/pRng)*priceH;
+    const yL = priceTop + ((pMax-lows[i])/pRng)*priceH;
+    const yO = priceTop + ((pMax-opens[i])/pRng)*priceH;
+    const yC = priceTop + ((pMax-closes[i])/pRng)*priceH;
+    const up = closes[i]>=opens[i];
+    ctx.strokeStyle = up?"#22c55e":"#ef4444";
+    ctx.fillStyle = up?"#22c55e":"#ef4444";
+    ctx.beginPath(); ctx.moveTo(x,yH); ctx.lineTo(x,yL); ctx.stroke();
+    ctx.fillRect(x-bodyW/2, Math.min(yO,yC), bodyW, Math.max(1,Math.abs(yC-yO)));
+  }
+
+  const toX        = (idx)=> padL + cw*(idx-off) + cw/2;
+  const toYprice   = (val)=> priceTop + ((pMax-val)/pRng)*priceH;
+  const toYrsi     = (val)=> rsiTop + ((100-val)/100)*rsiH;
+
+  // ============ Helper: draw a labeled point with value text ============
+  function drawLabeledPoint(x, y, color, valText, side, isHollow){
+    ctx.fillStyle = color;
+    if(isHollow){
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = color;
+      ctx.beginPath(); ctx.arc(x,y,5.5,0,Math.PI*2); ctx.stroke();
+      ctx.fillStyle="#0a0e1a"; ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle = color; ctx.beginPath(); ctx.arc(x,y,2,0,Math.PI*2); ctx.fill();
+    } else {
+      ctx.beginPath(); ctx.arc(x,y,4.5,0,Math.PI*2); ctx.fill();
+    }
+    ctx.font="bold 9px 'SF Mono', Menlo, monospace";
+    const padX=4, padY=2;
+    const tw = ctx.measureText(valText).width;
+    const bw = tw + padX*2;
+    const bh = 13;
+    let bx, by;
+    if(side==="below"){ bx = x - bw/2; by = y + 7; }
+    else { bx = x - bw/2; by = y - 7 - bh; }
+    bx = Math.max(2, Math.min(W-bw-2, bx));
+    ctx.fillStyle = "rgba(10,14,26,0.94)";
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1;
+    ctx.fillRect(bx, by, bw, bh);
+    ctx.strokeRect(bx, by, bw, bh);
+    ctx.fillStyle = color;
+    ctx.textAlign = "center"; ctx.textBaseline="middle";
+    ctx.fillText(valText, bx + bw/2, by + bh/2);
+    ctx.textBaseline="alphabetic";
+  }
+
+  // ============ PRICE divergence lines ============
+  // Color per indicator (so user can tell which divergence is which)
+  const indColorMap = {
+    rsi:  { bull: "#22c55e", bear: "#ef4444" }, // green/red — main
+    macd: { bull: "#2dd4bf", bear: "#2dd4bf" }, // blue/purple
+    hist: { bull: "#2dd4bf", bear: "#f5b342" }  // cyan/amber
+  };
+  const fmtIndVal = (ind, v)=>{
+    if(ind === "rsi") return v.toFixed(1);
+    if(Math.abs(v) >= 1)     return v.toFixed(3);
+    if(Math.abs(v) >= 0.001) return v.toFixed(5);
+    return v.toExponential(1);
+  };
+
+  // Group same-side divergences so price line is drawn once even if multiple inds
+  // We still show all indicator lines on indicator panels
+  const drawnPriceSides = new Set();
+  ctx.lineWidth = 2.5;
+  for(const t of r.types){
+    if(t.anchorIdx < off) continue;
+    const isLow = (t.k==="bull");
+    const color = indColorMap[t.ind][t.k];
+    const x1 = toX(t.anchorIdx), x2 = toX(t.newIdx);
+    const y1p = toYprice(t.anchorVal);
+    const y2p = toYprice(t.newVal);
+
+    // Price-side line: only draw once per side (use first indicator's color)
+    const sideKey = t.k;
+    if(!drawnPriceSides.has(sideKey)){
+      drawnPriceSides.add(sideKey);
+      // Use a distinct color for the price line — gold for clarity (it's the price level)
+      const priceLineColor = isLow ? "#22c55e" : "#ef4444";
+      ctx.setLineDash([6,4]);
+      ctx.strokeStyle = priceLineColor;
+      ctx.beginPath(); ctx.moveTo(x1,y1p); ctx.lineTo(x2,y2p); ctx.stroke();
+      ctx.setLineDash([]);
+      drawLabeledPoint(x1, y1p, priceLineColor, fmtPrice(t.anchorVal), isLow ? "below" : "above", false);
+      drawLabeledPoint(x2, y2p, priceLineColor, fmtPrice(t.newVal),    isLow ? "below" : "above", true);
+      ctx.font="bold 11px Inter";
+      ctx.textAlign="center";
+      ctx.fillStyle = priceLineColor;
+      const midX = (x1+x2)/2;
+      const tagY = isLow ? Math.max(y1p,y2p)+34 : Math.min(y1p,y2p)-22;
+      ctx.fillText("RAW "+(t.k==="bull"?"BULL":"BEAR"), midX, tagY);
+    }
+  }
+
+  // ============ RSI PANEL ============
+  ctx.strokeStyle = "#1a2233";
+  ctx.beginPath(); ctx.moveTo(padL,rsiTop); ctx.lineTo(W-padR,rsiTop); ctx.stroke();
+  ctx.fillStyle="#8892a8"; ctx.textAlign="right"; ctx.font="10px Inter";
+  [30,50,70].forEach(lv=>{
+    const y = rsiTop + ((100-lv)/100)*rsiH;
+    ctx.strokeStyle = lv===50?"#1f2740":"#1a2233";
+    ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(W-padR,y); ctx.stroke();
+    ctx.fillText(lv, padL-4, y+3);
+  });
+
+  // RSI line
+  ctx.strokeStyle="#f5b342"; ctx.lineWidth=2; ctx.beginPath();
+  let started=false;
+  for(let i=0;i<rsi.length;i++){
+    if(rsi[i]==null) continue;
+    const x = padL+cw*i+cw/2;
+    const y = rsiTop+((100-rsi[i])/100)*rsiH;
+    if(!started){ ctx.moveTo(x,y); started=true; }
+    else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+
+  // RSI div lines (only for RSI-indicator types)
+  ctx.lineWidth = 2.5;
+  for(const t of r.types){
+    if(t.ind !== "rsi") continue;
+    if(t.indAnchorIdx < off) continue;
+    const color = indColorMap.rsi[t.k];
+    const isLow = (t.k==="bull");
+    const x1 = toX(t.indAnchorIdx), y1 = toYrsi(t.indAnchor);
+    const x2 = toX(t.indNewIdx),    y2 = toYrsi(t.indNew);
+    ctx.setLineDash([6,4]);
+    ctx.strokeStyle = color;
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    ctx.setLineDash([]);
+    drawLabeledPoint(x1, y1, color, fmtIndVal("rsi", t.indAnchor), isLow ? "below" : "above", false);
+    drawLabeledPoint(x2, y2, color, fmtIndVal("rsi", t.indNew),    isLow ? "below" : "above", true);
+  }
+
+  ctx.font="bold 11px Inter"; ctx.textAlign="left";
+  ctx.fillStyle="#f5b342";
+  ctx.fillText("RSI(14)", padL+4, rsiTop+13);
+
+  // ============ MACD PANEL ============
+  // Compute MACD/Signal/Hist range
+  const macdVals = [];
+  for(let i=0;i<macd.length;i++){
+    if(macd[i]!=null) macdVals.push(macd[i]);
+    if(sigArr[i]!=null) macdVals.push(sigArr[i]);
+    if(hist[i]!=null) macdVals.push(hist[i]);
+  }
+  if(macdVals.length === 0){
+    ctx.fillStyle="#8892a8"; ctx.textAlign="left";
+    ctx.fillText("MACD verisi yetersiz", padL+4, macdTop + macdH/2);
+    return;
+  }
+  let mMax = Math.max(...macdVals);
+  let mMin = Math.min(...macdVals);
+  // Ensure 0-line is visible and panel is symmetric-ish
+  const absMax = Math.max(Math.abs(mMax), Math.abs(mMin));
+  mMax = absMax; mMin = -absMax;
+  const mRng = (mMax - mMin) || 1;
+
+  const toYmacd = (val)=> macdTop + ((mMax-val)/mRng)*macdH;
+
+  // Background separator
+  ctx.strokeStyle = "#1a2233";
+  ctx.beginPath(); ctx.moveTo(padL,macdTop); ctx.lineTo(W-padR,macdTop); ctx.stroke();
+
+  // Zero line (bold)
+  const yZero = toYmacd(0);
+  ctx.strokeStyle = "#1f2740"; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(padL,yZero); ctx.lineTo(W-padR,yZero); ctx.stroke();
+
+  // Y-axis labels for MACD: max, 0, min
+  ctx.fillStyle="#8892a8"; ctx.textAlign="right"; ctx.font="10px Inter";
+  ctx.fillText(mMax.toFixed(Math.abs(mMax)>=1?2:4), padL-4, macdTop+10);
+  ctx.fillText("0", padL-4, yZero+3);
+  ctx.fillText(mMin.toFixed(Math.abs(mMin)>=1?2:4), padL-4, macdTop+macdH-2);
+
+  // Histogram bars
+  const histW = Math.max(1, cw*0.7);
+  for(let i=0;i<hist.length;i++){
+    if(hist[i]==null) continue;
+    const x = padL + cw*i + cw/2;
+    const yh = toYmacd(hist[i]);
+    const isUp = hist[i] >= 0;
+    // Compare with previous to determine fading vs strengthening
+    let strong = true;
+    if(i>0 && hist[i-1]!=null){
+      strong = isUp ? (hist[i] > hist[i-1]) : (hist[i] < hist[i-1]);
+    }
+    // Strong = vivid; weak = muted
+    if(isUp){
+      ctx.fillStyle = strong ? "#22c55e" : "rgba(34,197,94,0.45)";
+    } else {
+      ctx.fillStyle = strong ? "#ef4444" : "rgba(239,68,68,0.45)";
+    }
+    const top = Math.min(yh, yZero);
+    const h = Math.max(1, Math.abs(yh - yZero));
+    ctx.fillRect(x - histW/2, top, histW, h);
+  }
+
+  // MACD line (blue)
+  ctx.strokeStyle = "#2dd4bf"; ctx.lineWidth = 2; ctx.beginPath();
+  started = false;
+  for(let i=0;i<macd.length;i++){
+    if(macd[i]==null) continue;
+    const x = padL+cw*i+cw/2;
+    const y = toYmacd(macd[i]);
+    if(!started){ ctx.moveTo(x,y); started=true; }
+    else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+
+  // Signal line (orange/amber)
+  ctx.strokeStyle = "#f5b342"; ctx.lineWidth = 1.5; ctx.beginPath();
+  started = false;
+  for(let i=0;i<sigArr.length;i++){
+    if(sigArr[i]==null) continue;
+    const x = padL+cw*i+cw/2;
+    const y = toYmacd(sigArr[i]);
+    if(!started){ ctx.moveTo(x,y); started=true; }
+    else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+
+  // MACD divergence lines (for macd-indicator types)
+  ctx.lineWidth = 2.5;
+  for(const t of r.types){
+    if(t.ind !== "macd") continue;
+    if(t.indAnchorIdx < off) continue;
+    const color = indColorMap.macd[t.k];
+    const isLow = (t.k==="bull");
+    const x1 = toX(t.indAnchorIdx), y1 = toYmacd(t.indAnchor);
+    const x2 = toX(t.indNewIdx),    y2 = toYmacd(t.indNew);
+    ctx.setLineDash([6,4]);
+    ctx.strokeStyle = color;
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    ctx.setLineDash([]);
+    drawLabeledPoint(x1, y1, color, fmtIndVal("macd", t.indAnchor), isLow ? "below" : "above", false);
+    drawLabeledPoint(x2, y2, color, fmtIndVal("macd", t.indNew),    isLow ? "below" : "above", true);
+  }
+
+  // Histogram divergence lines (for hist-indicator types)
+  for(const t of r.types){
+    if(t.ind !== "hist") continue;
+    if(t.indAnchorIdx < off) continue;
+    const color = indColorMap.hist[t.k];
+    const isLow = (t.k==="bull");
+    const x1 = toX(t.indAnchorIdx), y1 = toYmacd(t.indAnchor);
+    const x2 = toX(t.indNewIdx),    y2 = toYmacd(t.indNew);
+    ctx.setLineDash([3,3]);
+    ctx.strokeStyle = color;
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    ctx.setLineDash([]);
+    // Hist labels: small markers (no big box, since histogram bars are crowded)
+    ctx.fillStyle = color;
+    ctx.beginPath(); ctx.arc(x1,y1,3.5,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(x2,y2,3.5,0,Math.PI*2); ctx.fill();
+    // Tag at the new bar with value
+    ctx.font="bold 9px 'SF Mono', Menlo, monospace";
+    ctx.textAlign = isLow ? "left" : "left";
+    ctx.fillStyle = color;
+    const tx = Math.min(x2 + 6, W - 60);
+    const ty = isLow ? y2 + 10 : y2 - 4;
+    ctx.fillText("H:"+fmtIndVal("hist", t.indNew), tx, ty);
+  }
+
+  // MACD panel legend
+  ctx.font="bold 10px Inter"; ctx.textAlign="left";
+  ctx.fillStyle="#2dd4bf"; ctx.fillText("MACD", padL+4, macdTop+12);
+  ctx.fillStyle="#f5b342"; ctx.fillText("Signal", padL+44, macdTop+12);
+  ctx.fillStyle="#8892a8"; ctx.fillText("Histogram", padL+88, macdTop+12);
+}
+
+/* ========================== AUTO-SCAN ========================== */
+function startAuto(){
+  stopAuto();
+  state.nextRunAt = Date.now() + AUTO_INTERVAL_MS;
+  state.autoTimer = setInterval(()=>{
+    if(!state.scanning){
+      state.nextRunAt = Date.now() + AUTO_INTERVAL_MS;
+      scan(true);
+    }
+  }, AUTO_INTERVAL_MS);
+  state.countdownTimer = setInterval(updateCountdown, 1000);
+  updateCountdown();
+}
+function stopAuto(){
+  if(state.autoTimer){ clearInterval(state.autoTimer); state.autoTimer=null; }
+  if(state.countdownTimer){ clearInterval(state.countdownTimer); state.countdownTimer=null; }
+  $("countdown").textContent = "—";
+}
+function updateCountdown(){
+  if(!state.autoTimer){ $("countdown").textContent="—"; return; }
+  const ms = Math.max(0, state.nextRunAt - Date.now());
+  const s = Math.floor(ms/1000);
+  const mm = String(Math.floor(s/60)).padStart(2,"0");
+  const ss = String(s%60).padStart(2,"0");
+  $("countdown").textContent = `${mm}:${ss}`;
+}
+
+/* ========================== SOUND ========================== */
+function getAudioCtx(){
+  if(!state.audioCtx){
+    try{ state.audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){}
+  }
+  if(state.audioCtx && state.audioCtx.state==="suspended") state.audioCtx.resume();
+  return state.audioCtx;
+}
+function playAlarm(){
+  if(!$("soundToggle").checked) return;
+  const melody = $("melody").value;
+  const ctx = getAudioCtx();
+  if(!ctx) return;
+  switch(melody){
+    case "wolf":     melodyWolf(ctx); break;
+    case "alert":    melodyAlert(ctx); break;
+    case "bell":     melodyBell(ctx); break;
+    case "chime":    melodyChime(ctx); break;
+    case "arpeggio": melodyArpeggio(ctx); break;
+  }
+}
+function tone(ctx, freq, t, dur, type="sine", vol=0.18){
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.type = type; o.frequency.setValueAtTime(freq, t);
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(vol, t+0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+  o.connect(g); g.connect(ctx.destination);
+  o.start(t); o.stop(t+dur+0.05);
+}
+function sweep(ctx, f1, f2, t, dur, type="sawtooth", vol=0.15){
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.type=type;
+  o.frequency.setValueAtTime(f1, t);
+  o.frequency.exponentialRampToValueAtTime(f2, t+dur);
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(vol, t+0.05);
+  g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+  o.connect(g); g.connect(ctx.destination);
+  o.start(t); o.stop(t+dur+0.05);
+}
+function melodyWolf(ctx){
+  const t0 = ctx.currentTime;
+  sweep(ctx, 220, 660, t0,      0.6, "sawtooth", 0.18);
+  sweep(ctx, 660, 330, t0+0.55, 0.7, "sawtooth", 0.16);
+  sweep(ctx, 300, 500, t0+1.4,  0.4, "sawtooth", 0.14);
+  sweep(ctx, 500, 220, t0+1.75, 0.5, "sawtooth", 0.12);
+}
+function melodyAlert(ctx){
+  const t0 = ctx.currentTime;
+  for(let i=0;i<3;i++){
+    tone(ctx, 880, t0 + i*0.32, 0.15, "square", 0.22);
+    tone(ctx, 660, t0 + i*0.32 + 0.16, 0.13, "square", 0.18);
+  }
+}
+function melodyBell(ctx){
+  const t0 = ctx.currentTime;
+  tone(ctx, 1320, t0,     1.6, "sine", 0.18);
+  tone(ctx, 1980, t0,     1.2, "sine", 0.07);
+  tone(ctx, 880,  t0+0.6, 1.4, "sine", 0.15);
+  tone(ctx, 1320, t0+0.6, 1.0, "sine", 0.06);
+}
+function melodyChime(ctx){
+  const t0 = ctx.currentTime;
+  const notes = [523.25, 659.25, 783.99, 1046.50];
+  notes.forEach((f,i)=>{
+    tone(ctx, f, t0 + i*0.18, 0.6, "triangle", 0.15);
+  });
+}
+function melodyArpeggio(ctx){
+  const t0 = ctx.currentTime;
+  const seq = [392.00, 493.88, 587.33, 783.99, 587.33, 493.88, 392.00];
+  seq.forEach((f,i)=>{
+    tone(ctx, f, t0 + i*0.12, 0.18, "triangle", 0.16);
+  });
+}
+
+function flashTitle(msg){
+  const orig = "🐺 Wolf RSI + MACD RAW Divergence Scanner";
+  let on = true, n = 0;
+  const t = setInterval(()=>{
+    document.title = on ? msg : orig;
+    on = !on; n++;
+    if(n>=8){ clearInterval(t); document.title = orig; }
+  }, 700);
+}
+
+function $(id){return document.getElementById(id);}
+
+$("scanBtn").addEventListener("click", ()=>scan(false));
+$("stopBtn").addEventListener("click", ()=>{ state.abort=true; $("statusText").textContent="Durduruluyor..."; });
+$("closeBtn").addEventListener("click", closeModal);
+$("modal").addEventListener("click", (e)=>{ if(e.target.id==="modal") closeModal(); });
+document.querySelectorAll(".pill").forEach(p=>{
+  p.addEventListener("click", ()=>applyFilter(p.dataset.filter));
+});
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeModal(); });
+
+$("sortMode").addEventListener("change", ()=>{
+  if(state.results.length > 0) sortAndRender();
+});
+$("minScore").addEventListener("input", ()=>{
+  document.querySelectorAll(".card").forEach(applyFilterToCard);
+});
+
+$("autoToggle").addEventListener("change", e=>{
+  if(e.target.checked){
+    if(!state.scanning) scan(true);
+    startAuto();
+  } else {
+    stopAuto();
+  }
+});
+$("testSound").addEventListener("click", ()=>{
+  getAudioCtx();
+  const wasOn = $("soundToggle").checked;
+  if(!wasOn) $("soundToggle").checked = true;
+  playAlarm();
+  if(!wasOn) setTimeout(()=>{ $("soundToggle").checked = false; }, 100);
+});
+</script>
+</body>
+</html>

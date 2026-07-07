@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WOLF · Dip &amp; Tepe Avcısı</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --panel:#121826; --panel2:#121826; --line:#1a2233;
+    --txt:#e8edf5; --dim:#8892a8; --dimmer:#1f2740;
+    --amber:#f5b342; --amber-dim:#f5b342;
+    --green:#22c55e; --green-dim:#22c55e;
+    --red:#ef4444; --red-dim:#ef4444;
+    --blue:#2dd4bf;
+    --mono:'IBM Plex Mono',monospace; --disp:'Chakra Petch',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--txt);font-family:var(--mono);font-size:13px;line-height:1.45}
+  body{
+    background-image:
+      linear-gradient(rgba(26,34,51,.35) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(26,34,51,.35) 1px,transparent 1px);
+    background-size:38px 38px;
+    min-height:100vh;
+  }
+  ::selection{background:var(--amber);color:#000}
+  .wrap{max-width:1480px;margin:0 auto;padding:18px 16px 80px}
+
+  header{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:16px}
+  .brand{font-family:var(--disp);font-weight:700;letter-spacing:.06em;font-size:22px;display:flex;align-items:center;gap:11px}
+  .logo{flex:0 0 auto;filter:drop-shadow(0 0 7px rgba(245,179,66,.4))}
+  .brand .w{color:var(--amber)}
+  .brand small{font-family:var(--mono);font-weight:400;font-size:10px;color:var(--dim);letter-spacing:.18em}
+  .pill{font-size:10px;letter-spacing:.12em;color:var(--dim);border:1px solid var(--line);padding:3px 8px;border-radius:3px;text-transform:uppercase}
+  .clock{margin-left:auto;color:var(--dim);font-size:11px;letter-spacing:.08em}
+
+  .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px;margin-bottom:14px}
+  .ctl{display:flex;flex-direction:column;gap:5px}
+  .ctl label{font-size:9.5px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase}
+  .seg{display:flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+  .seg button{background:transparent;border:none;color:var(--dim);font-family:var(--mono);font-size:12px;padding:7px 13px;cursor:pointer;letter-spacing:.05em;transition:.12s}
+  .seg button.on{background:var(--amber);color:#000;font-weight:600}
+  .seg.long button.on{background:var(--green);color:#000}
+  .seg.short button.on{background:var(--red);color:#fff}
+  input[type=number],input[type=text]{background:var(--panel2);border:1px solid var(--line);color:var(--txt);font-family:var(--mono);font-size:12px;padding:7px 8px;border-radius:4px;width:84px}
+  input[type=text].wide{width:230px}
+  input:focus{outline:none;border-color:var(--amber)}
+  .scan-btn{background:var(--amber);color:#000;border:none;font-family:var(--disp);font-weight:700;letter-spacing:.08em;font-size:14px;padding:10px 22px;border-radius:4px;cursor:pointer;transition:.15s;text-transform:uppercase}
+  .scan-btn:hover{filter:brightness(1.12)}
+  .scan-btn:disabled{opacity:.4;cursor:not-allowed}
+  .ghost{background:transparent;border:1px solid var(--line);color:var(--dim);font-family:var(--mono);font-size:11px;padding:9px 12px;border-radius:4px;cursor:pointer}
+  .ghost:hover{border-color:var(--amber);color:var(--amber)}
+  details.adv{width:100%}
+  details.adv summary{cursor:pointer;color:var(--dim);font-size:11px;letter-spacing:.1em;list-style:none;padding:4px 0;user-select:none}
+  details.adv summary::-webkit-details-marker{display:none}
+  details.adv summary:before{content:'▸ ';color:var(--amber)}
+  details.adv[open] summary:before{content:'▾ '}
+  .adv-grid{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+  .chk{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--dim)}
+  .chk input{accent-color:var(--amber)}
+
+  .status{display:flex;align-items:center;gap:14px;font-size:11px;color:var(--dim);margin-bottom:10px;min-height:18px;flex-wrap:wrap}
+  .bar{flex:1;min-width:160px;height:5px;background:var(--panel2);border:1px solid var(--line);border-radius:3px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--amber-dim),var(--amber));transition:width .2s}
+  .err{color:var(--red)}
+
+  .tbl-wrap{border:1px solid var(--line);border-radius:6px;overflow:auto}
+  table{width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap}
+  thead th{position:sticky;top:0;background:var(--panel);color:var(--dim);font-weight:500;text-align:right;padding:9px 11px;letter-spacing:.06em;font-size:10px;text-transform:uppercase;border-bottom:1px solid var(--line);cursor:pointer;user-select:none}
+  thead th:first-child,thead th.l{text-align:left}
+  thead th:hover{color:var(--amber)}
+  tbody td{padding:9px 11px;text-align:right;border-bottom:1px solid var(--panel2)}
+  tbody td:first-child,tbody td.l{text-align:left}
+  tbody tr:hover{background:var(--panel2)}
+  .sym{font-weight:600;font-family:var(--disp);letter-spacing:.03em;color:var(--txt)}
+  .sym a{color:inherit;text-decoration:none;border-bottom:1px dotted var(--dimmer)}
+  .sym a:hover{color:var(--amber)}
+  .pos{color:var(--green)} .neg{color:var(--red)} .mut{color:var(--dim)}
+  .score{font-family:var(--disp);font-weight:700;font-size:14px}
+  .badges{display:flex;gap:3px;justify-content:flex-end;flex-wrap:wrap}
+  .b{font-size:8.5px;letter-spacing:.04em;padding:2px 5px;border-radius:3px;border:1px solid var(--line);color:var(--dim);text-transform:uppercase}
+  .b.hit{border-color:var(--green-dim);color:var(--green);background:rgba(34,197,94,.07)}
+  .b.warn{border-color:var(--red-dim);color:var(--red);background:rgba(239,68,68,.07)}
+  .empty{padding:40px;text-align:center;color:var(--dim)}
+  .legend{margin-top:14px;font-size:10.5px;color:var(--dimmer);line-height:1.7}
+  .legend b{color:var(--dim)}
+  .note{margin-top:8px;font-size:10.5px;color:var(--amber-dim);border-left:2px solid var(--amber-dim);padding-left:10px}
+  a.x{color:var(--blue);text-decoration:none}
+
+  tbody tr{cursor:pointer}
+  .rowhint{font-size:10px;color:var(--dimmer);margin:7px 0 0 2px}
+  .modal-bg{position:fixed;inset:0;background:rgba(10,14,26,.74);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;z-index:50;padding:40px 14px;overflow:auto}
+  .modal-bg.on{display:flex}
+  .modal{background:var(--panel);border:1px solid var(--line);border-radius:8px;max-width:700px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.6)}
+  .modal-h{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line)}
+  .ai-tag{font-size:9px;letter-spacing:.12em;color:var(--amber);border:1px solid var(--amber-dim);padding:3px 7px;border-radius:3px;font-family:var(--disp)}
+  .modal-h .msym{font-family:var(--disp);font-weight:700;font-size:18px;letter-spacing:.04em}
+  .modal-h .mside{font-size:10px;letter-spacing:.1em;padding:2px 8px;border-radius:3px;text-transform:uppercase;border:1px solid var(--line);color:var(--dim)}
+  .modal-h .mprice{color:var(--dim);font-size:13px}
+  .modal-h .x{margin-left:auto;cursor:pointer;color:var(--dim);font-size:22px;line-height:1;background:none;border:none}
+  .modal-h .x:hover{color:var(--amber)}
+  .modal-b{padding:16px 18px}
+  .wtab{width:100%;border-collapse:collapse;font-size:11.5px;margin-bottom:14px;table-layout:fixed;white-space:normal}
+  .wtab td{padding:7px 8px;border-bottom:1px solid var(--panel2);vertical-align:top;white-space:normal;text-align:left;word-break:break-word}
+  .wtab td:first-child{color:var(--dim);width:116px}
+  .wtab td.v{color:var(--txt);width:86px;text-align:right;font-weight:600;font-family:var(--mono)}
+  .wtab td.t{color:var(--txt);line-height:1.5;text-align:left}
+  .verdict{font-size:12.5px;line-height:1.6;border-left:3px solid var(--amber);padding:11px 14px;background:var(--panel2);border-radius:0 6px 6px 0;margin-bottom:11px}
+  .verdict .vh{font-family:var(--disp);font-weight:700;letter-spacing:.04em;color:var(--amber);display:block;margin-bottom:4px}
+  .lvls{display:flex;gap:20px;font-size:12px;color:var(--dim);flex-wrap:wrap;margin-bottom:10px}
+  .lvls b{color:var(--txt)}
+  .disc{font-size:10.5px;color:var(--amber-dim);border-top:1px dashed var(--line);padding-top:9px;line-height:1.55}
+</style>
+<style>
+.header,.header-row,.brand,.brand-row,.header-stats,.controls{flex-wrap:wrap;}
+.tf-group,.filter-group,.filter-row,.filter-pills,.filter-bar,.tabs,.actions,.tfgrid,.seg,.segmented,.tf-btns,.tf-list{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;}
+.tf-btn,.filter-btn,.tab,.pill,.seg-btn{flex-shrink:0;}
+.tablewrap,#tablewrap,.table-wrap,.tbl-wrap,.table-container,.feed{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch;}
+@media(max-width:860px){
+.header{height:auto!important;min-height:0;row-gap:8px;}
+.grid,.signals-grid,.tools-grid,.coins-grid,.card-grid,.dash-grid,.setup-grid,.portfolio-grid{grid-template-columns:1fr!important;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <img src="data:image/png;base64,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" alt="Wolf" style="width:38px;height:38px;vertical-align:middle;margin-right:9px;filter:drop-shadow(0 0 6px rgba(45,212,191,0.55)) drop-shadow(0 0 12px rgba(45,212,191,0.3))">
+      <span>DİP &amp; TEPE <span class="w">AVCISI</span></span>
+      
+    </div>
+    <span class="pill" id="srcPill" style="display:none">fapi.binance.com</span>
+    <span class="clock" id="clock"></span>
+  </header>
+
+  <div class="controls">
+    <div class="ctl">
+      <label>Yön / Setup</label>
+      <div class="seg long" id="sideSeg">
+        <button data-side="long" class="on">LONG ↑ (Dip)</button>
+        <button data-side="short">SHORT ↓ (Tepe)</button>
+      </div>
+    </div>
+    <div class="ctl">
+      <label>Zaman Dilimi</label>
+      <div class="seg" id="tfSeg">
+        <button data-tf="4h" class="on">4H</button>
+        <button data-tf="1d">1D</button>
+      </div>
+    </div>
+    <div class="ctl">
+      <label>Min Skor</label>
+      <input type="number" id="minScore" value="4" min="1" max="7" step="1" style="width:60px">
+    </div>
+    <div class="ctl">
+      <label>Min 24s Hacim (M$)</label>
+      <input type="number" id="minVol" value="50" min="0" step="10">
+    </div>
+    <button class="scan-btn" id="scanBtn">▶ TARA</button>
+    <button class="ghost" id="stopBtn" style="display:none">■ DUR</button>
+
+    <div class="ctl">
+      <label>Coin Ara (tek)</label>
+      <div style="display:flex;gap:6px">
+        <input type="text" id="searchSym" placeholder="BTC, SOL, WLD…" style="width:140px">
+        <button class="ghost" id="searchBtn" style="white-space:nowrap">🔍 Bak</button>
+      </div>
+    </div>
+
+    <details class="adv">
+      <summary>Gelişmiş eşikler & filtreler</summary>
+      <div class="adv-grid">
+        <div class="ctl"><label>RSI(6) eşiği</label><input type="number" id="rsiTh" value="32" step="1"></div>
+        <div class="ctl"><label>Funding eşiği %</label><input type="number" id="fundTh" value="0.000" step="0.001"></div>
+        <div class="ctl"><label>Basis eşiği %</label><input type="number" id="basisTh" value="0.00" step="0.01"></div>
+        <div class="ctl"><label>Hacim spike ×MA20</label><input type="number" id="volMult" value="1.8" step="0.1"></div>
+        <div class="ctl"><label>Fitil/Gövde oranı</label><input type="number" id="wickMult" value="1.5" step="0.1"></div>
+        <div class="ctl"><label>Dibe yakınlık %</label><input type="number" id="nearPct" value="2.0" step="0.5"></div>
+        <div class="ctl"><label>API base URL</label><input type="text" class="wide" id="apiBase" value="https://web-production-2bdde.up.railway.app"></div>
+        <div class="ctl" style="justify-content:flex-end">
+          <label> </label>
+          <div style="display:flex;gap:14px;flex-wrap:wrap">
+            <span class="chk"><input type="checkbox" id="deepLSR" checked> L/S + Taker derin tara</span>
+            <span class="chk"><input type="checkbox" id="reqWick" checked> Fitil reddi şart</span>
+            <span class="chk"><input type="checkbox" id="reqNear"> Dibe/tepeye yakınlık şart</span>
+          </div>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="status">
+    <span id="statTxt">Hazır. "TARA" ile tüm USDT-perp evreni taranır.</span>
+    <div class="bar"><i id="prog"></i></div>
+    <span id="statCount" class="mut"></span>
+  </div>
+
+  <div class="tbl-wrap">
+    <table id="tbl">
+      <thead><tr>
+        <th class="l" data-k="symbol">Coin</th>
+        <th data-k="score">Skor</th>
+        <th class="l" data-k="badges">Şartlar</th>
+        <th data-k="price">Fiyat</th>
+        <th data-k="chg">24s %</th>
+        <th data-k="rsi">RSI6</th>
+        <th data-k="funding">Funding%</th>
+        <th data-k="basis">Basis%</th>
+        <th data-k="volx">Hacim×</th>
+        <th data-k="ls_top">TopLSR</th>
+        <th data-k="ls_glob">GlobLSR</th>
+        <th data-k="taker">Taker B/S</th>
+        <th data-k="oichg">OI Δ%</th>
+        <th data-k="invalid">Invalid</th>
+        <th data-k="target">Hedef≈</th>
+      </tr></thead>
+      <tbody id="rows"><tr><td colspan="15" class="empty">— sonuç yok —</td></tr></tbody>
+    </table>
+  </div>
+  <div class="rowhint">Bir satıra tıkla → 🐺 Wolf AI yorumu açılır (o coinin gerçek verisiyle gösterge-gösterge analiz).</div>
+
+  <div class="note">
+    Bu tarayıcı <b>aday bulucudur</b>, otomatik sinyal değil. Her aday senin yapısal teyidini ister (HTF destek/direnç, CHoCH/BOS, OTE). Her satırda <b>Invalid</b> = son swing dibi/tepesi: tezin geçersizlik seviyesi. Yüksek win-rate ≠ risksiz — özellikle averaj/martingale ile tek kötü işlem seriyi götürebilir, o yüzden Invalid'i stop referansı olarak ciddiye al.
+  </div>
+
+  <div class="legend">
+    <b>Şart rozetleri (LONG):</b>
+    FND = funding ≤ eşik (negatif/kalabalık short) ·
+    BAS = basis ≤ eşik (backwardation/iskonto) ·
+    RSI = RSI(6) ≤ eşik (oversold) ·
+    VOL = hacim spike (kapitülasyon/klimaks) ·
+    WCK = alt fitil reddi (sweep+absorpsiyon) ·
+    LOW = N-bar dibine yakın (likidite avı) ·
+    TKR = sinyal mumunda satıcı baskın (absorbe ediliyor).
+    <b style="color:var(--red)"> CROWD!</b> = global L/S çok yüksek (kalabalık long = altta yakıt, dikkat).
+    SHORT modunda aynı şartlar yukarı yönde aynalanır. ·
+    <b>OI Δ%</b> = seçili periyotta Open Interest değişimi (− = flush/deleveraging, + = pozisyon birikimi); üzerine gelince notional $ değeri. ·
+    <b>Veri:</b> Binance fapi public — funding/basis tek çağrıda tüm coinler, sonra ön-eleme geçenlerde 4H/1D kline + L/S + OI derin tarama.
+  </div>
+
+</div>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <div class="modal-h">
+      <span class="ai-tag">🐺 WOLF AI</span>
+      <span class="msym" id="mSym"></span>
+      <span class="mside" id="mSide"></span>
+      <span class="mprice" id="mPrice"></span>
+      <button class="x" id="mClose" aria-label="kapat">×</button>
+    </div>
+    <div class="modal-b" id="mBody"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  const $ = id => document.getElementById(id);
+  let SIDE='long', TF='4h', STOP=false, LAST=[];
+
+  function loadPref(k,d){ try{const v=localStorage.getItem('wolf_'+k);return v===null?d:JSON.parse(v);}catch(e){return d;} }
+  function savePref(k,v){ try{localStorage.setItem('wolf_'+k,JSON.stringify(v));}catch(e){} }
+
+  setInterval(()=>{ const d=new Date(); $('clock').textContent=d.toUTCString().slice(17,25)+' UTC'; },1000);
+
+  $('sideSeg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+    SIDE=b.dataset.side;[...$('sideSeg').children].forEach(x=>x.classList.toggle('on',x===b));
+    $('sideSeg').className='seg '+SIDE; });
+  $('tfSeg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+    TF=b.dataset.tf;[...$('tfSeg').children].forEach(x=>x.classList.toggle('on',x===b)); });
+
+  async function jget(url){
+    const r=await fetch(url,{cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP '+r.status+' @ '+url.split('?')[0]);
+    return r.json();
+  }
+  function base(){ return $('apiBase').value.replace(/\/+$/,''); }
+
+  function rsi(closes,p){
+    // Wilder's RSI (RMA smoothing) — matches Binance / TradingView
+    if(closes.length<p+1) return null;
+    let g=0,l=0;
+    for(let i=1;i<=p;i++){const d=closes[i]-closes[i-1];if(d>=0)g+=d;else l-=d;}
+    let avgG=g/p, avgL=l/p;
+    for(let i=p+1;i<closes.length;i++){
+      const d=closes[i]-closes[i-1];
+      avgG=(avgG*(p-1)+(d>0?d:0))/p;
+      avgL=(avgL*(p-1)+(d<0?-d:0))/p;
+    }
+    if(avgL===0) return 100;
+    return 100-100/(1+avgG/avgL);
+  }
+  const sma=(a,p)=>{if(a.length<p)return null;let s=0;for(let i=a.length-p;i<a.length;i++)s+=a[i];return s/p;};
+  const fmt=(n,d=2)=>n==null||isNaN(n)?'—':Number(n).toLocaleString('en-US',{maximumFractionDigits:d,minimumFractionDigits:d});
+  const fmtP=n=>{if(n==null)return '—';const v=Number(n);return (v>=1?v.toLocaleString('en-US',{maximumFractionDigits:2}):v.toPrecision(4));};
+
+  async function pool(items,worker,limit,onTick){
+    let i=0,done=0;const out=new Array(items.length);
+    async function run(){ while(i<items.length){ if(STOP)return; const idx=i++;
+      try{ out[idx]=await worker(items[idx],idx);}catch(e){out[idx]=null;}
+      done++; onTick&&onTick(done,items.length); } }
+    const runners=Array.from({length:Math.min(limit,items.length)},run);
+    await Promise.all(runners); return out;
+  }
+
+  async function analyzeKlines(sym){
+    const B=base();
+    const kl=await jget(`${B}/fapi/v1/klines?symbol=${sym}&interval=${TF}&limit=120`);
+    if(!kl||kl.length<60) return null;
+    const closes=kl.map(k=>+k[4]);
+    const highs=kl.map(k=>+k[2]);
+    const lows=kl.map(k=>+k[3]);
+    const vols=kl.map(k=>+k[5]);
+    const n=kl.length;
+    const sig=kl[n-2];
+    const o=+sig[1],h=+sig[2],l=+sig[3],c=+sig[4],v=+sig[5];
+    const takerBuy=+sig[9];
+    const takerSell=v-takerBuy;
+    const body=Math.abs(c-o)||1e-9;
+    const upWick=h-Math.max(o,c), dnWick=Math.min(o,c)-l;
+    const rng=(h-l)||1e-9;
+    const closePos=(c-l)/rng;
+    const volMA=sma(vols.slice(0,n-1),20);
+    const volx=volMA?v/volMA:0;
+    const r6=rsi(closes.slice(0,n-1),6);
+    const r12=rsi(closes.slice(0,n-1),12);
+    const lookback=20;
+    const recLow=Math.min(...lows.slice(Math.max(0,n-1-lookback),n-1));
+    const recHigh=Math.max(...highs.slice(Math.max(0,n-1-lookback),n-1));
+    const price=closes[n-1];
+    return {sym,price,r6,r12,o,h,l,c,v,takerBuy,takerSell,body,upWick,dnWick,closePos,volx,recLow,recHigh};
+  }
+
+  async function deepLSR(sym){
+    const B=base(),p=TF;
+    const out={topAcc:null,topPos:null,glob:null,taker:null,oiChg:null,oiNotional:null};
+    try{const a=await jget(`${B}/futures/data/topLongShortAccountRatio?symbol=${sym}&period=${p}&limit=1`);if(a&&a[0])out.topAcc=+a[0].longShortRatio;}catch(e){}
+    try{const a=await jget(`${B}/futures/data/topLongShortPositionRatio?symbol=${sym}&period=${p}&limit=1`);if(a&&a[0])out.topPos=+a[0].longShortRatio;}catch(e){}
+    try{const a=await jget(`${B}/futures/data/globalLongShortAccountRatio?symbol=${sym}&period=${p}&limit=1`);if(a&&a[0])out.glob=+a[0].longShortRatio;}catch(e){}
+    try{const a=await jget(`${B}/futures/data/takerlongshortRatio?symbol=${sym}&period=${p}&limit=1`);if(a&&a[0])out.taker=+a[0].buySellRatio;}catch(e){}
+    try{const a=await jget(`${B}/futures/data/openInterestHist?symbol=${sym}&period=${p}&limit=14`);
+      if(a&&a.length>1){const f=+a[0].sumOpenInterest,l=+a[a.length-1].sumOpenInterest;
+        if(f>0)out.oiChg=(l-f)/f*100; out.oiNotional=+a[a.length-1].sumOpenInterestValue;}
+    }catch(e){}
+    return out;
+  }
+  function fmtBig(n){if(n==null||isNaN(n))return '—';const v=Math.abs(n);
+    if(v>=1e9)return (n/1e9).toFixed(2)+'B';if(v>=1e6)return (n/1e6).toFixed(1)+'M';if(v>=1e3)return (n/1e3).toFixed(0)+'K';return n.toFixed(0);}
+
+  function score(d,fundPct,basisPct){
+    const TH={rsi:+$('rsiTh').value,fund:+$('fundTh').value,basis:+$('basisTh').value,
+              vol:+$('volMult').value,wick:+$('wickMult').value,near:+$('nearPct').value/100};
+    const long=SIDE==='long';
+    const conds={};
+    if(long){
+      conds.FND = fundPct<=TH.fund;
+      conds.BAS = basisPct<=TH.basis;
+      conds.RSI = d.r6!=null && d.r6<=TH.rsi;
+      conds.VOL = d.volx>=TH.vol;
+      conds.WCK = d.dnWick>=TH.wick*d.body && d.closePos>=0.40;
+      conds.LOW = d.l<=d.recLow*(1+TH.near);
+      conds.TKR = d.takerSell>d.takerBuy;
+    }else{
+      conds.FND = fundPct>=-TH.fund;
+      conds.BAS = basisPct>=-TH.basis;
+      conds.RSI = d.r6!=null && d.r6>=(100-TH.rsi);
+      conds.VOL = d.volx>=TH.vol;
+      conds.WCK = d.upWick>=TH.wick*d.body && d.closePos<=0.60;
+      conds.LOW = d.h>=d.recHigh*(1-TH.near);
+      conds.TKR = d.takerBuy>d.takerSell;
+    }
+    let s=0;for(const k in conds) if(conds[k]) s++;
+    return {s,conds};
+  }
+
+  let sortK='score',sortDir=-1;
+  function render(){
+    const rows=$('rows');
+    if(!LAST.length){rows.innerHTML='<tr><td colspan="15" class="empty">— eşleşen coin yok (eşikleri gevşet) —</td></tr>';return;}
+    const arr=[...LAST].sort((a,b)=>{
+      let x=a[sortK],y=b[sortK];
+      if(sortK==='symbol'){x=a.sym;y=b.sym;return sortDir*(x<y?-1:1);}
+      if(sortK==='badges'){x=a.score;y=b.score;}
+      x=x==null?-1e12:x;y=y==null?-1e12:y;
+      return sortDir*((x>y?1:x<y?-1:0));
+    });
+    rows.innerHTML=arr.map(d=>{
+      const badges=Object.entries(d.conds).map(([k,v])=>`<span class="b ${v?'hit':''}">${k}</span>`).join('');
+      const crowd=d.crowd?`<span class="b warn">CROWD!</span>`:'';
+      const sc=d.score, scCol=sc>=6?'var(--green)':sc>=4?'var(--amber)':'var(--dim)';
+      return `<tr data-sym="${d.sym}">
+        <td class="l sym"><a href="https://www.binance.com/en/futures/${d.sym}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${d.sym.replace('USDT','')}</a></td>
+        <td class="score" style="color:${scCol}">${sc}</td>
+        <td class="l"><div class="badges">${badges}${crowd}</div></td>
+        <td>${fmtP(d.price)}</td>
+        <td class="${d.chg>=0?'pos':'neg'}">${d.chg==null?'—':(d.chg>=0?'+':'')+fmt(d.chg,2)}</td>
+        <td class="${d.r6!=null&&((SIDE==='long'&&d.r6<=35)||(SIDE==='short'&&d.r6>=65))?'pos':'mut'}">${d.r6==null?'—':fmt(d.r6,1)}</td>
+        <td class="${d.funding<0?'neg':'pos'}">${d.funding==null?'—':fmt(d.funding,4)}</td>
+        <td class="${d.basis<0?'neg':'pos'}">${d.basis==null?'—':fmt(d.basis,3)}</td>
+        <td class="${d.volx>=1.8?'pos':'mut'}">${fmt(d.volx,2)}×</td>
+        <td class="${d.topPos==null?'mut':''}">${d.topPos==null?'—':fmt(d.topPos,2)}</td>
+        <td class="${d.glob==null?'mut':''}">${d.glob==null?'—':fmt(d.glob,2)}</td>
+        <td class="mut">${d.taker==null?'—':fmt(d.taker,2)}</td>
+        <td class="${d.oiChg==null?'mut':(d.oiChg>=0?'pos':'neg')}" title="${d.oiNotional==null?'':'Notional: $'+fmtBig(d.oiNotional)}">${d.oiChg==null?'—':(d.oiChg>=0?'+':'')+fmt(d.oiChg,1)+'%'}</td>
+        <td class="mut">${fmtP(d.invalid)}</td>
+        <td class="mut">${fmtP(d.target)}</td>
+      </tr>`;
+    }).join('');
+  }
+  $('tbl').querySelectorAll('th').forEach(th=>th.addEventListener('click',()=>{
+    const k=th.dataset.k;if(!k)return;
+    if(sortK===k)sortDir*=-1;else{sortK=k;sortDir=(k==='symbol')?1:-1;}
+    render();
+  }));
+
+  async function scan(){
+    STOP=false;LAST=[];render();
+    $('scanBtn').disabled=true;$('stopBtn').style.display='';
+    const B=base();$('srcPill').textContent=B.replace(/^https?:\/\//,'');
+    const minVol=(+$('minVol').value||0)*1e6;
+    const minScore=+$('minScore').value||1;
+    const setStat=(t,e)=>{$('statTxt').textContent=t;$('statTxt').className=e?'err':'';};
+    const prog=p=>$('prog').style.width=(p*100).toFixed(0)+'%';
+
+    try{
+      setStat('Sembol listesi & funding/basis çekiliyor…');prog(0.03);
+      const [info,prem,tick]=await Promise.all([
+        jget(`${B}/fapi/v1/exchangeInfo`),
+        jget(`${B}/fapi/v1/premiumIndex`),
+        jget(`${B}/fapi/v1/ticker/24hr`)
+      ]);
+      const perp=new Set(info.symbols.filter(s=>s.status==='TRADING'&&s.contractType==='PERPETUAL'&&s.quoteAsset==='USDT').map(s=>s.symbol));
+      const premMap={};prem.forEach(p=>{premMap[p.symbol]={mark:+p.markPrice,index:+p.indexPrice,fund:+p.lastFundingRate*100};});
+      const tickMap={};tick.forEach(t=>{tickMap[t.symbol]={qv:+t.quoteVolume,chg:+t.priceChangePercent};});
+
+      const TH={fund:+$('fundTh').value,basis:+$('basisTh').value};
+      let cand=[...perp].filter(s=>{
+        const pm=premMap[s],tk=tickMap[s];if(!pm||!tk)return false;
+        if(tk.qv<minVol)return false;
+        const basisPct=pm.index?(pm.mark-pm.index)/pm.index*100:0;
+        if(SIDE==='long')  return pm.fund<=TH.fund+0.004 && basisPct<=TH.basis+0.05;
+        else               return pm.fund>=-TH.fund-0.004 && basisPct>=-TH.basis-0.05;
+      });
+      setStat(`Ön-eleme: ${perp.size} perp → ${cand.length} aday. Kline analizi…`);prog(0.12);
+      if(!cand.length){setStat('Funding/basis ön-elemesini geçen likit coin yok. Eşikleri gevşet.',false);finish();return;}
+
+      const klData=await pool(cand,async(sym)=>{
+        const a=await analyzeKlines(sym);return a;
+      },6,(done,total)=>{prog(0.12+0.5*done/total);$('statCount').textContent=`${done}/${total} kline`;});
+      if(STOP){setStat('Durduruldu.');finish();return;}
+
+      let scored=[];
+      cand.forEach((sym,i)=>{
+        const d=klData[i];if(!d)return;
+        const pm=premMap[sym];const basisPct=pm.index?(pm.mark-pm.index)/pm.index*100:0;
+        const {s,conds}=score(d,pm.fund,basisPct);
+        if($('reqWick').checked && !conds.WCK) return;
+        if($('reqNear').checked && !conds.LOW) return;
+        if(s<minScore) return;
+        const invalid=SIDE==='long'?Math.min(d.recLow,d.l):Math.max(d.recHigh,d.h);
+        const target =SIDE==='long'?d.recHigh:d.recLow;
+        scored.push({...d,sym,funding:pm.fund,basis:basisPct,chg:tickMap[sym]?.chg,
+          score:s,conds,invalid,target,topPos:null,glob:null,taker:null,crowd:false,oiChg:null,oiNotional:null});
+      });
+      scored.sort((a,b)=>b.score-a.score);
+      setStat(`${scored.length} aday skoru geçti.`+($('deepLSR').checked?' L/S derin tarama…':''));prog(0.7);
+
+      if($('deepLSR').checked && scored.length){
+        const top=scored.slice(0,80);
+        await pool(top,async(d)=>{
+          const ls=await deepLSR(d.sym);
+          d.topPos=ls.topPos;d.glob=ls.glob;d.taker=ls.taker;d.oiChg=ls.oiChg;d.oiNotional=ls.oiNotional;
+          if(SIDE==='long'  && ls.glob!=null && ls.glob>2.0) d.crowd=true;
+          if(SIDE==='short' && ls.glob!=null && ls.glob<0.5) d.crowd=true;
+          return 1;
+        },5,(done,total)=>{prog(0.7+0.28*done/total);$('statCount').textContent=`${done}/${total} L/S`;});
+      }
+      if(STOP){setStat('Durduruldu (kısmi sonuç).');}
+
+      LAST=scored;prog(1);
+      setStat(`Tamamlandı · ${SIDE.toUpperCase()} · ${TF.toUpperCase()} · ${scored.length} eşleşme (${perp.size} perp tarandı).`);
+      $('statCount').textContent='';
+      render();
+    }catch(e){
+      setStat('HATA: '+e.message+' — Geoblock/CORS olabilir. Yerelde (kendi PC) çalıştır ya da API base URL’yi proxy/mirror yap.',true);
+      console.error(e);
+    }
+    finish();
+  }
+  function finish(){$('scanBtn').disabled=false;$('stopBtn').style.display='none';}
+
+  // ---- Wolf AI comment engine (offline, rule-based on real data) ----
+  function wolfComment(d){
+    const long=SIDE==='long';
+    const rows=[]; let bull=0,bear=0;
+    const G=()=>bull++, R=()=>bear++;
+    const E={g:'🟢',y:'🟡',r:'🔴',w:'⚠️'};
+
+    // Funding
+    const f=d.funding;
+    let ft;
+    if(f==null) ft=[E.y,'Veri yok'];
+    else if(f<=-0.01){ft=[E.g,`Negatif funding — short'lar long'a ödüyor, kalabalık short/korku. Kontrarian ${long?'long':'short fade'} lehine.`];long?G():R();}
+    else if(f<0){ft=[E.g,'Hafif negatif — temkinli korku, sıfırın altında.'];long?G():R();}
+    else if(f<=0.01){ft=[E.y,'Sıfıra yakın pozitif — nötr, aşırı kaldıraç yok.'];}
+    else if(f<=0.03){ft=[E.y,'Pozitif/orta — hafif long bias, tehlikeli seviye değil.'];}
+    else {ft=[E.r,'Yüksek pozitif — kalabalık long, long squeeze riski.'];long?R():G();}
+    rows.push(['Funding', f==null?'—':fmt(f,4)+'%', ft[0]+' '+ft[1]]);
+
+    // Basis
+    const b=d.basis;
+    let bt;
+    if(b==null) bt=[E.y,'Veri yok'];
+    else if(b<=-0.05){bt=[E.g,'Belirgin backwardation — perp spot altında, korku/iskonto. Dip bölgesi imzası.'];long?G():R();}
+    else if(b<0){bt=[E.g,'Hafif negatif basis — perp iskontolu, temkin.'];long?G():R();}
+    else if(b<0.05){bt=[E.y,'Nötr basis — premium yok denecek kadar az.'];}
+    else {bt=[E.r,'Premium/contango — perp spot üstünde, ısınma.'];long?R():G();}
+    rows.push(['Basis', b==null?'—':fmt(b,3)+'%', bt[0]+' '+bt[1]]);
+
+    // RSI6
+    const r=d.r6;
+    let rt;
+    if(r==null) rt=[E.y,'Veri yok'];
+    else if(r<=25){rt=[E.g,'Aşırı oversold — sürdürülemez, tepki/dönüş olası.'];long?G():R();}
+    else if(r<=35){rt=[E.g,'Oversold bölge.'];long?G():R();}
+    else if(r<60){rt=[E.y,'Nötr — uçta değil.'];}
+    else if(r<75){rt=[E.y,'Yüksek — momentum yukarı ama aşırılık yakın.'];long?R():G();}
+    else {rt=[E.r,'Aşırı overbought.'];long?R():G();}
+    rows.push(['RSI(6)', r==null?'—':fmt(r,1), rt[0]+' '+rt[1]]);
+
+    // OI Δ%
+    const oi=d.oiChg;
+    let ot;
+    if(oi==null) ot=[E.y,'OI verisi yok'];
+    else if(oi<=-5){ot=[E.g,'OI eriyor (flush/deleveraging) — kaldıraç temizleniyor, dip oluşumda görülür.'];G();}
+    else if(oi<0){ot=[E.g,'OI hafif azalış — pozisyon kapanışı.'];}
+    else if(oi<5){ot=[E.y,'OI yatay/hafif artış.'];}
+    else {ot=[E.w,'OI artıyor — yeni pozisyon birikimi; fiyat zayıfken olursa altta yakıt.'];}
+    rows.push(['OI Δ%', oi==null?'—':(oi>=0?'+':'')+fmt(oi,1)+'%', ot[0]+' '+ot[1]+(d.oiNotional?` (Notional $${fmtBig(d.oiNotional)})`:'')]);
+
+    // L/S
+    const tp=d.topPos, gl=d.glob;
+    let lt;
+    if(tp==null&&gl==null) lt=[E.y,'L/S verisi yok'];
+    else if(tp!=null&&gl!=null&&tp<1&&gl>1.15){lt=[E.w,'Çelişki: retail/hesaplar long ama büyük pozisyonlar short — kurumsal hâlâ bear tarafta.'];}
+    else if(gl!=null&&gl>2){lt=[E.r,'CROWD! global L/S aşırı yüksek — kalabalık long, altta likidasyon yakıtı.'];long?R():G();}
+    else if(tp!=null&&tp<1&&(gl==null||gl<1)){lt=[E.g,'Pozisyon ve retail short ağırlıklı — aşırıysa kontrarian long lehine.'];long?G():R();}
+    else if(tp!=null&&tp>1.3){lt=[E.y,'Büyük pozisyonlar long — kalabalıksa dikkat.'];}
+    else {lt=[E.y,'L/S nötr-karışık bölgede.'];}
+    rows.push(['L/S (Pos/Glob)', (tp==null?'—':fmt(tp,2))+' / '+(gl==null?'—':fmt(gl,2)), lt[0]+' '+lt[1]]);
+
+    // Taker + volume
+    const tk=d.taker, vx=d.volx;
+    let kt;
+    if(vx>=1.8){kt=[E.w,`Hacim spike (×${fmt(vx,1)}) = kapitülasyon/klimaks. `+((d.takerSell>d.takerBuy)?'Satıcı baskın — absorbe ediliyorsa dip imzası.':'Alıcı baskın — blow-off olabilir.')];if(d.takerSell>d.takerBuy&&long)G();}
+    else if(tk!=null&&tk<0.95){kt=[E.y,'Satıcı hafif baskın.'];}
+    else if(tk!=null&&tk>1.05){kt=[E.y,'Alıcı hafif baskın.'];}
+    else {kt=[E.y,'Hacim/taker dengeli — spike yok.'];}
+    rows.push(['Taker / Hacim×', (tk==null?'—':fmt(tk,2))+' / '+fmt(vx,2)+'×', kt[0]+' '+kt[1]]);
+
+    // structure conds
+    if(d.conds.WCK){rows.push(['Fitil', '✓', E.g+(long?' Alt':' Üst')+' fitil reddi — sweep + absorpsiyon (av imzası).']);G();}
+    if(d.conds.LOW){rows.push([long?'Dibe yakınlık':'Tepeye yakınlık', '✓', E.g+' Son '+(long?'dibe':'tepeye')+' yakın — likidite süpürme bölgesi.']);G();}
+
+    // verdict
+    const net=bull-bear;
+    let stance,col;
+    if(net>=3){stance='Yapıcı '+(long?'dip':'tepe')+' adayı — kontrarian sinyaller birikmiş.';col='var(--green)';}
+    else if(net>=1){stance='Hafif yapıcı ama karışık — sinyaller tam hizalanmamış.';col='var(--amber)';}
+    else {stance='Çelişkili / zayıf — net '+(long?'long':'short')+' sinyali yok.';col='var(--red)';}
+
+    const tab=rows.map(x=>`<tr><td>${x[0]}</td><td class="v">${x[1]}</td><td class="t">${x[2]}</td></tr>`).join('');
+    return `
+      <table class="wtab"><tbody>${tab}</tbody></table>
+      <div class="verdict" style="border-color:${col}">
+        <span class="vh" style="color:${col}">🐺 WOLF ÖZET · skor ${d.score}/7 · net ${net>=0?'+':''}${net}</span>
+        ${stance} Yeşil (kontrarian/${long?'boğa':'ayı'}) sinyal: <b>${bull}</b> · uyarı/karşıt: <b>${bear}</b>.
+      </div>
+      <div class="lvls">
+        <span>Invalid (stop): <b>${fmtP(d.invalid)}</b></span>
+        <span>Hedef≈: <b>${fmtP(d.target)}</b></span>
+        ${d.htfLabel?`<span>HTF: <b>${d.htfLabel}</b></span>`:''}
+      </div>
+      <div class="disc">Tek başına giriş değil. LTF'de (15M/1H) <b>CHoCH/BOS</b> + <b>FVG / golden zone (OTE 0.618–0.786)</b> teyidi bekle. Invalid kaybedilirse tez iptal — averaj/martingale'de bu seviyeyi ciddiye al.</div>`;
+  }
+
+  const modalBg=$('modalBg');
+  function showWolf(d){
+    $('mSym').textContent=d.sym.replace('USDT','');
+    const long=SIDE==='long';
+    const ms=$('mSide'); ms.textContent=long?'LONG ↑':'SHORT ↓';
+    ms.style.color=long?'var(--green)':'var(--red)';
+    ms.style.borderColor=long?'var(--green-dim)':'var(--red-dim)';
+    $('mPrice').textContent='$'+fmtP(d.price);
+    $('mBody').innerHTML=wolfComment(d);
+    modalBg.classList.add('on');
+  }
+  function openModal(sym){
+    const d=LAST.find(x=>x.sym===sym); if(d) showWolf(d);
+  }
+  function closeModal(){modalBg.classList.remove('on');}
+  $('mClose').addEventListener('click',closeModal);
+  modalBg.addEventListener('click',e=>{if(e.target===modalBg)closeModal();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+  $('rows').addEventListener('click',e=>{const tr=e.target.closest('tr');if(!tr||!tr.dataset.sym)return;openModal(tr.dataset.sym);});
+
+  // ---- single-coin lookup (independent of scan) ----
+  async function analyzeOne(raw){
+    const B=base();
+    let sym=(raw||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
+    if(!sym) return;
+    if(!sym.endsWith('USDT')) sym+='USDT';
+    $('srcPill').textContent=B.replace(/^https?:\/\//,'');
+    const setStat=(t,e)=>{$('statTxt').textContent=t;$('statTxt').className=e?'err':'';};
+    setStat(`${sym} çekiliyor… (${TF.toUpperCase()} · ${SIDE.toUpperCase()})`);
+    try{
+      const [pmRes,tkRes]=await Promise.all([
+        jget(`${B}/fapi/v1/premiumIndex?symbol=${sym}`),
+        jget(`${B}/fapi/v1/ticker/24hr?symbol=${sym}`).catch(()=>null)
+      ]);
+      const pm=Array.isArray(pmRes)?pmRes[0]:pmRes;
+      if(!pm||!pm.markPrice) throw new Error('sembol bulunamadı');
+      const fund=+pm.lastFundingRate*100, mark=+pm.markPrice, index=+pm.indexPrice;
+      const basisPct=index?(mark-index)/index*100:0;
+      const d=await analyzeKlines(sym);
+      if(!d) throw new Error('yeterli kline verisi yok');
+      const {s,conds}=score(d,fund,basisPct);
+      const invalid=SIDE==='long'?Math.min(d.recLow,d.l):Math.max(d.recHigh,d.h);
+      const target =SIDE==='long'?d.recHigh:d.recLow;
+      const row={...d,sym,funding:fund,basis:basisPct,chg:tkRes?+tkRes.priceChangePercent:null,
+        score:s,conds,invalid,target,topPos:null,glob:null,taker:null,crowd:false,oiChg:null,oiNotional:null};
+      const ls=await deepLSR(sym);
+      row.topPos=ls.topPos;row.glob=ls.glob;row.taker=ls.taker;row.oiChg=ls.oiChg;row.oiNotional=ls.oiNotional;
+      if(SIDE==='long' && ls.glob!=null && ls.glob>2.0) row.crowd=true;
+      if(SIDE==='short'&& ls.glob!=null && ls.glob<0.5) row.crowd=true;
+      setStat(`${sym} · ${SIDE.toUpperCase()} · ${TF.toUpperCase()} · skor ${s}/7 — Wolf AI açıldı.`);
+      showWolf(row);
+    }catch(e){
+      setStat(`${sym} okunamadı: ${e.message} (USDT-perp mi? Geoblock/CORS olabilir.)`,true);
+    }
+  }
+  $('searchBtn').addEventListener('click',()=>analyzeOne($('searchSym').value));
+  $('searchSym').addEventListener('keydown',e=>{if(e.key==='Enter')analyzeOne($('searchSym').value);});
+
+  $('scanBtn').addEventListener('click',scan);
+  $('stopBtn').addEventListener('click',()=>{STOP=true;});
+
+  const savedBase=loadPref('apiBase',null); if(savedBase)$('apiBase').value=savedBase;
+  $('apiBase').addEventListener('change',()=>savePref('apiBase',$('apiBase').value));
+})();
+</script>
+</body>
+</html>

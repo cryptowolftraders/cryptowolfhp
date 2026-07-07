@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><img src="data:image/png;base64,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" alt="Wolf" style="width:38px;height:38px;vertical-align:middle;margin-right:9px;filter:drop-shadow(0 0 6px rgba(45,212,191,0.55)) drop-shadow(0 0 12px rgba(45,212,191,0.3))">Wolf Candle Theory | 4H Sweep + 5m FVG Retest Tarayıcı</title>
+<style>
+  :root {
+    --wolf-gold: #f5b342;
+    --wolf-gold-soft: #f5b342;
+    --wolf-bg: #0a0e1a;
+    --wolf-bg-2: #0a0e1a;
+    --wolf-bg-3: #121826;
+    --wolf-border: #1a2233;
+    --wolf-text: #e8edf5;
+    --wolf-text-mute: #888;
+    --wolf-green: #22c55e;
+    --wolf-red: #ef4444;
+    --wolf-blue: #2dd4bf;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    background: var(--wolf-bg);
+    color: var(--wolf-text);
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    min-height: 100vh;
+  }
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #121826 0%, #0a0e1a 100%);
+    border-bottom: 2px solid var(--wolf-gold);
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  }
+  .header h1 {
+    color: var(--wolf-gold);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .header h1 small {
+    color: var(--wolf-text-mute);
+    font-size: 13px;
+    font-weight: 400;
+    margin-left: 8px;
+  }
+  .header-stats {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .stat-box {
+    background: var(--wolf-bg-3);
+    border: 1px solid var(--wolf-border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+  .stat-box .label { color: var(--wolf-text-mute); margin-right: 6px; }
+  .stat-box .value { color: var(--wolf-gold); font-weight: 600; }
+  .stat-box.ok .value { color: var(--wolf-green); }
+  .stat-box.warn .value { color: var(--wolf-red); }
+
+  /* CONTROLS */
+  .controls {
+    background: var(--wolf-bg-2);
+    border-bottom: 1px solid var(--wolf-border);
+    padding: 14px 24px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .ctrl-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--wolf-bg-3);
+    border: 1px solid var(--wolf-border);
+    border-radius: 8px;
+    padding: 6px 12px;
+  }
+  .ctrl-group label {
+    font-size: 12px;
+    color: var(--wolf-text-mute);
+  }
+  .ctrl-group input, .ctrl-group select {
+    background: transparent;
+    border: none;
+    color: var(--wolf-text);
+    font-size: 13px;
+    outline: none;
+    width: 60px;
+  }
+  .ctrl-group input[type="checkbox"] { width: auto; accent-color: var(--wolf-gold); }
+  .btn {
+    background: var(--wolf-gold);
+    color: #000;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+  }
+  .btn:hover { background: var(--wolf-gold-soft); transform: translateY(-1px); }
+  .btn.secondary {
+    background: var(--wolf-bg-3);
+    color: var(--wolf-text);
+    border: 1px solid var(--wolf-border);
+  }
+  .btn.secondary:hover { border-color: var(--wolf-gold); color: var(--wolf-gold); background: var(--wolf-bg-3); }
+
+  /* MAIN GRID */
+  .main {
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 20px;
+  }
+  @media (max-width: 1100px) { .main { grid-template-columns: 1fr; } }
+
+  /* SIGNAL CARDS */
+  .signals-section h2 {
+    color: var(--wolf-gold);
+    font-size: 16px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .signals-section h2 .count {
+    background: var(--wolf-gold);
+    color: #000;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .signals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 14px;
+  }
+  .signal-card {
+    background: linear-gradient(135deg, var(--wolf-bg-2) 0%, var(--wolf-bg-3) 100%);
+    border: 1px solid var(--wolf-border);
+    border-left: 4px solid var(--wolf-gold);
+    border-radius: 10px;
+    padding: 14px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .signal-card.short { border-left-color: var(--wolf-red); }
+  .signal-card.long { border-left-color: var(--wolf-green); }
+  .signal-card.fresh {
+    animation: freshFlash 2s ease-in-out;
+    box-shadow: 0 0 30px rgba(245,179,66, 0.5);
+  }
+  @keyframes freshFlash {
+    0% { box-shadow: 0 0 0 rgba(245,179,66, 0); transform: scale(1); }
+    50% { box-shadow: 0 0 40px rgba(245,179,66, 0.8); transform: scale(1.02); }
+    100% { box-shadow: 0 0 30px rgba(245,179,66, 0.5); transform: scale(1); }
+  }
+  .signal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .signal-symbol {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--wolf-gold);
+  }
+  .signal-side {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+  .signal-side.SHORT { background: var(--wolf-red); color: #fff; }
+  .signal-side.LONG { background: var(--wolf-green); color: #fff; }
+  .signal-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: 13px;
+    border-bottom: 1px dashed var(--wolf-border);
+  }
+  .signal-row:last-child { border-bottom: none; }
+  .signal-row .lbl { color: var(--wolf-text-mute); }
+  .signal-row .val { color: var(--wolf-text); font-weight: 600; }
+  .signal-row .val.entry { color: var(--wolf-gold); }
+  .signal-row .val.tp { color: var(--wolf-green); }
+  .signal-row .val.sl { color: var(--wolf-red); }
+  .signal-row .val.tp-pct { color: var(--wolf-green); font-size: 11px; }
+  .signal-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .signal-actions a {
+    flex: 1;
+    text-align: center;
+    background: var(--wolf-bg-3);
+    color: var(--wolf-blue);
+    text-decoration: none;
+    padding: 6px;
+    border-radius: 5px;
+    font-size: 11px;
+    border: 1px solid var(--wolf-border);
+  }
+  .signal-actions a:hover { border-color: var(--wolf-blue); }
+  .signal-time {
+    font-size: 10px;
+    color: var(--wolf-text-mute);
+    margin-top: 6px;
+    text-align: right;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--wolf-bg-2);
+    border: 1px solid var(--wolf-border);
+    border-radius: 10px;
+    padding: 16px;
+    height: fit-content;
+    position: sticky;
+    top: 90px;
+  }
+  .sidebar h3 {
+    color: var(--wolf-gold);
+    font-size: 14px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--wolf-border);
+    padding-bottom: 8px;
+  }
+  .watch-list {
+    max-height: 320px;
+    overflow-y: auto;
+    font-size: 11px;
+  }
+  .watch-list::-webkit-scrollbar { width: 6px; }
+  .watch-list::-webkit-scrollbar-track { background: var(--wolf-bg); }
+  .watch-list::-webkit-scrollbar-thumb { background: var(--wolf-gold); border-radius: 3px; }
+  .watch-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 4px;
+    border-bottom: 1px solid var(--wolf-border);
+    font-size: 11px;
+  }
+  .watch-item .sym { color: var(--wolf-text); font-weight: 600; }
+  .watch-item .info { color: var(--wolf-text-mute); }
+  .watch-item .info.short { color: var(--wolf-red); }
+  .watch-item .info.long { color: var(--wolf-green); }
+
+  .log-section { margin-top: 20px; }
+  .log {
+    background: var(--wolf-bg);
+    border: 1px solid var(--wolf-border);
+    border-radius: 6px;
+    padding: 8px;
+    font-family: 'Consolas', monospace;
+    font-size: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    color: var(--wolf-text-mute);
+  }
+  .log::-webkit-scrollbar { width: 6px; }
+  .log::-webkit-scrollbar-thumb { background: var(--wolf-border); border-radius: 3px; }
+  .log .line { padding: 2px 0; border-bottom: 1px dotted #222; }
+  .log .line.ok { color: var(--wolf-green); }
+  .log .line.err { color: var(--wolf-red); }
+  .log .line.signal { color: var(--wolf-gold); font-weight: 600; }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--wolf-text-mute);
+    background: var(--wolf-bg-2);
+    border: 1px dashed var(--wolf-border);
+    border-radius: 10px;
+  }
+  .empty-state .ico { font-size: 48px; margin-bottom: 12px; }
+  .empty-state .title { font-size: 16px; color: var(--wolf-gold); margin-bottom: 6px; }
+  .pulse {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--wolf-green);
+    margin-right: 6px;
+    animation: pulse 1.5s infinite;
+  }
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(6px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal-box {
+    background: var(--wolf-bg-2);
+    border: 2px solid var(--wolf-gold);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 1400px;
+    max-height: 95vh;
+    overflow-y: auto;
+    padding: 20px;
+    box-shadow: 0 20px 60px rgba(245,179,66, 0.3);
+  }
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--wolf-border);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+  }
+  .modal-title {
+    color: var(--wolf-gold);
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .modal-side-badge {
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+  .modal-side-badge.SHORT { background: var(--wolf-red); color: #fff; }
+  .modal-side-badge.LONG { background: var(--wolf-green); color: #fff; }
+  .modal-close {
+    background: var(--wolf-bg-3);
+    border: 1px solid var(--wolf-border);
+    color: var(--wolf-text);
+    font-size: 22px;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .modal-close:hover { border-color: var(--wolf-red); color: var(--wolf-red); }
+  .charts-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  @media (max-width: 1100px) { .charts-wrap { grid-template-columns: 1fr; } }
+  .chart-panel {
+    background: var(--wolf-bg);
+    border: 1px solid var(--wolf-border);
+    border-radius: 10px;
+    padding: 12px;
+  }
+  .chart-panel h4 {
+    color: var(--wolf-gold);
+    font-size: 13px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .chart-panel h4 .info { color: var(--wolf-text-mute); font-weight: 400; font-size: 11px; }
+  .chart-svg {
+    width: 100%;
+    height: 380px;
+    background: #0a0e1a;
+    border-radius: 6px;
+    border: 1px solid var(--wolf-border);
+  }
+  .chart-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 380px;
+    color: var(--wolf-text-mute);
+    font-size: 13px;
+  }
+  .modal-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--wolf-border);
+  }
+  .info-cell {
+    background: var(--wolf-bg-3);
+    border: 1px solid var(--wolf-border);
+    border-radius: 6px;
+    padding: 8px 10px;
+  }
+  .info-cell .lbl { color: var(--wolf-text-mute); font-size: 10px; display: block; margin-bottom: 2px; }
+  .info-cell .val { color: var(--wolf-text); font-size: 13px; font-weight: 600; }
+  .info-cell.gold .val { color: var(--wolf-gold); }
+  .info-cell.green .val { color: var(--wolf-green); }
+  .info-cell.red .val { color: var(--wolf-red); }
+  .signal-card { cursor: pointer; }
+  .signal-card .click-hint {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 10px;
+    color: var(--wolf-text-mute);
+    opacity: 0.6;
+  }
+  .signal-card:hover { transform: translateY(-2px); border-color: var(--wolf-gold); }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+</style>
+<style>
+.header,.header-row,.brand,.brand-row,.header-stats,.controls{flex-wrap:wrap;}
+.tf-group,.filter-group,.filter-row,.filter-pills,.filter-bar,.tabs,.actions,.tfgrid,.seg,.segmented,.tf-btns,.tf-list{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;}
+.tf-btn,.filter-btn,.tab,.pill,.seg-btn{flex-shrink:0;}
+.tablewrap,#tablewrap,.table-wrap,.tbl-wrap,.table-container,.feed{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch;}
+@media(max-width:860px){
+.header{height:auto!important;min-height:0;row-gap:8px;}
+.grid,.signals-grid,.tools-grid,.coins-grid,.card-grid,.dash-grid,.setup-grid,.portfolio-grid{grid-template-columns:1fr!important;}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🐺 Wolf Candle Theory</h1>
+  <div class="header-stats">
+    <div class="stat-box ok"><span class="label">Durum:</span><span class="value" id="statusVal"><span class="pulse"></span>Beklemede</span></div>
+    <div class="stat-box"><span class="label">Coin:</span><span class="value" id="coinCount">0</span></div>
+    <div class="stat-box"><span class="label">Sweep:</span><span class="value" id="boxCount">0</span></div>
+    <div class="stat-box"><span class="label">Aktif FVG:</span><span class="value" id="fvgCount">0</span></div>
+    <div class="stat-box warn"><span class="label">Sinyal:</span><span class="value" id="signalCount">0</span></div>
+    <div class="stat-box"><span class="label">Saat:</span><span class="value" id="clockVal">--:--:--</span></div>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="ctrl-group">
+    <label>Min TP1 %:</label>
+    <input type="number" id="minTpPct" value="2" min="0" max="20" step="0.1">
+  </div>
+  <div class="ctrl-group">
+    <label>FVG Yakınlık %:</label>
+    <input type="number" id="proximityPct" value="0.1" min="0" max="2" step="0.05">
+  </div>
+  <div class="ctrl-group">
+    <label>FVG Min Boyut %:</label>
+    <input type="number" id="minFvgSize" value="0.05" min="0" max="2" step="0.01">
+  </div>
+  <div class="ctrl-group">
+    <label><input type="checkbox" id="soundOn" checked> Ses Alarmı</label>
+  </div>
+  <div class="ctrl-group">
+    <label><input type="checkbox" id="autoRefresh" checked> Otomatik Tarama</label>
+  </div>
+  <div class="ctrl-group">
+    <label><input type="checkbox" id="tgEnabled"> 📱 Telegram</label>
+  </div>
+  <div class="ctrl-group" style="min-width:180px;">
+    <label>Bot Token:</label>
+    <input type="password" id="tgToken" placeholder="123:ABC..." style="width:140px; font-family:monospace; font-size:11px;">
+  </div>
+  <div class="ctrl-group" style="min-width:140px;">
+    <label>Chat ID:</label>
+    <input type="text" id="tgChatId" placeholder="-100..." style="width:100px; font-family:monospace; font-size:11px;">
+  </div>
+  <button class="btn secondary" id="tgTestBtn" style="font-size:11px;">📤 Test</button>
+  <button class="btn" id="startBtn">🐺 BAŞLAT</button>
+  <button class="btn secondary" id="rescanBtn">🔄 Yeniden Tara</button>
+  <button class="btn secondary" id="clearLogBtn">🗑 Log Temizle</button>
+</div>
+
+<div class="main">
+  <div class="signals-section">
+    <h2>🎯 Aktif Sinyaller <span class="count" id="signalsHeaderCount">0</span></h2>
+    <div id="signalsGrid" class="signals-grid"></div>
+    <div id="emptyState" class="empty-state">
+      <div class="ico">🐺</div>
+      <div class="title">Wolf Candle Theory — Sinyal Bekleniyor</div>
+      <div>BAŞLAT'a bas, sistem tüm USDT perpetual coinleri taramaya başlasın.</div>
+      <div style="margin-top:10px; font-size:11px;">4H Sweep tetiklenmiş + 5m FVG kutusu mevcut + fiyat FVG yakın kenarına %0.1 yakın olduğunda burada görünecek.</div>
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <h3>👁 İzleme Listesi (Sweep Aktif)</h3>
+    <div id="watchList" class="watch-list">
+      <div style="text-align:center; color:var(--wolf-text-mute); padding:20px; font-size:11px;">Tarama başladığında 4H sweep tetiği bulunan coinler burada listelenecek.</div>
+    </div>
+    <div class="log-section">
+      <h3>📋 Sistem Logu</h3>
+      <div id="log" class="log"></div>
+    </div>
+  </div>
+</div>
+
+<audio id="alarmAudio" preload="auto">
+  <source src="data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU..." type="audio/wav">
+</audio>
+
+<!-- MODAL: Setup Görüntüleyici -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">
+        <span id="modalSymbol">--</span>
+        <span class="modal-side-badge" id="modalSide">--</span>
+      </div>
+      <button class="modal-close" id="modalClose">×</button>
+    </div>
+    <div class="charts-wrap">
+      <div class="chart-panel">
+        <h4>4H Chart - Sweep & Referans Mum <span class="info" id="info4h">--</span></h4>
+        <div id="chart4hWrap"><div class="chart-loading">Yükleniyor...</div></div>
+      </div>
+      <div class="chart-panel">
+        <h4>5m Chart - FVG & Entry <span class="info" id="info5m">--</span></h4>
+        <div id="chart5mWrap"><div class="chart-loading">Yükleniyor...</div></div>
+      </div>
+    </div>
+    <div class="modal-info-grid" id="modalInfoGrid"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   🐺 WOLF CANDLE THEORY
+   ------------------------------------------------------------
+   MANTIK:
+   1) Tüm Binance USDT Perpetual coinleri çek
+   2) Her coin için son 4H mumlarına bak:
+      - Mevcut 4H mum (TETİK), önceki 4H mumun (REFERANS) high'ını
+        süpürdü mü? (SHORT setup)
+        veya low'unu süpürdü mü? (LONG setup)
+      - Süpürdü ve geri döndü mü? (Wick reversal / sweep)
+   3) Sweep tetiği varsa, o 4H mum boyunca (48 x 5m mum) içinde
+      yön uyumlu FVG var mı kontrol et
+   4) Aktif (henüz tam doldurulmamış) FVG kutusu varsa,
+      mevcut fiyat FVG yakın kenarına %0.1 mesafede mi?
+   5) TP1 = (prevHigh + prevLow) / 2  [Fibo 0.5]
+      TP2 = prevLow (SHORT) / prevHigh (LONG)  [fitil dahil uç]
+      TP1 % >= 2 değilse listeye dahil etme
+   ============================================================ */
+
+const FAPI = 'https://web-production-2bdde.up.railway.app';
+const state = {
+  symbols: [],
+  watch: new Map(),     // symbol -> { side, box, fvg, lastPrice }
+  signals: new Map(),   // symbol -> signal object
+  running: false,
+  scanInterval: null,
+  priceInterval: null,
+  knownSignals: new Set()
+};
+
+// ==== UTIL ====
+const log = (msg, type='') => {
+  const el = document.getElementById('log');
+  const t = new Date().toLocaleTimeString('tr-TR');
+  const line = document.createElement('div');
+  line.className = 'line ' + type;
+  line.textContent = `[${t}] ${msg}`;
+  el.insertBefore(line, el.firstChild);
+  while (el.children.length > 200) el.removeChild(el.lastChild);
+};
+
+const setStatus = (txt, ok=true) => {
+  const el = document.getElementById('statusVal');
+  el.innerHTML = `<span class="pulse"></span>${txt}`;
+  document.querySelector('#statusVal').parentElement.classList.toggle('ok', ok);
+  document.querySelector('#statusVal').parentElement.classList.toggle('warn', !ok);
+};
+
+const fmt = (n, dec=4) => {
+  if (n === null || n === undefined || isNaN(n)) return '-';
+  if (Math.abs(n) >= 100) return Number(n).toFixed(2);
+  if (Math.abs(n) >= 1) return Number(n).toFixed(3);
+  if (Math.abs(n) >= 0.01) return Number(n).toFixed(4);
+  return Number(n).toFixed(6);
+};
+
+// ==== BINANCE API ====
+async function fetchExchangeInfo() {
+  const r = await fetch(`${FAPI}/fapi/v1/exchangeInfo`);
+  const data = await r.json();
+  const symbols = data.symbols
+    .filter(s => s.status === 'TRADING'
+              && s.contractType === 'PERPETUAL'
+              && s.quoteAsset === 'USDT'
+              && !s.symbol.includes('_'))
+    .map(s => s.symbol);
+  return symbols;
+}
+
+async function fetchKlines(symbol, interval, limit) {
+  const url = `${FAPI}/fapi/v1/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`;
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`klines ${symbol} ${interval} ${r.status}`);
+  const data = await r.json();
+  return data.map(k => ({
+    openTime: k[0],
+    open: +k[1],
+    high: +k[2],
+    low:  +k[3],
+    close: +k[4],
+    volume: +k[5],
+    closeTime: k[6]
+  }));
+}
+
+async function fetchAllPrices() {
+  const r = await fetch(`${FAPI}/fapi/v1/ticker/price`);
+  const data = await r.json();
+  const map = {};
+  data.forEach(p => { map[p.symbol] = +p.price; });
+  return map;
+}
+
+// ==== WOLF BOX TESPIT ====
+/*
+   2-mum Wolf Box (wick sweep reversal):
+   prev = önceki kapanmış 4H mum
+   curr = mevcut açık (veya son kapanmış) 4H mum
+   
+   BEAR_EXPR (SHORT): curr.high > prev.high  AND  curr.close < prev.high
+                      (önceki yükseliği süpürdü, geri döndü)
+   BULL_EXPR (LONG):  curr.low < prev.low    AND  curr.close > prev.low
+                      (önceki düşüğü süpürdü, geri döndü)
+   
+   Box body = |open-close|, Stop Line = curr.high (short) / curr.low (long)
+   TP1 = entry - bodySize  (short)  /  entry + bodySize (long)
+*/
+function detectWolfBox(klines4h) {
+  if (klines4h.length < 2) return null;
+  const prev = klines4h[klines4h.length - 2];
+  const curr = klines4h[klines4h.length - 1];
+  const body = Math.abs(curr.open - curr.close);
+  if (body === 0) return null;
+
+  // SHORT setup
+  if (curr.high > prev.high && curr.close < prev.high) {
+    return {
+      side: 'SHORT',
+      stopLine: curr.high,
+      sweepLevel: prev.high,
+      bodySize: body,
+      // Wolf Box mumun kendisi (TP hesabı için — Fibo 0.5 referansı)
+      currHigh: curr.high,
+      currLow: curr.low,
+      // Önceki 4H mum bilgisi (referans için)
+      prevHigh: prev.high,
+      prevLow: prev.low,
+      prevBody: Math.abs(prev.open - prev.close),
+      prevRange: prev.high - prev.low,
+      boxOpenTime: curr.openTime,
+      boxCloseTime: curr.closeTime,
+      currOpen: curr.open,
+      currClose: curr.close
+    };
+  }
+  // LONG setup
+  if (curr.low < prev.low && curr.close > prev.low) {
+    return {
+      side: 'LONG',
+      stopLine: curr.low,
+      sweepLevel: prev.low,
+      bodySize: body,
+      currHigh: curr.high,
+      currLow: curr.low,
+      prevHigh: prev.high,
+      prevLow: prev.low,
+      prevBody: Math.abs(prev.open - prev.close),
+      prevRange: prev.high - prev.low,
+      boxOpenTime: curr.openTime,
+      boxCloseTime: curr.closeTime,
+      currOpen: curr.open,
+      currClose: curr.close
+    };
+  }
+  return null;
+}
+
+// ==== 5m FVG TESPIT (Wolf Box dönemi içinde) ====
+/*
+   Bearish FVG (SHORT için):  c[i-2].low > c[i].high
+   FVG kutusu = [c[i].high (alt), c[i-2].low (üst)]
+   Yakın kenar (price coming from below): üst kenar = c[i-2].low
+   ... ama short retest mantığında fiyat AŞAĞIDAN GELMEZ - YUKARIDAN düşüp,
+       sonra geri YUKARIYA dönüp FVG'ye girer. Yani retest perspektifinde
+       yakın kenar = ALT kenar = c[i].high. (fiyat onu yukarı kıracak)
+   
+   Bullish FVG (LONG için):  c[i-2].high < c[i].low
+   FVG kutusu = [c[i-2].high (alt), c[i].low (üst)]
+   Yakın kenar (retest, price coming from above): üst kenar = c[i].low
+   
+   En yeni (en güncel) ve henüz fiyat tarafından TAM doldurulmamış FVG'yi seç.
+   Box dönemi: curr 4H mum açıldıktan sonraki 5m mumlar.
+*/
+function detectFVGsInBox(klines5m, boxOpenTime, side, minFvgSize) {
+  // Sadece 4H mum açıldıktan sonraki 5m mumlar
+  const inBox = klines5m.filter(k => k.openTime >= boxOpenTime);
+  if (inBox.length < 3) return null;
+
+  const fvgs = [];
+  for (let i = 2; i < inBox.length; i++) {
+    const c0 = inBox[i-2];
+    const c2 = inBox[i];
+    if (side === 'SHORT') {
+      // Bearish FVG: c2.high < c0.low  (gap aşağıda, yukarıdan düşüş)
+      // i.e. mum2'nin tepesi mum0'ın dibinden aşağıda
+      if (c2.high < c0.low) {
+        const top = c0.low;
+        const bottom = c2.high;
+        const sizePct = ((top - bottom) / bottom) * 100;
+        if (sizePct >= minFvgSize) {
+          fvgs.push({
+            type: 'BEAR',
+            top, bottom,
+            sizePct,
+            createdTime: c2.closeTime,
+            // retest (short): fiyat aşağı düştü, şimdi geri yukarı çıkıp FVG'ye giriyor
+            // yakın kenar = bottom (alt) - fiyat aşağıdan yukarı bunu önce kırar
+            nearEdge: bottom,
+            farEdge: top
+          });
+        }
+      }
+    } else {
+      // Bullish FVG: c2.low > c0.high  (gap yukarıda)
+      if (c2.low > c0.high) {
+        const top = c2.low;
+        const bottom = c0.high;
+        const sizePct = ((top - bottom) / bottom) * 100;
+        if (sizePct >= minFvgSize) {
+          fvgs.push({
+            type: 'BULL',
+            top, bottom,
+            sizePct,
+            createdTime: c2.closeTime,
+            // retest (long): fiyat yukarı çıktı, şimdi geri aşağı düşüp FVG'ye giriyor
+            // yakın kenar = top (üst) - fiyat yukarıdan aşağı bunu önce kırar
+            nearEdge: top,
+            farEdge: bottom
+          });
+        }
+      }
+    }
+  }
+  if (!fvgs.length) return null;
+
+  // En son oluşan FVG'yi al, sonra mevcut fiyatla doldurulup doldurulmadığını kontrol et
+  // (henüz tam doldurulmamış olanlardan en günceli)
+  const currentPrice = inBox[inBox.length - 1].close;
+  let valid = null;
+  for (let i = fvgs.length - 1; i >= 0; i--) {
+    const f = fvgs[i];
+    // FVG oluştuktan sonraki mumlar onu tam doldurdu mu?
+    const after = inBox.filter(k => k.openTime > f.createdTime);
+    let fullyFilled = false;
+    if (f.type === 'BEAR') {
+      // Tam doluyor: bir mum FVG'nin top kenarını yukarı kırdıysa (close > top)
+      // ama biz wick'i de saymak istiyoruz mu? Genelde wick yeterli sayılır.
+      // Yine de wick + close kontrolü:
+      for (const k of after) {
+        if (k.high >= f.top && k.close > f.top) { fullyFilled = true; break; }
+      }
+    } else {
+      for (const k of after) {
+        if (k.low <= f.bottom && k.close < f.bottom) { fullyFilled = true; break; }
+      }
+    }
+    if (!fullyFilled) {
+      valid = f;
+      break;
+    }
+  }
+  return valid;
+}
+
+// ==== TARAMA: tek symbol ====
+async function scanSymbol(symbol) {
+  try {
+    const k4 = await fetchKlines(symbol, '4h', 3);
+    const box = detectWolfBox(k4);
+    if (!box) {
+      // Wolf Box yok, watch listesinden çıkar
+      state.watch.delete(symbol);
+      return null;
+    }
+
+    // 5m mumları çek (kutu boyunca - max 48)
+    const k5 = await fetchKlines(symbol, '5m', 60);
+    const minFvgSize = parseFloat(document.getElementById('minFvgSize').value) || 0.05;
+    const fvg = detectFVGsInBox(k5, box.boxOpenTime, box.side, minFvgSize);
+
+    // İzleme listesine ekle
+    state.watch.set(symbol, {
+      side: box.side,
+      box,
+      fvg,
+      lastPrice: k5[k5.length - 1].close,
+      updated: Date.now()
+    });
+
+    return { symbol, box, fvg, lastPrice: k5[k5.length - 1].close };
+  } catch (e) {
+    return null;
+  }
+}
+
+// ==== ANA TARAMA DÖNGÜSÜ ====
+async function fullScan() {
+  if (!state.symbols.length) {
+    log('Önce symbol listesi yüklenmeli', 'err');
+    return;
+  }
+  setStatus('Taranıyor...');
+  log(`🔍 Tam tarama başlıyor (${state.symbols.length} coin)`);
+
+  let boxFound = 0, fvgFound = 0, processed = 0;
+  const concurrency = 8;
+  const queue = [...state.symbols];
+
+  async function worker() {
+    while (queue.length > 0) {
+      const sym = queue.shift();
+      const r = await scanSymbol(sym);
+      processed++;
+      if (r && r.box) {
+        boxFound++;
+        if (r.fvg) fvgFound++;
+      }
+      if (processed % 25 === 0) {
+        document.getElementById('boxCount').textContent = boxFound;
+        document.getElementById('fvgCount').textContent = fvgFound;
+      }
+    }
+  }
+  const workers = Array(concurrency).fill(0).map(() => worker());
+  await Promise.all(workers);
+
+  document.getElementById('boxCount').textContent = boxFound;
+  document.getElementById('fvgCount').textContent = fvgFound;
+  log(`✅ Tarama bitti: ${boxFound} Wolf Box | ${fvgFound} aktif FVG`, 'ok');
+  setStatus('Anlık takip aktif');
+  renderWatchList();
+  // Hemen fiyat kontrolü tetikle
+  priceTick();
+}
+
+// ==== ANLIK FİYAT KONTROLÜ (signal trigger) ====
+async function priceTick() {
+  if (!state.watch.size) return;
+  let prices;
+  try {
+    prices = await fetchAllPrices();
+  } catch (e) {
+    log('Fiyat çekilemedi: ' + e.message, 'err');
+    return;
+  }
+
+  const proximityPct = parseFloat(document.getElementById('proximityPct').value) || 0.1;
+  const minTpPct = parseFloat(document.getElementById('minTpPct').value) || 2;
+
+  for (const [sym, w] of state.watch.entries()) {
+    if (!w.fvg) continue;
+    const px = prices[sym];
+    if (!px) continue;
+    w.lastPrice = px;
+
+    const f = w.fvg;
+    const nearEdge = f.nearEdge;
+
+    // Tetik: fiyat FVG yakın kenarına %proximityPct kadar yakın
+    let triggered = false;
+    if (w.side === 'SHORT') {
+      // Bearish FVG: nearEdge = bottom. Fiyat aşağıdan yaklaşıyor veya zaten içeride.
+      // |px - nearEdge| / nearEdge <= proximity OR px FVG içinde (bottom <= px <= top)
+      const dist = Math.abs(px - nearEdge) / nearEdge * 100;
+      const inside = px >= f.bottom && px <= f.top;
+      if (dist <= proximityPct || inside) {
+        // Fiyat StopLine'ı kırmadıysa hala geçerli
+        if (px < w.box.stopLine) triggered = true;
+      }
+    } else {
+      // Bullish FVG: nearEdge = top
+      const dist = Math.abs(px - nearEdge) / nearEdge * 100;
+      const inside = px >= f.bottom && px <= f.top;
+      if (dist <= proximityPct || inside) {
+        if (px > w.box.stopLine) triggered = true;
+      }
+    }
+
+    if (triggered) {
+      // Entry = FVG yakın kenarı, SL = Tetik Mum (curr) high/low
+      // TP MANTIĞI (Fibo 0.5 - KAPANAN Referans Mum / prev):
+      //   Mum 1 (prev) = kapanmış 4H mum → TP referansı
+      //   Mum 2 (curr) = aktif/tetik mum → SL referansı (sweep yapan mum)
+      //   SHORT: TP1 = (prevHigh + prevLow) / 2  [Fibo 0.5]
+      //          TP2 = prevLow                    [fitil dahil dip]
+      //   LONG:  TP1 = (prevHigh + prevLow) / 2  [Fibo 0.5]
+      //          TP2 = prevHigh                   [fitil dahil tepe]
+      const entry = nearEdge;
+      const sl = w.box.stopLine;
+      const fib05 = (w.box.prevHigh + w.box.prevLow) / 2;
+      let tp1, tp2;
+      if (w.side === 'SHORT') {
+        tp1 = fib05;
+        tp2 = w.box.prevLow;
+      } else {
+        tp1 = fib05;
+        tp2 = w.box.prevHigh;
+      }
+      const tp1Pct = Math.abs((tp1 - entry) / entry * 100);
+      const tp2Pct = Math.abs((tp2 - entry) / entry * 100);
+      // Min TP1 % filtresi (entry'den TP1'e mesafe)
+      if (tp1Pct < minTpPct) continue;
+      // Mantık kontrolü: TP1 entry'nin doğru tarafında olmalı
+      if (w.side === 'SHORT' && tp1 >= entry) continue;
+      if (w.side === 'LONG' && tp1 <= entry) continue;
+
+      const slPct = Math.abs((sl - entry) / entry * 100);
+      const rr = tp1Pct / slPct;
+
+      const sigKey = `${sym}_${w.box.boxOpenTime}_${f.createdTime}`;
+      const isNew = !state.knownSignals.has(sigKey);
+
+      const signal = {
+        symbol: sym,
+        side: w.side,
+        entry,
+        sl,
+        tp1, tp2,
+        tp1Pct, tp2Pct, slPct, rr,
+        currHigh: w.box.currHigh,
+        currLow: w.box.currLow,
+        prevHigh: w.box.prevHigh,
+        prevLow: w.box.prevLow,
+        fvgTop: f.top,
+        fvgBottom: f.bottom,
+        fvgSize: f.sizePct,
+        currentPrice: px,
+        triggeredAt: state.signals.get(sym)?.triggeredAt || Date.now(),
+        isNew,
+        sigKey
+      };
+
+      state.signals.set(sym, signal);
+
+      if (isNew) {
+        state.knownSignals.add(sigKey);
+        log(`🎯 SİNYAL: ${sym} ${w.side} | entry=${fmt(entry)} TP1=${tp1Pct.toFixed(2)}% RR=${rr.toFixed(2)}`, 'signal');
+        if (document.getElementById('soundOn').checked) playAlarm();
+        // Telegram'a gönder (async, beklemiyoruz)
+        sendTelegram(formatTelegramSignal(signal)).then(ok => {
+          if (ok) log(`📱 Telegram'a gönderildi: ${sym}`, 'ok');
+        });
+      }
+    } else {
+      // Tetik koşulu kalktıysa sinyali sil (ama dokunmadığı sürece tutalım, kullanıcı görebilsin)
+      // Default: tutmaya devam et
+    }
+  }
+
+  renderSignals();
+  renderWatchList();
+}
+
+// ==== UI RENDER ====
+function renderSignals() {
+  const grid = document.getElementById('signalsGrid');
+  const empty = document.getElementById('emptyState');
+  const sigs = [...state.signals.values()].sort((a,b) => b.triggeredAt - a.triggeredAt);
+
+  document.getElementById('signalCount').textContent = sigs.length;
+  document.getElementById('signalsHeaderCount').textContent = sigs.length;
+
+  if (!sigs.length) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = sigs.map(s => {
+    const isFresh = (Date.now() - s.triggeredAt) < 60000;
+    const tvSym = s.symbol.replace('USDT','USDTPERP');
+    return `
+    <div class="signal-card ${s.side.toLowerCase()} ${isFresh ? 'fresh' : ''}" data-sym="${s.symbol}" onclick="openSetupModal('${s.symbol}')">
+      <div class="click-hint">📊 Tıkla</div>
+      <div class="signal-header">
+        <div class="signal-symbol">${s.symbol}</div>
+        <div class="signal-side ${s.side}">${s.side}</div>
+      </div>
+      <div class="signal-row"><span class="lbl">Şu an Fiyat</span><span class="val">${fmt(s.currentPrice)}</span></div>
+      <div class="signal-row"><span class="lbl">Entry (FVG kenarı)</span><span class="val entry">${fmt(s.entry)}</span></div>
+      <div class="signal-row"><span class="lbl">Stop Line</span><span class="val sl">${fmt(s.sl)} <small style="color:var(--wolf-text-mute);">(${s.slPct.toFixed(2)}%)</small></span></div>
+      <div class="signal-row"><span class="lbl">TP1 (Fibo 0.5)</span><span class="val tp">${fmt(s.tp1)} <span class="tp-pct">+${s.tp1Pct.toFixed(2)}%</span></span></div>
+      <div class="signal-row"><span class="lbl">TP2 (Referans ${s.side === 'SHORT' ? 'Low' : 'High'})</span><span class="val tp">${fmt(s.tp2)} <span class="tp-pct">+${s.tp2Pct.toFixed(2)}%</span></span></div>
+      <div class="signal-row"><span class="lbl">Referans Mum (kapanan)</span><span class="val">${fmt(s.prevLow)} – ${fmt(s.prevHigh)}</span></div>
+      <div class="signal-row"><span class="lbl">Tetik Mum (sweep)</span><span class="val">${fmt(s.currLow)} – ${fmt(s.currHigh)}</span></div>
+      <div class="signal-row"><span class="lbl">FVG Kutusu</span><span class="val">${fmt(s.fvgBottom)} – ${fmt(s.fvgTop)}</span></div>
+      <div class="signal-row"><span class="lbl">R:R (TP1)</span><span class="val">${s.rr.toFixed(2)}</span></div>
+      <div class="signal-actions" onclick="event.stopPropagation()">
+        <a href="https://www.binance.com/en/futures/${s.symbol}" target="_blank">Binance</a>
+        <a href="https://www.tradingview.com/chart/?symbol=BINANCE:${tvSym}&interval=240" target="_blank">4H Chart</a>
+        <a href="https://www.tradingview.com/chart/?symbol=BINANCE:${tvSym}&interval=5" target="_blank">5m Chart</a>
+      </div>
+      <div class="signal-time">${new Date(s.triggeredAt).toLocaleTimeString('tr-TR')}</div>
+    </div>
+    `;
+  }).join('');
+}
+
+function renderWatchList() {
+  const wl = document.getElementById('watchList');
+  const items = [...state.watch.entries()]
+    .filter(([s, w]) => w.box)
+    .sort((a, b) => {
+      // FVG'si olanlar üstte, sonra side, sonra sembol
+      if (!!a[1].fvg !== !!b[1].fvg) return b[1].fvg ? 1 : -1;
+      return a[0].localeCompare(b[0]);
+    });
+
+  if (!items.length) {
+    wl.innerHTML = '<div style="text-align:center; color:var(--wolf-text-mute); padding:20px; font-size:11px;">Sweep tetiği bulunan coin yok.</div>';
+    return;
+  }
+
+  wl.innerHTML = items.map(([sym, w]) => {
+    const f = w.fvg;
+    let info = w.side;
+    if (f) {
+      const nearEdge = f.nearEdge;
+      const dist = Math.abs(w.lastPrice - nearEdge) / nearEdge * 100;
+      info = `${w.side} | FVG ${dist.toFixed(2)}% uzak`;
+    } else {
+      info = `${w.side} | FVG yok`;
+    }
+    return `<div class="watch-item">
+      <span class="sym">${sym}</span>
+      <span class="info ${w.side.toLowerCase()}">${info}</span>
+    </div>`;
+  }).join('');
+}
+
+// ==== ALARM ====
+let audioCtx;
+function playAlarm() {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.type = 'sine';
+    o.frequency.setValueAtTime(880, audioCtx.currentTime);
+    o.frequency.setValueAtTime(1100, audioCtx.currentTime + 0.1);
+    o.frequency.setValueAtTime(880, audioCtx.currentTime + 0.2);
+    g.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+    o.start();
+    o.stop(audioCtx.currentTime + 0.4);
+  } catch (e) {}
+}
+
+// ==== SETUP MODAL: 4H + 5m mum görüntüleyici ====
+async function openSetupModal(symbol) {
+  const sig = state.signals.get(symbol);
+  const w = state.watch.get(symbol);
+  if (!sig || !w) {
+    log('Sinyal bilgisi bulunamadı: ' + symbol, 'err');
+    return;
+  }
+
+  // Modal'ı aç
+  const overlay = document.getElementById('modalOverlay');
+  overlay.classList.add('show');
+  document.getElementById('modalSymbol').textContent = symbol;
+  const sideBadge = document.getElementById('modalSide');
+  sideBadge.textContent = sig.side;
+  sideBadge.className = 'modal-side-badge ' + sig.side;
+
+  // Info grid
+  document.getElementById('modalInfoGrid').innerHTML = `
+    <div class="info-cell"><span class="lbl">Şu an Fiyat</span><span class="val">${fmt(sig.currentPrice)}</span></div>
+    <div class="info-cell gold"><span class="lbl">Entry (FVG kenarı)</span><span class="val">${fmt(sig.entry)}</span></div>
+    <div class="info-cell red"><span class="lbl">Stop Line</span><span class="val">${fmt(sig.sl)} (${sig.slPct.toFixed(2)}%)</span></div>
+    <div class="info-cell green"><span class="lbl">TP1 (Fibo 0.5)</span><span class="val">${fmt(sig.tp1)} (+${sig.tp1Pct.toFixed(2)}%)</span></div>
+    <div class="info-cell green"><span class="lbl">TP2 (Ref ${sig.side === 'SHORT' ? 'Low' : 'High'})</span><span class="val">${fmt(sig.tp2)} (+${sig.tp2Pct.toFixed(2)}%)</span></div>
+    <div class="info-cell"><span class="lbl">R:R (TP1)</span><span class="val">${sig.rr.toFixed(2)}</span></div>
+    <div class="info-cell"><span class="lbl">Referans Mum</span><span class="val">${fmt(sig.prevLow)} - ${fmt(sig.prevHigh)}</span></div>
+    <div class="info-cell"><span class="lbl">Tetik Mum (sweep)</span><span class="val">${fmt(sig.currLow)} - ${fmt(sig.currHigh)}</span></div>
+    <div class="info-cell"><span class="lbl">5m FVG Kutusu</span><span class="val">${fmt(sig.fvgBottom)} - ${fmt(sig.fvgTop)}</span></div>
+  `;
+
+  // Loading state
+  document.getElementById('chart4hWrap').innerHTML = '<div class="chart-loading">📊 4H mumlar yükleniyor...</div>';
+  document.getElementById('chart5mWrap').innerHTML = '<div class="chart-loading">📊 5m mumlar yükleniyor...</div>';
+  document.getElementById('info4h').textContent = '';
+  document.getElementById('info5m').textContent = '';
+
+  try {
+    const [k4, k5] = await Promise.all([
+      fetchKlines(symbol, '4h', 30),
+      fetchKlines(symbol, '5m', 100)
+    ]);
+
+    // 4H chart: Wolf Box, Stop Line, TP1, TP2, Sweep level
+    const chart4h = drawCandlestickChart(k4, {
+      width: 700, height: 380,
+      overlays: [
+        { type: 'zone', y1: sig.currLow, y2: sig.currHigh, color: 'rgba(245,179,66,0.08)', label: 'Tetik Mum' },
+        { type: 'zone', y1: sig.prevLow, y2: sig.prevHigh, color: 'rgba(45,212,191,0.08)', label: 'Referans Mum' },
+        { type: 'line', y: sig.sl, color: '#ef4444', label: 'STOP LINE', dashed: false, weight: 2 },
+        { type: 'line', y: sig.entry, color: '#f5b342', label: 'ENTRY', dashed: true, weight: 2 },
+        { type: 'line', y: sig.tp1, color: '#22c55e', label: 'TP1 (Fibo 0.5)', dashed: false, weight: 2 },
+        { type: 'line', y: sig.tp2, color: '#22c55e', label: 'TP2', dashed: false, weight: 2 },
+        { type: 'line', y: sig.currentPrice, color: '#888', label: 'Fiyat', dashed: true, weight: 1 }
+      ]
+    });
+    document.getElementById('chart4hWrap').innerHTML = chart4h;
+    document.getElementById('info4h').textContent = `Son ${k4.length} mum`;
+
+    // 5m chart: FVG kutusu, Entry, Stop Line, current price
+    const chart5m = drawCandlestickChart(k5, {
+      width: 700, height: 380,
+      overlays: [
+        { type: 'zone', y1: sig.fvgBottom, y2: sig.fvgTop,
+          color: sig.side === 'SHORT' ? 'rgba(239,68,68,0.18)' : 'rgba(34,197,94,0.18)',
+          label: '5m FVG' },
+        { type: 'line', y: sig.sl, color: '#ef4444', label: 'STOP', dashed: false, weight: 1.5 },
+        { type: 'line', y: sig.entry, color: '#f5b342', label: 'ENTRY', dashed: true, weight: 2 },
+        { type: 'line', y: sig.tp1, color: '#22c55e', label: 'TP1', dashed: false, weight: 1.5 },
+        { type: 'line', y: sig.currentPrice, color: '#fff', label: 'Şimdi', dashed: true, weight: 1 }
+      ],
+      highlightFromTime: w.box.boxOpenTime  // Tetik mum açılış zamanından sonrası vurgulu
+    });
+    document.getElementById('chart5mWrap').innerHTML = chart5m;
+    document.getElementById('info5m').textContent = `Son ${k5.length} mum`;
+
+  } catch (e) {
+    log('Chart yüklenemedi: ' + e.message, 'err');
+    document.getElementById('chart4hWrap').innerHTML = '<div class="chart-loading" style="color:var(--wolf-red);">Hata: ' + e.message + '</div>';
+    document.getElementById('chart5mWrap').innerHTML = '<div class="chart-loading" style="color:var(--wolf-red);">Hata: ' + e.message + '</div>';
+  }
+}
+
+function closeSetupModal() {
+  document.getElementById('modalOverlay').classList.remove('show');
+}
+
+// ==== SVG CANDLESTICK CHART ====
+function drawCandlestickChart(klines, opts) {
+  if (!klines.length) return '<div class="chart-loading">Veri yok</div>';
+  const W = opts.width || 700;
+  const H = opts.height || 380;
+  const padL = 8;
+  const padR = 75;     // sağda fiyat etiketleri için yer
+  const padT = 12;
+  const padB = 28;     // altta tarih
+  const cw = W - padL - padR;
+  const ch = H - padT - padB;
+
+  // Tüm overlay'lerle birlikte y aralığını hesapla
+  let yMin = Infinity, yMax = -Infinity;
+  for (const k of klines) {
+    if (k.low < yMin) yMin = k.low;
+    if (k.high > yMax) yMax = k.high;
+  }
+  if (opts.overlays) {
+    for (const o of opts.overlays) {
+      if (o.type === 'line' && isFinite(o.y)) {
+        if (o.y < yMin) yMin = o.y;
+        if (o.y > yMax) yMax = o.y;
+      }
+      if (o.type === 'zone') {
+        if (isFinite(o.y1) && o.y1 < yMin) yMin = o.y1;
+        if (isFinite(o.y1) && o.y1 > yMax) yMax = o.y1;
+        if (isFinite(o.y2) && o.y2 < yMin) yMin = o.y2;
+        if (isFinite(o.y2) && o.y2 > yMax) yMax = o.y2;
+      }
+    }
+  }
+  // %3 padding
+  const pad = (yMax - yMin) * 0.03;
+  yMin -= pad; yMax += pad;
+  const yRange = yMax - yMin || 1;
+
+  const yToPx = (price) => padT + ch - ((price - yMin) / yRange) * ch;
+  const N = klines.length;
+  const candleW = Math.max(2, (cw / N) * 0.7);
+  const xStep = cw / N;
+  const xToPx = (i) => padL + i * xStep + xStep / 2;
+
+  // Grid
+  let gridLines = '';
+  for (let i = 0; i <= 4; i++) {
+    const y = padT + (ch / 4) * i;
+    const price = yMax - (yRange / 4) * i;
+    gridLines += `<line x1="${padL}" y1="${y}" x2="${padL+cw}" y2="${y}" stroke="#121826" stroke-width="1"/>`;
+    gridLines += `<text x="${padL+cw+4}" y="${y+3}" fill="#666" font-size="9" font-family="Consolas,monospace">${fmt(price)}</text>`;
+  }
+
+  // X axis tarih etiketleri (3-4 nokta)
+  let xLabels = '';
+  const showCount = Math.min(5, N);
+  for (let i = 0; i < showCount; i++) {
+    const idx = Math.floor((N - 1) * (i / (showCount - 1 || 1)));
+    const k = klines[idx];
+    const d = new Date(k.openTime);
+    const lbl = d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+    const dlbl = d.getDate() + '/' + (d.getMonth()+1);
+    const x = xToPx(idx);
+    xLabels += `<text x="${x}" y="${H-12}" fill="#666" font-size="9" font-family="Consolas,monospace" text-anchor="middle">${lbl}</text>`;
+    xLabels += `<text x="${x}" y="${H-2}" fill="#444" font-size="8" font-family="Consolas,monospace" text-anchor="middle">${dlbl}</text>`;
+  }
+
+  // Highlight zone (tetik mumdan sonrası 5m chart'ta)
+  let highlightZone = '';
+  if (opts.highlightFromTime) {
+    const idx = klines.findIndex(k => k.openTime >= opts.highlightFromTime);
+    if (idx >= 0) {
+      const x1 = xToPx(idx) - xStep/2;
+      highlightZone = `<rect x="${x1}" y="${padT}" width="${padL+cw - x1}" height="${ch}" fill="rgba(245,179,66,0.04)" />`;
+    }
+  }
+
+  // Overlay zones (önce zonelar, mumların altında)
+  let zonesUnder = '';
+  if (opts.overlays) {
+    for (const o of opts.overlays) {
+      if (o.type === 'zone') {
+        const y1 = yToPx(Math.max(o.y1, o.y2));
+        const y2 = yToPx(Math.min(o.y1, o.y2));
+        zonesUnder += `<rect x="${padL}" y="${y1}" width="${cw}" height="${y2-y1}" fill="${o.color}" />`;
+        if (o.label) {
+          zonesUnder += `<text x="${padL+4}" y="${y1+11}" fill="#888" font-size="9" font-family="Consolas,monospace">${o.label}</text>`;
+        }
+      }
+    }
+  }
+
+  // Mumlar
+  let candles = '';
+  for (let i = 0; i < N; i++) {
+    const k = klines[i];
+    const x = xToPx(i);
+    const isUp = k.close >= k.open;
+    const color = isUp ? '#22c55e' : '#ef4444';
+    const yOpen = yToPx(k.open);
+    const yClose = yToPx(k.close);
+    const yHigh = yToPx(k.high);
+    const yLow = yToPx(k.low);
+    const yTop = Math.min(yOpen, yClose);
+    const yBot = Math.max(yOpen, yClose);
+    const bodyH = Math.max(1, yBot - yTop);
+    // Wick
+    candles += `<line x1="${x}" y1="${yHigh}" x2="${x}" y2="${yLow}" stroke="${color}" stroke-width="1"/>`;
+    // Body
+    candles += `<rect x="${x - candleW/2}" y="${yTop}" width="${candleW}" height="${bodyH}" fill="${color}" />`;
+  }
+
+  // Overlay lines (mumların üstünde)
+  let lines = '';
+  if (opts.overlays) {
+    for (const o of opts.overlays) {
+      if (o.type === 'line') {
+        const y = yToPx(o.y);
+        const dash = o.dashed ? 'stroke-dasharray="4 3"' : '';
+        lines += `<line x1="${padL}" y1="${y}" x2="${padL+cw}" y2="${y}" stroke="${o.color}" stroke-width="${o.weight || 1}" ${dash}/>`;
+        // Sağda etiket + fiyat
+        lines += `<rect x="${padL+cw+1}" y="${y-7}" width="68" height="14" fill="${o.color}" rx="2"/>`;
+        lines += `<text x="${padL+cw+5}" y="${y+3}" fill="#000" font-size="9" font-family="Consolas,monospace" font-weight="700">${fmt(o.y)}</text>`;
+        // Solda label
+        if (o.label) {
+          lines += `<text x="${padL+5}" y="${y-3}" fill="${o.color}" font-size="9" font-family="Consolas,monospace" font-weight="700">${o.label}</text>`;
+        }
+      }
+    }
+  }
+
+  return `<svg class="chart-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    ${highlightZone}
+    ${gridLines}
+    ${zonesUnder}
+    ${candles}
+    ${lines}
+    ${xLabels}
+  </svg>`;
+}
+
+// ==== TELEGRAM ENTEGRASYONU ====
+const TG_STORAGE_KEY = 'wolf_candle_theory_tg';
+
+function saveTgConfig() {
+  try {
+    const cfg = {
+      enabled: document.getElementById('tgEnabled').checked,
+      token: document.getElementById('tgToken').value.trim(),
+      chatId: document.getElementById('tgChatId').value.trim()
+    };
+    // sessionStorage kullanma — sadece runtime memory + manual export
+    // Anthropic artifact ortamında localStorage olmuyordu ama harici Python server üzerinde olduğu için kullanılabilir
+    localStorage.setItem(TG_STORAGE_KEY, JSON.stringify(cfg));
+  } catch (e) {}
+}
+
+function loadTgConfig() {
+  try {
+    const raw = localStorage.getItem(TG_STORAGE_KEY);
+    if (!raw) return;
+    const cfg = JSON.parse(raw);
+    document.getElementById('tgEnabled').checked = !!cfg.enabled;
+    document.getElementById('tgToken').value = cfg.token || '';
+    document.getElementById('tgChatId').value = cfg.chatId || '';
+  } catch (e) {}
+}
+
+async function sendTelegram(text) {
+  const enabled = document.getElementById('tgEnabled').checked;
+  if (!enabled) return false;
+  const token = document.getElementById('tgToken').value.trim();
+  const chatId = document.getElementById('tgChatId').value.trim();
+  if (!token || !chatId) {
+    log('Telegram aktif ama token/chat ID boş', 'err');
+    return false;
+  }
+  try {
+    const url = `https://api.telegram.org/bot${token}/sendMessage`;
+    const r = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: text,
+        parse_mode: 'HTML',
+        disable_web_page_preview: true
+      })
+    });
+    const j = await r.json();
+    if (!j.ok) {
+      log('Telegram hatası: ' + (j.description || 'bilinmeyen'), 'err');
+      return false;
+    }
+    return true;
+  } catch (e) {
+    log('Telegram fetch hatası: ' + e.message, 'err');
+    return false;
+  }
+}
+
+function formatTelegramSignal(s) {
+  const tvSym = s.symbol.replace('USDT','USDTPERP');
+  const sideEmoji = s.side === 'SHORT' ? '🔴' : '🟢';
+  const sideTxt = s.side === 'SHORT' ? 'SHORT 📉' : 'LONG 📈';
+  return `🐺 <b>WOLF CANDLE THEORY</b> ${sideEmoji}
+
+<b>${s.symbol}</b> | ${sideTxt}
+
+💰 <b>Entry:</b> <code>${fmt(s.entry)}</code>
+🛑 <b>Stop:</b> <code>${fmt(s.sl)}</code> (${s.slPct.toFixed(2)}%)
+🎯 <b>TP1 (Fibo 0.5):</b> <code>${fmt(s.tp1)}</code> (+${s.tp1Pct.toFixed(2)}%)
+🎯 <b>TP2 (Ref ${s.side === 'SHORT' ? 'Low' : 'High'}):</b> <code>${fmt(s.tp2)}</code> (+${s.tp2Pct.toFixed(2)}%)
+⚖️ <b>R:R (TP1):</b> ${s.rr.toFixed(2)}
+
+📊 <b>Referans Mum:</b> ${fmt(s.prevLow)} - ${fmt(s.prevHigh)}
+⚡ <b>Tetik Mum:</b> ${fmt(s.currLow)} - ${fmt(s.currHigh)}
+📦 <b>5m FVG:</b> ${fmt(s.fvgBottom)} - ${fmt(s.fvgTop)}
+
+💵 Anlık fiyat: <code>${fmt(s.currentPrice)}</code>
+🕒 ${new Date().toLocaleString('tr-TR')}
+
+🔗 <a href="https://www.binance.com/en/futures/${s.symbol}">Binance</a> | <a href="https://www.tradingview.com/chart/?symbol=BINANCE:${tvSym}&interval=5">TV 5m</a> | <a href="https://www.tradingview.com/chart/?symbol=BINANCE:${tvSym}&interval=240">TV 4H</a>`;
+}
+
+async function testTelegram() {
+  saveTgConfig();
+  const ok = await sendTelegram(`🐺 <b>Wolf Candle Theory</b>\n\n✅ Test mesajı başarılı!\nSinyaller bu kanala gelecek.\n\n🕒 ${new Date().toLocaleString('tr-TR')}`);
+  if (ok) {
+    log('✅ Telegram test mesajı gönderildi', 'ok');
+    alert('✅ Test başarılı! Telegram kanalına mesaj gitti.');
+  } else {
+    alert('❌ Test başarısız. Token ve Chat ID\'yi kontrol et.\nBot, kanala/gruba eklenmiş olmalı.');
+  }
+}
+
+// ==== KONTROL: BAŞLAT/DURDUR ====
+async function start() {
+  if (state.running) {
+    state.running = false;
+    clearInterval(state.scanInterval);
+    clearInterval(state.priceInterval);
+    document.getElementById('startBtn').textContent = '🐺 BAŞLAT';
+    setStatus('Durduruldu', false);
+    log('⏸ Sistem durduruldu');
+    return;
+  }
+  state.running = true;
+  document.getElementById('startBtn').textContent = '⏸ DURDUR';
+  setStatus('Başlatılıyor...');
+  log('🐺 Wolf Candle Theory başlatıldı');
+
+  try {
+    state.symbols = await fetchExchangeInfo();
+    document.getElementById('coinCount').textContent = state.symbols.length;
+    log(`📊 ${state.symbols.length} USDT perpetual coin bulundu`, 'ok');
+  } catch (e) {
+    log('Sembol listesi çekilemedi: ' + e.message, 'err');
+    setStatus('Hata', false);
+    return;
+  }
+
+  await fullScan();
+
+  // Tam tarama her 4 dakikada bir (4H mum kapanış kontrolü ve yeni FVG'ler için)
+  state.scanInterval = setInterval(() => {
+    if (state.running && document.getElementById('autoRefresh').checked) fullScan();
+  }, 4 * 60 * 1000);
+
+  // Anlık fiyat kontrolü her 5 saniye
+  state.priceInterval = setInterval(() => {
+    if (state.running) priceTick();
+  }, 5000);
+}
+
+// ==== EVENT BINDINGS ====
+document.getElementById('startBtn').addEventListener('click', start);
+document.getElementById('rescanBtn').addEventListener('click', () => {
+  if (!state.running) { log('Önce BAŞLAT', 'err'); return; }
+  fullScan();
+});
+document.getElementById('clearLogBtn').addEventListener('click', () => {
+  document.getElementById('log').innerHTML = '';
+});
+
+// Modal kapatma
+document.getElementById('modalClose').addEventListener('click', closeSetupModal);
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+  if (e.target.id === 'modalOverlay') closeSetupModal();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeSetupModal();
+});
+
+// Telegram
+document.getElementById('tgTestBtn').addEventListener('click', testTelegram);
+document.getElementById('tgEnabled').addEventListener('change', saveTgConfig);
+document.getElementById('tgToken').addEventListener('change', saveTgConfig);
+document.getElementById('tgChatId').addEventListener('change', saveTgConfig);
+loadTgConfig();
+
+// Saat
+setInterval(() => {
+  document.getElementById('clockVal').textContent = new Date().toLocaleTimeString('tr-TR');
+}, 1000);
+
+log('🐺 Wolf Candle Theory hazır. BAŞLAT butonuna bas.');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2117 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐺 Wolf MAFS HunterKey + Divergence Scanner</title>
+<style>
+:root {
+  --bg-0: #0a0e1a;
+  --bg-1: #121826;
+  --bg-2: #121826;
+  --bg-3: #1a2233;
+  --gold: #f5b342;
+  --gold-bright: #f5b342;
+  --gold-dim: #f5b342;
+  --green: #22c55e;
+  --red: #ef4444;
+  --cyan: #2dd4bf;
+  --orange: #f5b342;
+  --text: #e8edf5;
+  --text-dim: #8892a8;
+  --border: #1a2233;
+  --confluence: #22c55e;
+  --warning: #f5b342;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
+  background:
+    radial-gradient(ellipse at top left, rgba(245,179,66,0.08), transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(45,212,191,0.05), transparent 50%),
+    var(--bg-0);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ---------- HEADER ---------- */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(180deg, rgba(10,14,26,0.98), rgba(10,14,26,0.92));
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo {
+  font-size: 28px;
+  filter: drop-shadow(0 0 8px var(--gold));
+}
+
+.brand-title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-sub {
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.tf-group {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-2);
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.tf-btn {
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  background: transparent;
+  color: var(--text-dim);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+
+.tf-btn:hover { color: var(--text); }
+
+.tf-btn.active {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+  color: #000;
+  box-shadow: 0 2px 8px rgba(245,179,66,0.3);
+}
+
+.btn {
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-2);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  letter-spacing: 0.5px;
+}
+
+.btn:hover { border-color: var(--gold); color: var(--gold-bright); }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+  color: #000;
+  border-color: var(--gold);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+  color: #000;
+}
+
+.btn-stop {
+  background: linear-gradient(135deg, var(--red), #ef4444);
+  color: #fff;
+  border-color: var(--red);
+}
+
+.status-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 11px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  box-shadow: 0 0 6px currentColor;
+}
+
+.status-dot.scanning {
+  background: var(--green);
+  animation: pulse 1.2s infinite;
+}
+
+.status-dot.idle { background: var(--text-dim); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stat-label {
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold-bright);
+}
+
+/* ---------- MAIN ---------- */
+.container {
+  padding: 20px 24px;
+  max-width: 1800px;
+  margin: 0 auto;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab {
+  padding: 10px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  letter-spacing: 0.5px;
+}
+
+.tab:hover { color: var(--text); }
+
+.tab.active {
+  color: var(--gold-bright);
+  border-bottom-color: var(--gold);
+}
+
+.tab-badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  font-size: 10px;
+  background: var(--bg-3);
+  border-radius: 10px;
+  color: var(--gold-bright);
+}
+
+.signals-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.signal-card {
+  background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: grid;
+  grid-template-columns: 100px 70px 90px 120px 1fr 100px 100px 80px;
+  align-items: center;
+  gap: 14px;
+  transition: all 0.2s;
+  font-size: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.signal-card.long { border-left-color: var(--green); }
+.signal-card.short { border-left-color: var(--red); }
+.signal-card.confluence-long {
+  border-left-color: var(--confluence);
+  background: linear-gradient(135deg, rgba(34,197,94,0.08), var(--bg-2));
+  box-shadow: 0 0 20px rgba(34,197,94,0.15);
+}
+.signal-card.confluence-short {
+  border-left-color: var(--red);
+  background: linear-gradient(135deg, rgba(239,68,68,0.08), var(--bg-2));
+  box-shadow: 0 0 20px rgba(239,68,68,0.15);
+}
+.signal-card.warning {
+  border-left-color: var(--warning);
+  background: linear-gradient(135deg, rgba(245,179,66,0.06), var(--bg-2));
+}
+
+.signal-card:hover {
+  border-color: var(--gold-dim);
+  transform: translateX(2px);
+}
+
+.signal-card.new-signal {
+  animation: flashIn 1.5s ease-out;
+}
+
+@keyframes flashIn {
+  0% {
+    background: rgba(245,179,66,0.4);
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  100% {
+    background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.symbol-cell {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--gold-bright);
+  letter-spacing: 0.5px;
+}
+
+.symbol-cell a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dashed var(--gold-dim);
+}
+
+.symbol-cell a:hover { color: #fff; border-bottom-color: var(--gold); }
+
+.tf-cell {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  background: var(--bg-3);
+  border-radius: 4px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.dir-cell {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 8px;
+  border-radius: 4px;
+  text-align: center;
+  letter-spacing: 0.5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.dir-long { background: rgba(34,197,94,0.15); color: var(--green); }
+.dir-short { background: rgba(239,68,68,0.15); color: var(--red); }
+
+.zone-cell {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.zone-target { background: rgba(34,197,94,0.12); color: var(--confluence); }
+.zone-extension { background: rgba(245,179,66,0.12); color: var(--orange); }
+.zone-entry { background: rgba(34,197,94,0.18); color: var(--green); border: 1px solid rgba(34,197,94,0.4); }
+.zone-chase { background: rgba(245,179,66,0.12); color: #f5b342; }
+.zone-waiting { background: rgba(45,212,191,0.12); color: #2dd4bf; }
+.zone-invalid { background: rgba(136,146,168,0.12); color: #888; }
+.zone-neutral { background: var(--bg-3); color: var(--text-dim); }
+
+.detail-cell {
+  font-size: 10px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.detail-cell .label {
+  color: var(--gold-dim);
+  font-weight: 600;
+}
+
+.detail-cell .value {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.div-cell {
+  font-size: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.div-tag {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 0.5px;
+}
+
+.div-confluence { background: rgba(34,197,94,0.2); color: var(--confluence); }
+.div-warning { background: rgba(245,179,66,0.2); color: var(--warning); }
+.div-neutral { background: var(--bg-3); color: var(--text-dim); }
+
+/* ---- TRADE PLAN STATUS TAGS ---- */
+.status-tag {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 9px;
+  letter-spacing: 0.7px;
+  margin-top: 4px;
+  cursor: help;
+  white-space: nowrap;
+}
+.status-tag-wait {
+  background: rgba(34,197,94,0.18);
+  color: var(--green);
+  border: 1px solid rgba(34,197,94,0.4);
+  box-shadow: 0 0 8px rgba(34,197,94,0.25);
+}
+.status-tag-chase {
+  background: rgba(245,179,66,0.18);
+  color: #f5b342;
+  border: 1px solid rgba(245,179,66,0.4);
+}
+.status-tag-waiting {
+  background: rgba(45,212,191,0.15);
+  color: #2dd4bf;
+  border: 1px solid rgba(45,212,191,0.35);
+}
+.status-tag-tphit {
+  background: rgba(239,68,68,0.15);
+  color: var(--red);
+  border: 1px solid rgba(239,68,68,0.35);
+}
+.status-tag-invalid {
+  background: rgba(136,146,168,0.15);
+  color: #888;
+  border: 1px solid rgba(136,146,168,0.3);
+  text-decoration: line-through;
+}
+
+/* Card özel durumlar */
+.signal-card.status-tp-hit {
+  opacity: 0.65;
+  background: linear-gradient(135deg, rgba(239,68,68,0.04), var(--bg-2));
+}
+.signal-card.status-invalid {
+  opacity: 0.4;
+  filter: grayscale(0.7);
+}
+.signal-card.status-wait:not(.confluence-long):not(.confluence-short) {
+  border-left-color: var(--green);
+  box-shadow: 0 0 12px rgba(34,197,94,0.1);
+}
+
+/* Trade plan inline detayı */
+.trade-plan-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  align-items: center;
+  font-size: 11px;
+  margin-bottom: 4px;
+}
+.tp-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  white-space: nowrap;
+}
+.tp-item .tp-label {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+.tp-item .tp-pct {
+  font-size: 10px;
+  font-weight: 600;
+  opacity: 0.75;
+}
+.tp-entry { color: var(--gold-bright); font-weight: 700; }
+.tp-target { color: var(--green); font-weight: 700; }
+.tp-stop { color: var(--red); font-weight: 700; }
+
+/* R:R rozeti */
+.rr-tag {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin-left: auto;
+}
+.rr-good { background: rgba(34,197,94,0.18); color: var(--green); border: 1px solid rgba(34,197,94,0.35); }
+.rr-ok   { background: rgba(245,179,66,0.15); color: #f5b342; border: 1px solid rgba(245,179,66,0.3); }
+.rr-poor { background: rgba(239,68,68,0.12); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+
+/* Meta satırı (tip + bar yaşı) */
+.meta-row {
+  font-size: 10px;
+  color: var(--text-dim);
+  opacity: 0.8;
+}
+.meta-row .meta-item { white-space: nowrap; }
+
+/* Dir cell altındaki status badge için */
+.dir-cell .dir-status {
+  margin-top: 3px;
+}
+
+.price-cell {
+  font-size: 12px;
+  font-weight: 700;
+  text-align: right;
+  color: var(--text);
+}
+
+.price-cell .change {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.change.up { color: var(--green); }
+.change.down { color: var(--red); }
+
+.time-cell {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-align: right;
+}
+
+.empty-state {
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--text-dim);
+}
+
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.3;
+}
+
+.empty-state-title {
+  font-size: 16px;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.empty-state-text {
+  font-size: 12px;
+}
+
+.log-panel {
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  max-height: 200px;
+  overflow-y: auto;
+  font-size: 10px;
+  color: var(--text-dim);
+  font-family: monospace;
+}
+
+.log-line {
+  padding: 2px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.log-line .ts { color: var(--gold-dim); margin-right: 8px; }
+.log-line.err { color: var(--red); }
+.log-line.ok { color: var(--green); }
+
+/* Settings panel */
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.setting-card {
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.setting-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.setting-value {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold-bright);
+  margin-bottom: 8px;
+}
+
+.setting-input {
+  width: 100%;
+  padding: 6px 10px;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.setting-input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.checkbox-row input { accent-color: var(--gold); }
+
+.checkbox-row label {
+  font-size: 11px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-1); }
+::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .signal-card {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+}
+
+/* Header bar above grid */
+.grid-header {
+  display: grid;
+  grid-template-columns: 100px 70px 90px 120px 1fr 100px 100px 80px;
+  gap: 14px;
+  padding: 8px 18px;
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+@media (max-width: 1100px) {
+  .grid-header { display: none; }
+}
+
+.filter-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 5px 12px;
+  font-size: 10px;
+  font-weight: 600;
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.5px;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover { color: var(--text); border-color: var(--gold-dim); }
+
+.filter-btn.active {
+  background: var(--gold);
+  color: #000;
+  border-color: var(--gold);
+}
+</style>
+<style>
+.header,.header-row,.brand,.brand-row,.header-stats,.controls{flex-wrap:wrap;}
+.tf-group,.filter-group,.filter-row,.filter-pills,.filter-bar,.tabs,.actions,.tfgrid,.seg,.segmented,.tf-btns,.tf-list{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;}
+.tf-btn,.filter-btn,.tab,.pill,.seg-btn{flex-shrink:0;}
+.tablewrap,#tablewrap,.table-wrap,.tbl-wrap,.table-container,.feed{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch;}
+@media(max-width:860px){
+.header{height:auto!important;min-height:0;row-gap:8px;}
+.grid,.signals-grid,.tools-grid,.coins-grid,.card-grid,.dash-grid,.setup-grid,.portfolio-grid{grid-template-columns:1fr!important;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-row">
+    <div class="brand">
+      <span class="brand-logo"><img src="data:image/png;base64,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" alt="Wolf" style="width:38px;height:38px;vertical-align:middle;margin-right:9px;filter:drop-shadow(0 0 6px rgba(45,212,191,0.55)) drop-shadow(0 0 12px rgba(45,212,191,0.3))"></span>
+      <div>
+        <div class="brand-title">WOLF MAFS HUNTERKEY</div>
+        
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="tf-group" id="tfGroup">
+        <button class="tf-btn" data-tf="15m">15m</button>
+        <button class="tf-btn" data-tf="30m">30m</button>
+        <button class="tf-btn" data-tf="1h">1h</button>
+        <button class="tf-btn" data-tf="2h">2h</button>
+        <button class="tf-btn" data-tf="3h">3h</button>
+        <button class="tf-btn active" data-tf="4h">4h</button>
+        <button class="tf-btn active" data-tf="1d">1d</button>
+      </div>
+      <button class="btn btn-primary" id="startBtn">▶ TARAMAYI BAŞLAT</button>
+      <button class="btn btn-stop" id="stopBtn" style="display:none">■ DURDUR</button>
+    </div>
+  </div>
+
+  <div class="status-bar">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="status-dot idle" id="statusDot"></span>
+      <span id="statusText" style="font-weight:600;color:var(--text-dim)">HAZIR</span>
+    </div>
+    <div class="stat"><span class="stat-label">Coin</span><span class="stat-value" id="coinCount">-</span></div>
+    <div class="stat"><span class="stat-label">Aktif TF</span><span class="stat-value" id="tfCount">2</span></div>
+    <div class="stat"><span class="stat-label">Toplam Tarama</span><span class="stat-value" id="scanCount">0</span></div>
+    <div class="stat"><span class="stat-label">Sinyal</span><span class="stat-value" id="signalCount">0</span></div>
+    <div class="stat"><span class="stat-label">🟢 Hazır</span><span class="stat-value" id="waitEntryCount" style="color:var(--green)">0</span></div>
+    <div class="stat"><span class="stat-label">Confluence 🐺</span><span class="stat-value" id="confluenceCount" style="color:var(--confluence)">0</span></div>
+    <div class="stat"><span class="stat-label">Son Tarama</span><span class="stat-value" id="lastScanTime">-</span></div>
+    <div class="stat"><span class="stat-label">Bir Sonraki</span><span class="stat-value" id="nextScan">-</span></div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<div class="container">
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" data-tab="signals">🎯 Aktif Sinyaller<span class="tab-badge" id="signalsBadge">0</span></button>
+    <button class="tab" data-tab="confluence">🐺 Confluence Sadece<span class="tab-badge" id="confBadge">0</span></button>
+    <button class="tab" data-tab="warnings">⚠️ Uyumsuzluklar<span class="tab-badge" id="warnBadge">0</span></button>
+    <button class="tab" data-tab="settings">⚙️ Ayarlar</button>
+    <button class="tab" data-tab="logs">📜 Log</button>
+  </div>
+
+  <!-- Filter row -->
+  <div class="filter-row" id="filterRow">
+    <button class="filter-btn active" data-filter="all">TÜMÜ</button>
+    <button class="filter-btn" data-filter="long">LONG</button>
+    <button class="filter-btn" data-filter="short">SHORT</button>
+    <button class="filter-btn" data-filter="wait_entry">🟢 HAZIR (Entry)</button>
+    <button class="filter-btn" data-filter="chase">🟡 GEÇ (Chase)</button>
+    <button class="filter-btn" data-filter="waiting">⏳ BEKLE (Pullback)</button>
+    <button class="filter-btn" data-filter="tp_hit">🔴 TP HIT</button>
+    <button class="filter-btn" data-filter="target">1.272-1.414 Hedef</button>
+    <button class="filter-btn" data-filter="extension">-0.272/-0.414 Uzantı</button>
+  </div>
+
+  <!-- Signals tab -->
+  <div id="tab-signals" class="tab-content">
+    <div class="grid-header">
+      <div>SEMBOL</div>
+      <div>TF</div>
+      <div>YÖN</div>
+      <div>BÖLGE</div>
+      <div>FİB DETAY</div>
+      <div>DIVERGENCE</div>
+      <div>FİYAT</div>
+      <div>ZAMAN</div>
+    </div>
+    <div class="signals-grid" id="signalsGrid">
+      <div class="empty-state">
+        <div class="empty-state-icon">🐺</div>
+        <div class="empty-state-title">Tarayıcı Hazır</div>
+        <div class="empty-state-text">"TARAMAYI BAŞLAT" butonuna basın. Tarama her dakika çalışır, fiyat hedef Fib kutusuna girdiği anda burada gösterilir.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-confluence" class="tab-content" style="display:none">
+    <div class="signals-grid" id="confluenceGrid">
+      <div class="empty-state">
+        <div class="empty-state-icon">🐺</div>
+        <div class="empty-state-title">Confluence Sinyali Yok</div>
+        <div class="empty-state-text">BOS/CHoCH yönü + aynı yönlü Divergence varsa burada gösterilir (en güçlü kurulumlar).</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-warnings" class="tab-content" style="display:none">
+    <div class="signals-grid" id="warningsGrid">
+      <div class="empty-state">
+        <div class="empty-state-icon">⚠️</div>
+        <div class="empty-state-title">Uyumsuzluk Yok</div>
+        <div class="empty-state-text">BOS/CHoCH ile divergence ters yönde olduğunda burada görünür (dikkat gerekir).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings -->
+  <div id="tab-settings" class="tab-content" style="display:none">
+    <div class="settings-grid">
+      <div class="setting-card">
+        <div class="setting-label">Pivot Length</div>
+        <div class="setting-value" id="pivotLenLabel">10</div>
+        <input type="number" class="setting-input" id="pivotLenInput" value="10" min="2" max="50">
+      </div>
+
+      <div class="setting-card">
+        <div class="setting-label">Tarama Aralığı (sn)</div>
+        <div class="setting-value" id="scanIntervalLabel">120</div>
+        <input type="number" class="setting-input" id="scanIntervalInput" value="120" min="10" max="600">
+      </div>
+
+      <div class="setting-card">
+        <div class="setting-label">Eş Zamanlı İstek Limiti</div>
+        <div class="setting-value" id="concurrencyLabel">3</div>
+        <input type="number" class="setting-input" id="concurrencyInput" value="3" min="1" max="20">
+      </div>
+
+      <div class="setting-card">
+        <div class="setting-label">Maksimum Bar Yaşı (kırılım)</div>
+        <div class="setting-value" id="maxAgeLabel">30</div>
+        <input type="number" class="setting-input" id="maxAgeInput" value="30" min="1" max="200">
+      </div>
+
+      <div class="setting-card">
+        <div class="setting-label">Fib Kutu Tolerans (%)</div>
+        <div class="setting-value" id="toleranceLabel">0</div>
+        <input type="number" class="setting-input" id="toleranceInput" value="0" min="0" max="20" step="0.5">
+      </div>
+
+      <div class="setting-card">
+        <div class="setting-label">Sesli Alarm</div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="soundEnabled" checked>
+          <label for="soundEnabled">Yeni sinyal geldiğinde çal</label>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="soundConfluence" checked>
+          <label for="soundConfluence">Sadece confluence için</label>
+        </div>
+        <button class="btn" style="margin-top:10px;width:100%" onclick="testBeep()">🔊 Test Et</button>
+      </div>
+
+      <div class="setting-card">
+        <div class="setting-label">Divergence</div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="divEnabled" checked>
+          <label for="divEnabled">RSI divergence kontrol et</label>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="divHidden" checked>
+          <label for="divHidden">Hidden divergence dahil</label>
+        </div>
+      </div>
+
+      <div class="setting-card">
+        <div class="setting-label">Trade Planı Filtreleri</div>
+        <div class="setting-value" id="minRRLabel">Min R:R 0.5</div>
+        <input type="number" class="setting-input" id="minRRInput" value="0.5" min="0" max="10" step="0.1" title="Minimum risk/reward oranı (TP2 baz alınır). Pine planı sabit ratio verir: TP1=0.46, TP2=0.59. 0 = filtreleme kapalı.">
+        <div class="setting-value" id="entryTolLabel" style="margin-top:10px">Entry Tolerans ±%1.0</div>
+        <input type="number" class="setting-input" id="entryTolInput" value="1.0" min="0.1" max="10" step="0.1" title="Entry seviyesinden bu yüzde içindeki fiyatlar 'HAZIR' olarak işaretlenir. Daha düşük = daha sıkı, daha az hatalı HAZIR.">
+        <div class="checkbox-row" style="margin-top:8px">
+          <input type="checkbox" id="hideTpHit">
+          <label for="hideTpHit">TP HIT'leri gizle (sadece aktif fırsatlar)</label>
+        </div>
+        <div style="font-size:10px;color:var(--text-dim);margin-top:6px;line-height:1.5">
+          Entry = 0.786 · TP1 = 1.272 · TP2 = 1.414 · SL = -0.272<br>
+          <strong>Pine planı sabit R:R verir:</strong><br>
+          • TP1 hedefli: 1:0.46<br>
+          • TP2 hedefli: 1:0.59<br>
+          (Min R:R filtresi TP2 üzerinden hesaplanır)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logs -->
+  <div id="tab-logs" class="tab-content" style="display:none">
+    <div class="log-panel" id="logPanel"></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+/* ========================================================================
+   WOLF MAFS HUNTERKEY + DIVERGENCE SCANNER
+   Pine Script aslına sadık, Binance Futures fapi
+   ======================================================================== */
+
+const FAPI = 'https://web-production-2bdde.up.railway.app';
+
+const TF_MAP = {
+  '15m': { interval: '15m', ms: 15*60*1000 },
+  '30m': { interval: '30m', ms: 30*60*1000 },
+  '1h':  { interval: '1h',  ms: 60*60*1000 },
+  '2h':  { interval: '2h',  ms: 2*60*60*1000 },
+  '3h':  { interval: '4h',  ms: 4*60*60*1000, customAgg: 3 }, // 3h yok, 1h x 3 ile yapılır
+  '4h':  { interval: '4h',  ms: 4*60*60*1000 },
+  '1d':  { interval: '1d',  ms: 24*60*60*1000 }
+};
+
+// Fib levels (Pine ile aynı)
+const FIB = {
+  midTop: 0.5,
+  midBot: 0.382,
+  hiTop:  1.272,
+  hiBot:  1.414,
+  negTop: -0.272,
+  negBot: -0.414,
+  line786: 0.786
+};
+
+// State
+const state = {
+  symbols: [],
+  activeTfs: ['4h','1d'],
+  scanning: false,
+  scanCount: 0,
+  signals: new Map(), // key: SYMBOL_TF -> signal object
+  knownKeys: new Set(), // unique signal id'ler
+  abortController: null,
+  scanIntervalSec: 120,
+  pivotLen: 10,
+  concurrency: 3,
+  maxAge: 30,
+  tolerance: 0,
+  divEnabled: true,
+  divHidden: true,
+  soundEnabled: true,
+  soundConfluence: true,
+  minRR: 0.5,
+  hideTpHit: false,
+  entryTolerancePct: 1.0,     // Entry HAZIR bandı: ±%1 (kullanıcı ayarlanabilir)
+  rateLimitedUntil: 0,        // Binance 418/429 sonrası beklenecek timestamp
+  rateLimitHits: 0,           // Bu turdaki rate limit isabet sayısı
+  currentFilter: 'all',
+  currentTab: 'signals',
+  nextScanAt: 0,
+  // TF bazlı son tarama zamanı (büyük TF'ler seyrek taranır)
+  lastTfScan: {},
+  // TF tarama aralıkları (saniye) - candle yarısı kadar
+  tfRefresh: {
+    '15m': 60,    // her dakikada
+    '30m': 120,   // 2 dakikada
+    '1h':  240,   // 4 dakikada
+    '2h':  300,   // 5 dakikada
+    '3h':  600,   // 10 dakikada
+    '4h':  600,   // 10 dakikada
+    '1d':  1800   // 30 dakikada
+  }
+};
+
+/* ---------- UTIL ---------- */
+const $ = id => document.getElementById(id);
+
+function log(msg, type='') {
+  const panel = $('logPanel');
+  const ts = new Date().toLocaleTimeString('tr-TR');
+  const line = document.createElement('div');
+  line.className = 'log-line ' + type;
+  line.innerHTML = `<span class="ts">${ts}</span>${msg}`;
+  panel.insertBefore(line, panel.firstChild);
+  while (panel.children.length > 200) panel.removeChild(panel.lastChild);
+}
+
+function fmt(num, decimals=null) {
+  if (num === null || num === undefined || isNaN(num)) return '-';
+  if (decimals !== null) return Number(num).toFixed(decimals);
+  const abs = Math.abs(num);
+  if (abs >= 1000) return num.toFixed(2);
+  if (abs >= 1)    return num.toFixed(4);
+  if (abs >= 0.01) return num.toFixed(5);
+  return num.toFixed(8);
+}
+
+function pct(a, b) {
+  if (!b) return 0;
+  return ((a-b)/b)*100;
+}
+
+function timeAgo(ms) {
+  const diff = Date.now() - ms;
+  const m = Math.floor(diff/60000);
+  if (m < 60) return m + 'd';
+  const h = Math.floor(m/60);
+  if (h < 24) return h + 'h ' + (m%60) + 'd';
+  return Math.floor(h/24) + 'g';
+}
+
+/* ---------- AUDIO ---------- */
+let audioCtx = null;
+function getAudio() {
+  if (!audioCtx) {
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+    catch(e) { return null; }
+  }
+  return audioCtx;
+}
+
+function beep(type='normal') {
+  const ctx = getAudio();
+  if (!ctx) return;
+  const now = ctx.currentTime;
+  const cfg = type === 'confluence'
+    ? { freqs: [880, 1320, 880, 1320], dur: 0.12, gap: 0.05, gain: 0.18 }
+    : type === 'warning'
+      ? { freqs: [440, 350], dur: 0.18, gap: 0.05, gain: 0.12 }
+      : { freqs: [880], dur: 0.12, gap: 0, gain: 0.10 };
+  let t = now;
+  cfg.freqs.forEach(f => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = f;
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(cfg.gain, t + 0.02);
+    gain.gain.linearRampToValueAtTime(0, t + cfg.dur);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + cfg.dur);
+    t += cfg.dur + cfg.gap;
+  });
+}
+
+function testBeep() { beep('confluence'); }
+window.testBeep = testBeep;
+
+/* ---------- BINANCE FETCH ---------- */
+async function fetchExchangeInfo() {
+  const maxRetry = 3;
+  let lastErr;
+  for (let attempt = 1; attempt <= maxRetry; attempt++) {
+    try {
+      // Rate limit aktifse bekle
+      if (state.rateLimitedUntil > Date.now()) {
+        const wait = state.rateLimitedUntil - Date.now();
+        await new Promise(res => setTimeout(res, wait + 100));
+      }
+      const r = await fetch(`${FAPI}/fapi/v1/exchangeInfo`);
+      if (r.status === 418 || r.status === 429) {
+        let waitSec = 60;
+        const retryAfter = r.headers.get('Retry-After');
+        if (retryAfter) { const ra = parseInt(retryAfter, 10); if (!isNaN(ra)) waitSec = Math.max(ra, 30); }
+        state.rateLimitedUntil = Date.now() + waitSec * 1000;
+        state.rateLimitHits++;
+        log(`⛔ Binance HTTP ${r.status} (exchangeInfo) — ${waitSec}sn beklenecek`, 'err');
+        await new Promise(res => setTimeout(res, waitSec * 1000 + 200));
+        continue;
+      }
+      if (!r.ok) {
+        lastErr = new Error(`HTTP ${r.status}`);
+        await new Promise(res => setTimeout(res, 600 * attempt));
+        continue;
+      }
+      const j = await r.json();
+      if (!j || !Array.isArray(j.symbols)) {
+        lastErr = new Error('Geçersiz exchangeInfo yanıtı (rate limit?)');
+        await new Promise(res => setTimeout(res, 800 * attempt));
+        continue;
+      }
+      // Sadece USDT perpetual ve TRADING durumda olanlar
+      return j.symbols
+        .filter(s => s.contractType === 'PERPETUAL' && s.quoteAsset === 'USDT' && s.status === 'TRADING')
+        .map(s => s.symbol);
+    } catch (e) {
+      lastErr = e;
+      await new Promise(res => setTimeout(res, 600 * attempt));
+    }
+  }
+  throw lastErr || new Error('exchangeInfo alınamadı');
+}
+
+async function fetchKlines(symbol, interval, limit=200) {
+  // Eğer rate limit aktifse sessizce çık, fetch'i bile gönderme
+  if (state.rateLimitedUntil > Date.now()) {
+    throw new Error('rate-limit-skip');
+  }
+  // Minimal jitter — Binance peak limit'lerini absorbe etmek için
+  await new Promise(res => setTimeout(res, 30 + Math.random() * 70));
+  const url = `${FAPI}/fapi/v1/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`;
+  const r = await fetch(url);
+  if (!r.ok) {
+    if (r.status === 418 || r.status === 429) {
+      let waitSec = 60;
+      const retryAfter = r.headers.get('Retry-After');
+      if (retryAfter) {
+        const ra = parseInt(retryAfter, 10);
+        if (!isNaN(ra)) waitSec = Math.max(ra, 30);
+      }
+      // Concurrent worker'lar aynı anda 418 alabilir; sadece ilk olan log atsın
+      const wasAlreadyBanned = state.rateLimitedUntil > Date.now();
+      if (state.rateLimitHits > 0) waitSec = Math.min(waitSec * 2, 300);
+      state.rateLimitedUntil = Date.now() + waitSec * 1000;
+      state.rateLimitHits++;
+      if (!wasAlreadyBanned) {
+        log(`⛔ Binance HTTP ${r.status} (IP ban/rate limit) — ${waitSec}sn beklenecek. Tarama duruyor.`, 'err');
+      }
+      throw new Error(`HTTP ${r.status} - rate limited`);
+    }
+    throw new Error(`${symbol} ${interval} HTTP ${r.status}`);
+  }
+  const j = await r.json();
+  if (!Array.isArray(j)) throw new Error(`${symbol} ${interval} geçersiz yanıt`);
+  return j.map(k => ({
+    t: k[0],
+    o: parseFloat(k[1]),
+    h: parseFloat(k[2]),
+    l: parseFloat(k[3]),
+    c: parseFloat(k[4]),
+    v: parseFloat(k[5])
+  }));
+}
+
+// 3h aggregate from 1h
+async function fetchKlines3h(symbol, limit=200) {
+  // 1h çekip 3'er gruplayacağız
+  const base = await fetchKlines(symbol, '1h', limit*3);
+  const agg = [];
+  // 3h candles UTC 0/3/6/9/12/15/18/21'de açılır (Binance standard)
+  // İlk 1h candle'ın başlangıcına göre grup başlangıcı bul
+  let i = 0;
+  // İlk uyumlu noktayı bul (h % 3 == 0)
+  while (i < base.length) {
+    const d = new Date(base[i].t);
+    if (d.getUTCHours() % 3 === 0) break;
+    i++;
+  }
+  for (; i + 2 < base.length; i += 3) {
+    const a = base[i], b = base[i+1], c = base[i+2];
+    agg.push({
+      t: a.t,
+      o: a.o,
+      h: Math.max(a.h, b.h, c.h),
+      l: Math.min(a.l, b.l, c.l),
+      c: c.c,
+      v: a.v + b.v + c.v
+    });
+  }
+  return agg;
+}
+
+/* ---------- INDICATORS / STRUCTURE ---------- */
+// ta.pivothigh(high, len, len) - bar i bir pivot high mi?
+// Pine'da pivot, +len bar onaylanmasını bekler. Yani true sadece i + len bar geçince ortaya çıkar.
+// Bu HTML scanner'da bar_index = candles.length-1 (kapanmış son bar). Pivot bar = i, onay = i+len bara kadar gerekir.
+function findPivots(candles, len) {
+  const ph = []; // {idx, price, time}
+  const pl = [];
+  for (let i = len; i < candles.length - len; i++) {
+    let isHigh = true, isLow = true;
+    const cH = candles[i].h, cL = candles[i].l;
+    for (let j = 1; j <= len; j++) {
+      if (candles[i-j].h >= cH || candles[i+j].h >= cH) isHigh = false;
+      if (candles[i-j].l <= cL || candles[i+j].l <= cL) isLow = false;
+      if (!isHigh && !isLow) break;
+    }
+    if (isHigh) ph.push({ idx: i, price: cH, time: candles[i].t });
+    if (isLow)  pl.push({ idx: i, price: cL, time: candles[i].t });
+  }
+  return { ph, pl };
+}
+
+/**
+ * Pine kodundaki BOS/CHoCH mantığını birebir simule eder.
+ * Wick mode default: high > breakHigh / low < breakLow
+ *
+ * Returns: array of break events:
+ *  { idx, time, type: 'BOS'|'CHoCH', dir: 'up'|'down',
+ *    fibStart, fibEnd, fibStartTime, fibEndTime,
+ *    bosPrice }
+ */
+function runStructure(candles, pivotLen) {
+  const breaks = [];
+  let lastPivotHighP = null, lastPivotHighIdx = null;
+  let lastPivotLowP  = null, lastPivotLowIdx  = null;
+  let bullLowP = null, bullLowIdx = null, bullHighP = null, bullHighIdx = null;
+  let bearHighP = null, bearHighIdx = null, bearLowP = null, bearLowIdx = null;
+  let breakHighP = null, breakHighIdx = null, highBroken = true;
+  let breakLowP = null,  breakLowIdx = null,  lowBroken = true;
+  let trend = 0;
+
+  const n = candles.length;
+  for (let i = pivotLen; i < n; i++) {
+    // Pine'da pivot len bar gecikmeli onaylanır:
+    // ph_struct = ta.pivothigh(high, pivotLen, pivotLen) -> bar i'de candles[i-pivotLen] pivot high mı kontrol
+    const pivotIdx = i - pivotLen;
+    if (pivotIdx >= pivotLen) {
+      let isHigh = true, isLow = true;
+      const cH = candles[pivotIdx].h, cL = candles[pivotIdx].l;
+      for (let j = 1; j <= pivotLen; j++) {
+        if (candles[pivotIdx-j].h >= cH || candles[pivotIdx+j].h >= cH) { isHigh = false; }
+        if (candles[pivotIdx-j].l <= cL || candles[pivotIdx+j].l <= cL) { isLow = false; }
+        if (!isHigh && !isLow) break;
+      }
+      if (isHigh) {
+        lastPivotHighP = cH;
+        lastPivotHighIdx = pivotIdx;
+        breakHighP = cH;
+        breakHighIdx = pivotIdx;
+        highBroken = false;
+        if (lastPivotLowP !== null) {
+          bullLowP = lastPivotLowP;
+          bullLowIdx = lastPivotLowIdx;
+          bullHighP = cH;
+          bullHighIdx = pivotIdx;
+        }
+      }
+      if (isLow) {
+        lastPivotLowP = cL;
+        lastPivotLowIdx = pivotIdx;
+        breakLowP = cL;
+        breakLowIdx = pivotIdx;
+        lowBroken = false;
+        if (lastPivotHighP !== null) {
+          bearHighP = lastPivotHighP;
+          bearHighIdx = lastPivotHighIdx;
+          bearLowP = cL;
+          bearLowIdx = pivotIdx;
+        }
+      }
+    }
+
+    // Bar i'de break check (wick mode)
+    const brokeUp = (breakHighP !== null && !highBroken && candles[i].h > breakHighP);
+    const brokeDn = (breakLowP  !== null && !lowBroken  && candles[i].l < breakLowP);
+
+    if (brokeUp) {
+      highBroken = true;
+      const isCHoCH = trend === -1;
+      const type = isCHoCH ? 'CHoCH' : 'BOS';
+      trend = 1;
+      // Fib: bear leg (high -> low) — bear retest
+      if (bearHighP !== null && bearLowP !== null) {
+        breaks.push({
+          idx: i,
+          time: candles[i].t,
+          type, dir: 'up',
+          fibStart: bearHighP, fibEnd: bearLowP,
+          fibStartIdx: bearHighIdx, fibEndIdx: bearLowIdx,
+          breakPrice: breakHighP
+        });
+      }
+    }
+    if (brokeDn) {
+      lowBroken = true;
+      const isCHoCH = trend === 1;
+      const type = isCHoCH ? 'CHoCH' : 'BOS';
+      trend = -1;
+      if (bullLowP !== null && bullHighP !== null) {
+        breaks.push({
+          idx: i,
+          time: candles[i].t,
+          type, dir: 'down',
+          fibStart: bullLowP, fibEnd: bullHighP,
+          fibStartIdx: bullLowIdx, fibEndIdx: bullHighIdx,
+          breakPrice: breakLowP
+        });
+      }
+    }
+  }
+
+  return breaks;
+}
+
+// Pine: f_price(pStart, pEnd, lvl) = pEnd + (pStart - pEnd) * lvl
+function fibPrice(pStart, pEnd, lvl) {
+  return pEnd + (pStart - pEnd) * lvl;
+}
+
+/* ---------- DIVERGENCE (basit RSI) ---------- */
+function rsi(closes, period=14) {
+  const out = new Array(closes.length).fill(NaN);
+  if (closes.length < period+1) return out;
+  let gain = 0, loss = 0;
+  for (let i = 1; i <= period; i++) {
+    const ch = closes[i] - closes[i-1];
+    if (ch >= 0) gain += ch; else loss -= ch;
+  }
+  let avgG = gain/period, avgL = loss/period;
+  out[period] = avgL === 0 ? 100 : 100 - 100/(1 + avgG/avgL);
+  for (let i = period+1; i < closes.length; i++) {
+    const ch = closes[i] - closes[i-1];
+    const g = ch > 0 ? ch : 0;
+    const l = ch < 0 ? -ch : 0;
+    avgG = (avgG * (period-1) + g) / period;
+    avgL = (avgL * (period-1) + l) / period;
+    out[i] = avgL === 0 ? 100 : 100 - 100/(1 + avgG/avgL);
+  }
+  return out;
+}
+
+/**
+ * Divergence detector - son 2 swing arasında klasik divergence
+ * Returns: { type: 'pos_reg'|'neg_reg'|'pos_hid'|'neg_hid'|null, strength }
+ */
+function detectDivergence(candles, divPrd=5, includeHidden=true) {
+  const n = candles.length;
+  if (n < 50) return { type: null };
+  const closes = candles.map(c => c.c);
+  const highs = candles.map(c => c.h);
+  const lows = candles.map(c => c.l);
+  const rsiArr = rsi(closes, 14);
+
+  // Son 2 pivot high & low bul (divPrd onayıyla)
+  const ph = [], pl = [];
+  for (let i = divPrd; i < n - divPrd; i++) {
+    let isH = true, isL = true;
+    for (let j = 1; j <= divPrd; j++) {
+      if (highs[i-j] >= highs[i] || highs[i+j] >= highs[i]) isH = false;
+      if (lows[i-j]  <= lows[i]  || lows[i+j]  <= lows[i])  isL = false;
+      if (!isH && !isL) break;
+    }
+    if (isH) ph.push(i);
+    if (isL) pl.push(i);
+  }
+
+  // Son 2 high
+  const lastH = ph[ph.length-1], prevH = ph[ph.length-2];
+  // Son 2 low
+  const lastL = pl[pl.length-1], prevL = pl[pl.length-2];
+
+  // Negative regular: price HH, rsi LH (üst tepelerde)
+  if (lastH && prevH && !isNaN(rsiArr[lastH]) && !isNaN(rsiArr[prevH])) {
+    if (highs[lastH] > highs[prevH] && rsiArr[lastH] < rsiArr[prevH]) {
+      return { type: 'neg_reg', dir: 'short' };
+    }
+    if (includeHidden && highs[lastH] < highs[prevH] && rsiArr[lastH] > rsiArr[prevH]) {
+      return { type: 'neg_hid', dir: 'short' };
+    }
+  }
+  // Positive regular: price LL, rsi HL (alt diplerde)
+  if (lastL && prevL && !isNaN(rsiArr[lastL]) && !isNaN(rsiArr[prevL])) {
+    if (lows[lastL] < lows[prevL] && rsiArr[lastL] > rsiArr[prevL]) {
+      return { type: 'pos_reg', dir: 'long' };
+    }
+    if (includeHidden && lows[lastL] > lows[prevL] && rsiArr[lastL] < rsiArr[prevL]) {
+      return { type: 'pos_hid', dir: 'long' };
+    }
+  }
+  return { type: null };
+}
+
+/* ---------- ZONE CHECK ---------- */
+/**
+ * En son break event'i kontrol et: fiyat hedef Fib kutusunda mı?
+ * Pine'da break sonrası çizilen kutular:
+ *   LONG break (brokeUp) -> bear fib: start=bearHigh, end=bearLow
+ *     1.272/1.414 üstte yer alır → SHORT hedef (devam)
+ *     -0.272/-0.414 altta yer alır → ekstra extension
+ *   Aslında scan mantığı: LONG sinyali için bull fib aralıkları; SHORT için bear.
+ *
+ * Pine kodunu birebir okudum:
+ *   brokeUp -> f_draw_fib(bearHighT, bearHigh, bearLowT, bearLow)
+ *     yani pStart = bearHigh, pEnd = bearLow
+ *     1.272 = bearLow + (bearHigh - bearLow) * 1.272 → bearHigh'ın ÜSTÜNDE (LONG hedef)
+ *     -0.272 = bearLow + (bearHigh - bearLow) * -0.272 → bearLow'un ALTINDA (LONG karşı uzantı)
+ *   brokeDn -> f_draw_fib(bullLowT, bullLow, bullHighT, bullHigh)
+ *     pStart = bullLow, pEnd = bullHigh
+ *     1.272 = bullHigh + (bullLow - bullHigh) * 1.272 → bullLow'un ALTINDA (SHORT hedef, aşağı)
+ *     -0.272 = bullHigh + (bullLow - bullHigh) * -0.272 → bullHigh'ın ÜSTÜNDE (SHORT karşı uzantı)
+ *
+ * Yani:
+ *  - LONG break (brokeUp) için: 1.272-1.414 = LONG TARGET (yukarı), -0.272/-0.414 = altta uzantı
+ *  - SHORT break (brokeDn) için: 1.272-1.414 = SHORT TARGET (aşağı), -0.272/-0.414 = üstte uzantı
+ */
+function checkZone(brk, currentPrice, tolerancePct=0) {
+  const tol = tolerancePct / 100;
+
+  const pHiTop = fibPrice(brk.fibStart, brk.fibEnd, FIB.hiTop);   // 1.272
+  const pHiBot = fibPrice(brk.fibStart, brk.fibEnd, FIB.hiBot);   // 1.414
+  const pNegTop = fibPrice(brk.fibStart, brk.fibEnd, FIB.negTop); // -0.272
+  const pNegBot = fibPrice(brk.fibStart, brk.fibEnd, FIB.negBot); // -0.414
+
+  const hiHigh = Math.max(pHiTop, pHiBot);
+  const hiLow  = Math.min(pHiTop, pHiBot);
+  const negHigh = Math.max(pNegTop, pNegBot);
+  const negLow  = Math.min(pNegTop, pNegBot);
+
+  const tolHi = (hiHigh - hiLow) * tol;
+  const tolNeg = (negHigh - negLow) * tol;
+
+  let zone = null;
+  // 1.272-1.414 kutusunda mı?
+  if (currentPrice >= (hiLow - tolHi) && currentPrice <= (hiHigh + tolHi)) {
+    zone = 'target';
+  }
+  // -0.272/-0.414 kutusunda mı?
+  else if (currentPrice >= (negLow - tolNeg) && currentPrice <= (negHigh + tolNeg)) {
+    zone = 'extension';
+  }
+
+  return {
+    zone,
+    targetBox: { high: hiHigh, low: hiLow },
+    extBox: { high: negHigh, low: negLow },
+    fib786: fibPrice(brk.fibStart, brk.fibEnd, FIB.line786)
+  };
+}
+
+/* ---------- TRADE PLAN (Pine mantığı: entry=0.786, TP=1.272/1.414, SL=-0.272) ---------- */
+/**
+ * brk: { dir: 'up'|'down', fibStart, fibEnd, breakPrice, ... }
+ * currentPrice: anlık fiyat
+ *
+ * LONG (brokeUp): pStart=bearHigh, pEnd=bearLow → fiyat 0.786 üstüne çıktı, hedef 1.272
+ *   entry = 0.786 (geri çekilme noktası)
+ *   tp1   = 1.272 (target box alt)
+ *   tp2   = 1.414 (target box üst)
+ *   sl    = -0.272 (extension box üst, bearLow altı)
+ *
+ * SHORT (brokeDn): pStart=bullLow, pEnd=bullHigh → fiyat 0.786 altına indi
+ *   entry = 0.786, tp1 = 1.272, tp2 = 1.414, sl = -0.272 (hepsi aynı formül, yön Pine'da otomatik)
+ */
+function computeTradePlan(brk, currentPrice) {
+  const isLong = brk.dir === 'up';
+
+  const entry = fibPrice(brk.fibStart, brk.fibEnd, FIB.line786);  // 0.786
+  const tp1   = fibPrice(brk.fibStart, brk.fibEnd, FIB.hiTop);    // 1.272
+  const tp2   = fibPrice(brk.fibStart, brk.fibEnd, FIB.hiBot);    // 1.414
+  const sl    = fibPrice(brk.fibStart, brk.fibEnd, FIB.negTop);   // -0.272
+  const slHard = fibPrice(brk.fibStart, brk.fibEnd, FIB.negBot);  // -0.414 (invalidation)
+
+  // Risk/Reward: TP1 ve TP2 ayrı ayrı (Pine planı sabit ratiolar verir: TP1=0.46, TP2=0.59)
+  const reward1 = Math.abs(tp1 - entry);
+  const reward2 = Math.abs(tp2 - entry);
+  const risk    = Math.abs(entry - sl);
+  const rr1     = risk > 0 ? reward1 / risk : 0;  // ≈ 0.46 sabit
+  const rr2     = risk > 0 ? reward2 / risk : 0;  // ≈ 0.59 sabit
+  // Kullanıcının "asıl" R:R'si: TP2'yi nihai hedef sayar
+  const rr      = rr2;
+
+  // Status hesabı
+  let status = 'WAIT_ENTRY';
+  // Entry tolerans: state.entryTolerancePct (default %1) — entry'nin ±X% bandındaki fiyatlar HAZIR
+  const entryTol = (state.entryTolerancePct || 1) / 100;
+  const entryUpper = entry * (1 + entryTol);  // entry'nin üst sınırı
+  const entryLower = entry * (1 - entryTol);  // entry'nin alt sınırı
+
+  if (isLong) {
+    // LONG: tp2 > tp1 > entry > sl,  fiyat akışı: break sonrası fiyat yukarı, ideal pullback entry'ye
+    if (currentPrice <= sl) status = 'INVALIDATED';
+    else if (currentPrice >= tp2) status = 'TP_HIT';        // TP2'yi geçmiş
+    else if (currentPrice >= tp1) status = 'TP_HIT';        // TP1'i geçmiş
+    else if (currentPrice >= entryLower && currentPrice <= entryUpper) status = 'WAIT_ENTRY';  // entry bandında
+    else if (currentPrice > entryUpper && currentPrice < tp1) status = 'CHASE';                // entry üstü, tp1 altı
+    else status = 'WAITING';                                  // entry altında (henüz pullback olmadı veya çok aşağı)
+  } else {
+    // SHORT: sl > entry > tp1 > tp2,  fiyat akışı: break sonrası aşağı, ideal pullback entry'ye yukarı
+    if (currentPrice >= sl) status = 'INVALIDATED';
+    else if (currentPrice <= tp2) status = 'TP_HIT';
+    else if (currentPrice <= tp1) status = 'TP_HIT';
+    else if (currentPrice >= entryLower && currentPrice <= entryUpper) status = 'WAIT_ENTRY';  // entry bandında
+    else if (currentPrice < entryLower && currentPrice > tp1) status = 'CHASE';                // entry altı, tp1 üstü
+    else status = 'WAITING';                                  // entry üstünde (henüz pullback olmadı)
+  }
+
+  // Mevcut fiyattan hedeflere yüzdesel mesafe
+  // LONG'da: yukarı = pozitif, aşağı = negatif
+  // SHORT'ta: aşağı = pozitif (kâr), yukarı = negatif (kayıp)
+  // Entry hariç (entry ne tarafta olursa olsun, mesafe ham gösterilir — long'da entry pullback aşağıda, short'ta entry pullback yukarıda)
+  const pctRaw = (target) => ((target - currentPrice) / currentPrice) * 100;
+  const pctDir = (target) => {
+    const raw = ((target - currentPrice) / currentPrice) * 100;
+    return isLong ? raw : -raw;  // SHORT'ta yönü çevir: aşağı hareket pozitif olsun
+  };
+
+  return {
+    entry, tp1, tp2, sl, slHard,
+    rr, rr1, rr2,
+    status,
+    // entryPct: ham mesafe (long'da entry aşağıda → negatif, short'ta entry yukarıda → pozitif)
+    entryPct: pctRaw(entry),
+    // tp1Pct, tp2Pct: kâr yönü pozitif (long ↑ pozitif, short ↓ pozitif)
+    tp1Pct: pctDir(tp1),
+    tp2Pct: pctDir(tp2),
+    // slPct: kayıp yönü negatif olsun (long sl aşağıda, short sl yukarıda — ikisinde de zarar)
+    slPct: -Math.abs(pctDir(sl)),
+    // Trade'i şu anda başlatsa kazanç/kayıp potansiyeli (entry @ market)
+    rewardPct: isLong ? ((tp1 - currentPrice) / currentPrice) * 100 : ((currentPrice - tp1) / currentPrice) * 100,
+    riskPct:   isLong ? ((currentPrice - sl) / currentPrice) * 100  : ((sl - currentPrice) / currentPrice) * 100
+  };
+}
+
+/* ---------- SCAN CORE ---------- */
+async function scanSymbolTf(symbol, tfKey) {
+  const tfCfg = TF_MAP[tfKey];
+  let candles;
+  try {
+    if (tfCfg.customAgg === 3) {
+      candles = await fetchKlines3h(symbol, 200);
+    } else {
+      candles = await fetchKlines(symbol, tfCfg.interval, 250);
+    }
+  } catch (e) {
+    return null;
+  }
+  if (!candles || candles.length < state.pivotLen * 4) return null;
+
+  // Son bar canlı olabilir, Pine'da realtime'da kullanılır → kullanalım
+  const breaks = runStructure(candles, state.pivotLen);
+  if (breaks.length === 0) return null;
+
+  // En son break'i al
+  const last = breaks[breaks.length - 1];
+  // Yaş kontrolü: son break, son maxAge bar içinde olmalı
+  const ageBars = (candles.length - 1) - last.idx;
+  if (ageBars > state.maxAge) return null;
+
+  const currentPrice = candles[candles.length-1].c;
+  const zoneInfo = checkZone(last, currentPrice, state.tolerance);
+  // ESKİ: zone şartı vardı (fiyat sadece target/extension kutusundaysa sinyal dönerdi)
+  // YENİ: tüm aktif kırılımları döndürüyoruz; status ('WAIT/CHASE/TP_HIT') ayrımını tradePlan yapıyor
+  // Eğer fiyat hiçbir kutuda değilse zone = null kalıyor ama sinyal yine de dönüyor
+
+  // Divergence
+  let div = { type: null };
+  if (state.divEnabled) {
+    div = detectDivergence(candles, 5, state.divHidden);
+  }
+
+  // Confluence / Warning logic
+  // last.dir: 'up' (LONG) veya 'down' (SHORT)
+  // div.dir: 'long' veya 'short'
+  let confluence = false, warning = false;
+  if (div.type) {
+    const sameDir = (div.dir === 'long' && last.dir === 'up') || (div.dir === 'short' && last.dir === 'down');
+    const oppDir = (div.dir === 'long' && last.dir === 'down') || (div.dir === 'short' && last.dir === 'up');
+    if (sameDir) confluence = true;
+    else if (oppDir) warning = true;
+  }
+
+  // Trade plan (entry/TP/SL, status, R:R)
+  const tradePlan = computeTradePlan(last, currentPrice);
+
+  // INVALIDATED (SL kırılmış) sinyalleri zaten geçersiz, listeleme gereksiz
+  if (tradePlan.status === 'INVALIDATED') return null;
+
+  return {
+    symbol,
+    tf: tfKey,
+    dir: last.dir,
+    type: last.type,
+    zone: zoneInfo.zone,
+    fibStart: last.fibStart,
+    fibEnd: last.fibEnd,
+    targetBox: zoneInfo.targetBox,
+    extBox: zoneInfo.extBox,
+    fib786: zoneInfo.fib786,
+    breakPrice: last.breakPrice,
+    breakTime: last.time,
+    ageBars,
+    currentPrice,
+    pctChange: pct(currentPrice, last.breakPrice),
+    div,
+    confluence,
+    warning,
+    tradePlan,
+    detectedAt: Date.now()
+  };
+}
+
+/* ---------- POOL ---------- */
+async function runPool(tasks, concurrency, onProgress) {
+  const results = [];
+  let i = 0, completed = 0;
+  const workers = new Array(Math.min(concurrency, tasks.length)).fill(0).map(async () => {
+    while (i < tasks.length) {
+      // Rate limit aktifse veya scan durdurulduysa anında çık
+      if (state.rateLimitedUntil > Date.now() || !state.scanning) {
+        return;
+      }
+      const myIdx = i++;
+      try {
+        const r = await tasks[myIdx]();
+        if (r) results.push(r);
+      } catch(e) {
+        // 418 yendiyse pool'u durdur
+        if (e && e.message && (e.message.includes('rate limited') || e.message === 'rate-limit-skip')) {
+          return;
+        }
+      }
+      completed++;
+      if (onProgress) onProgress(completed, tasks.length);
+    }
+  });
+  await Promise.all(workers);
+  return results;
+}
+
+/* ---------- SCAN LOOP ---------- */
+async function doScan() {
+  if (!state.scanning) return;
+
+  // Ban aktifse bu turu atla, sonraki için tekrar dene
+  if (state.rateLimitedUntil > Date.now()) {
+    const wait = Math.ceil((state.rateLimitedUntil - Date.now()) / 1000);
+    log(`Tarama atlandı: Binance ban ${wait}sn daha sürecek`, 'err');
+    if (state.scanning) {
+      // Ban bitiminden 5 saniye sonra tekrar dene
+      state.nextScanAt = state.rateLimitedUntil + 5000;
+      setTimeout(doScan, (state.rateLimitedUntil - Date.now()) + 5000);
+    }
+    return;
+  }
+
+  state.scanCount++;
+  $('scanCount').textContent = state.scanCount;
+  $('statusText').textContent = 'TARAMA ÇALIŞIYOR...';
+  $('statusDot').classList.remove('idle');
+  $('statusDot').classList.add('scanning');
+
+  // Bu turda taranacak TF'leri belirle (refresh süresi dolanlar)
+  const now = Date.now();
+  const tfsToScan = state.activeTfs.filter(tf => {
+    const last = state.lastTfScan[tf] || 0;
+    const refresh = (state.tfRefresh[tf] || 60) * 1000;
+    return (now - last) >= refresh;
+  });
+
+  if (tfsToScan.length === 0) {
+    log(`Tarama #${state.scanCount}: bekleyen TF yok, atlandı`);
+    if (state.scanning) {
+      state.nextScanAt = Date.now() + state.scanIntervalSec * 1000;
+      setTimeout(doScan, state.scanIntervalSec * 1000);
+    }
+    $('statusText').textContent = `BEKLİYOR (${state.scanIntervalSec}sn)`;
+    $('statusDot').classList.remove('scanning');
+    $('statusDot').classList.add('idle');
+    return;
+  }
+
+  log(`Tarama #${state.scanCount} başladı: ${state.symbols.length} coin × ${tfsToScan.length} TF [${tfsToScan.join(', ')}] = ${state.symbols.length * tfsToScan.length} kontrol`);
+
+  const startTime = Date.now();
+  const rateLimitHitsBefore = state.rateLimitHits;
+  const tasks = [];
+  for (const sym of state.symbols) {
+    for (const tf of tfsToScan) {
+      tasks.push(() => scanSymbolTf(sym, tf));
+    }
+  }
+
+  const results = await runPool(tasks, state.concurrency, (done, total) => {
+    if (done % 200 === 0) {
+      $('statusText').textContent = `TARAMA: ${done}/${total}`;
+    }
+  });
+
+  // Rate limit özeti
+  const rateLimitHitsThis = state.rateLimitHits - rateLimitHitsBefore;
+  if (rateLimitHitsThis > 0) {
+    log(`⚠️ Bu taramada ${rateLimitHitsThis} rate limit hata. Concurrency'i düşürün veya tarama aralığını uzatın.`, 'err');
+  }
+  // Eğer hiç sonuç gelmediyse uyar
+  if (results.length === 0 && tasks.length > 100) {
+    log(`⚠️ Hiç sinyal dönmedi. Muhtemel sebep: rate limit/ban. ${state.rateLimitHits > 0 ? `Toplam ${state.rateLimitHits} ban.` : 'Network kontrol edin.'}`, 'err');
+  }
+
+  // Bu turda taranan TF'leri timestamp'le
+  for (const tf of tfsToScan) state.lastTfScan[tf] = now;
+
+  // Sinyalleri map'e güncelle (sadece taranan TF'ler için)
+  const newKeys = new Set();
+  let newSignalCount = 0, newConfluenceCount = 0;
+  for (const r of results) {
+    // Key: aynı break + aynı status → tek bildirim. Status değişince (CHASE→TP_HIT vs.) yeni key.
+    const key = `${r.symbol}_${r.tf}_${r.breakTime}_${r.tradePlan.status}`;
+    newKeys.add(key);
+    if (!state.knownKeys.has(key)) {
+      r.isNew = true;
+      newSignalCount++;
+      if (r.confluence) newConfluenceCount++;
+      const statusIcon = { 'WAIT_ENTRY': '🟢', 'CHASE': '🟡', 'WAITING': '⏳', 'TP_HIT': '🔴', 'INVALIDATED': '⚫' }[r.tradePlan.status] || '';
+      log(`🎯 YENİ ${r.dir.toUpperCase()} ${r.symbol} ${r.tf} ${statusIcon}${r.tradePlan.status} · R:R 1:${r.tradePlan.rr1.toFixed(2)}/${r.tradePlan.rr2.toFixed(2)}` +
+          (r.confluence ? ' 🐺 CONFLUENCE' : '') + (r.warning ? ' ⚠️ UYUMSUZ' : ''),
+          r.confluence ? 'ok' : '');
+      state.knownKeys.add(key);
+    }
+    state.signals.set(`${r.symbol}_${r.tf}`, r);
+  }
+
+  // Bu turda taranan TF'lerin eski sinyallerini temizle (artık geçerli değilse)
+  // VE artık aktif TF listesinde olmayan TF'lerin sinyallerini sil (kullanıcı TF butonunu kapattıysa)
+  for (const [k, v] of [...state.signals.entries()]) {
+    // Aktif TF'ler arasında değilse anında sil
+    if (!state.activeTfs.includes(v.tf)) {
+      state.signals.delete(k);
+      continue;
+    }
+    if (!tfsToScan.includes(v.tf)) continue; // bu TF taranmadı (refresh süresi dolmadı), dokunma
+    const fullKey = `${v.symbol}_${v.tf}_${v.breakTime}_${v.tradePlan.status}`;
+    if (!newKeys.has(fullKey)) {
+      state.signals.delete(k);
+    }
+  }
+
+  const dur = ((Date.now() - startTime)/1000).toFixed(1);
+  log(`Tarama #${state.scanCount} bitti: ${results.length} sinyal, ${newSignalCount} yeni, ${dur}sn`, 'ok');
+
+  // Bu turda rate limit yoksa sayacı yavaşça sıfırla (ardışık banlar için escalate ediyor)
+  if (rateLimitHitsThis === 0 && state.rateLimitHits > 0) {
+    state.rateLimitHits = Math.max(0, state.rateLimitHits - 1);
+  }
+
+  // UI render
+  renderSignals();
+  $('lastScanTime').textContent = new Date().toLocaleTimeString('tr-TR');
+  $('statusText').textContent = state.scanning ? `BEKLİYOR (${state.scanIntervalSec}sn)` : 'DURDURULDU';
+  $('statusDot').classList.remove('scanning');
+  $('statusDot').classList.add('idle');
+
+  // Beep
+  if (newSignalCount > 0 && state.soundEnabled) {
+    if (state.soundConfluence && newConfluenceCount > 0) {
+      beep('confluence');
+    } else if (!state.soundConfluence) {
+      beep(newConfluenceCount > 0 ? 'confluence' : 'normal');
+    }
+  }
+
+  // Schedule next
+  if (state.scanning) {
+    state.nextScanAt = Date.now() + state.scanIntervalSec * 1000;
+    setTimeout(doScan, state.scanIntervalSec * 1000);
+  }
+}
+
+/* ---------- RENDER ---------- */
+function renderSignals() {
+  // Status önceliği: WAIT_ENTRY > CHASE > WAITING > TP_HIT > INVALIDATED
+  const statusRank = { 'WAIT_ENTRY': 0, 'CHASE': 1, 'WAITING': 2, 'TP_HIT': 3, 'INVALIDATED': 4 };
+
+  const all = [...state.signals.values()]
+    // minRR altındakileri ele (0 = filtreleme yok)
+    .filter(s => state.minRR <= 0 || (s.tradePlan && s.tradePlan.rr >= state.minRR))
+    .sort((a,b) => {
+      // 1) Confluence önce
+      if (a.confluence !== b.confluence) return b.confluence - a.confluence;
+      // 2) Status önceliği (WAIT > CHASE > TP_HIT > INVALID)
+      const ra = statusRank[a.tradePlan.status] ?? 99;
+      const rb = statusRank[b.tradePlan.status] ?? 99;
+      if (ra !== rb) return ra - rb;
+      // 3) Yaşa göre (yeni sinyaller önce)
+      return a.ageBars - b.ageBars;
+    });
+
+  // Filter
+  let filtered = all;
+  if (state.currentFilter === 'long') filtered = all.filter(s => s.dir === 'up');
+  else if (state.currentFilter === 'short') filtered = all.filter(s => s.dir === 'down');
+  else if (state.currentFilter === 'target') filtered = all.filter(s => s.zone === 'target');
+  else if (state.currentFilter === 'extension') filtered = all.filter(s => s.zone === 'extension');
+  else if (state.currentFilter === 'wait_entry') filtered = all.filter(s => s.tradePlan.status === 'WAIT_ENTRY');
+  else if (state.currentFilter === 'chase') filtered = all.filter(s => s.tradePlan.status === 'CHASE');
+  else if (state.currentFilter === 'waiting') filtered = all.filter(s => s.tradePlan.status === 'WAITING');
+  else if (state.currentFilter === 'tp_hit') filtered = all.filter(s => s.tradePlan.status === 'TP_HIT');
+
+  // hideTpHit ayarı (hangi filtre olursa olsun TP HIT'i kaldırır, "tp_hit" filtresi hariç)
+  if (state.hideTpHit && state.currentFilter !== 'tp_hit') {
+    filtered = filtered.filter(s => s.tradePlan.status !== 'TP_HIT' && s.tradePlan.status !== 'INVALIDATED');
+  }
+
+  const conf = all.filter(s => s.confluence);
+  const warn = all.filter(s => s.warning);
+  const waitEntry = all.filter(s => s.tradePlan.status === 'WAIT_ENTRY');
+
+  $('signalCount').textContent = all.length;
+  $('confluenceCount').textContent = conf.length;
+  $('waitEntryCount').textContent = waitEntry.length;
+  $('signalsBadge').textContent = filtered.length;
+  $('confBadge').textContent = conf.length;
+  $('warnBadge').textContent = warn.length;
+
+  renderGrid('signalsGrid', filtered);
+  renderGrid('confluenceGrid', conf);
+  renderGrid('warningsGrid', warn);
+}
+
+function renderGrid(elId, signals) {
+  const el = $(elId);
+  if (signals.length === 0) {
+    el.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">${elId === 'warningsGrid' ? '⚠️' : '🐺'}</div>
+        <div class="empty-state-title">Henüz Sinyal Yok</div>
+        <div class="empty-state-text">Tarama devam ediyor, fiyat hedef Fib kutusuna girince burada görünür.</div>
+      </div>`;
+    return;
+  }
+  el.innerHTML = signals.map(s => signalCardHtml(s)).join('');
+}
+
+function signalCardHtml(s) {
+  const isLong = s.dir === 'up';
+  let cardClass = isLong ? 'long' : 'short';
+  if (s.confluence) cardClass = isLong ? 'confluence-long' : 'confluence-short';
+  if (s.warning) cardClass += ' warning';
+  if (s.isNew) cardClass += ' new-signal';
+
+  // Status'a göre ekstra class
+  const tp = s.tradePlan;
+  if (tp.status === 'TP_HIT') cardClass += ' status-tp-hit';
+  else if (tp.status === 'INVALIDATED') cardClass += ' status-invalid';
+  else if (tp.status === 'WAIT_ENTRY') cardClass += ' status-wait';
+
+  const dirLabel = isLong ? 'LONG ▲' : 'SHORT ▼';
+  const dirClass = isLong ? 'dir-long' : 'dir-short';
+
+  // Bölge etiketi: zone yoksa status'a göre göster
+  let zoneLabel, zoneClass;
+  if (s.zone === 'target') {
+    zoneLabel = '1.272-1.414 🎯';
+    zoneClass = 'zone-target';
+  } else if (s.zone === 'extension') {
+    zoneLabel = '-0.272/-0.414 ⚡';
+    zoneClass = 'zone-extension';
+  } else {
+    // Fiyat hiçbir kutuda değil — entry/chase/waiting aşamasında
+    if (tp.status === 'WAIT_ENTRY') {
+      zoneLabel = '0.786 ENTRY 🟢';
+      zoneClass = 'zone-entry';
+    } else if (tp.status === 'CHASE') {
+      zoneLabel = 'CHASE 🟡';
+      zoneClass = 'zone-chase';
+    } else if (tp.status === 'WAITING') {
+      zoneLabel = 'PULLBACK ⏳';
+      zoneClass = 'zone-waiting';
+    } else if (tp.status === 'INVALIDATED') {
+      zoneLabel = 'SL ALTINDA ⚫';
+      zoneClass = 'zone-invalid';
+    } else {
+      zoneLabel = 'AKTİF';
+      zoneClass = 'zone-neutral';
+    }
+  }
+
+  let divHtml = '<span class="div-tag div-neutral">YOK</span>';
+  if (s.div.type) {
+    const tagClass = s.confluence ? 'div-confluence' : (s.warning ? 'div-warning' : 'div-neutral');
+    const labels = {
+      'pos_reg': 'POS REG',
+      'neg_reg': 'NEG REG',
+      'pos_hid': 'POS HID',
+      'neg_hid': 'NEG HID'
+    };
+    divHtml = `<span class="div-tag ${tagClass}">${labels[s.div.type]}</span>`;
+    if (s.confluence) divHtml += '<span class="div-tag div-confluence">🐺 CONFLUENCE</span>';
+    if (s.warning) divHtml += '<span class="div-tag div-warning">⚠️ UYUMSUZ</span>';
+  }
+
+  // STATUS rozeti
+  const statusMap = {
+    'WAIT_ENTRY':  { txt: '🟢 HAZIR',     cls: 'status-tag-wait',    desc: 'Entry bandında — şimdi giriş düşünülebilir' },
+    'CHASE':       { txt: '🟡 GEÇ',       cls: 'status-tag-chase',   desc: 'Entry geçildi, hedef yolunda — chase riskli' },
+    'WAITING':     { txt: '⏳ BEKLE',     cls: 'status-tag-waiting', desc: 'Entry henüz oluşmadı — pullback bekleniyor' },
+    'TP_HIT':      { txt: '🔴 TP GELDİ',  cls: 'status-tag-tphit',   desc: 'TP1 ulaşıldı — yeni trade AÇMA, çıkış zamanı' },
+    'INVALIDATED': { txt: '⚫ İPTAL',     cls: 'status-tag-invalid', desc: 'SL kırıldı — sinyal geçersiz' }
+  };
+  const st = statusMap[tp.status] || statusMap['WAITING'];
+  const statusBadge = `<span class="status-tag ${st.cls}" title="${st.desc}">${st.txt}</span>`;
+
+  // R:R badge — Pine planı sabit: TP1=0.46, TP2=0.59
+  const rrColor = tp.rr >= 0.6 ? 'rr-good' : tp.rr >= 0.45 ? 'rr-ok' : 'rr-poor';
+  const rrBadge = `<span class="rr-tag ${rrColor}" title="TP2 baz alınmış R:R. Pine planı sabit oran verir: TP1=0.46, TP2=0.59">R:R 1:${tp.rr1.toFixed(2)} / 1:${tp.rr2.toFixed(2)}</span>`;
+
+  const tvUrl = `https://www.tradingview.com/chart/?symbol=BINANCE:${s.symbol}.P&interval=${s.tf}`;
+
+  // Yüzde formatla
+  const fmtPct = (p) => (p >= 0 ? '+' : '') + p.toFixed(2) + '%';
+
+  return `
+    <div class="signal-card ${cardClass}">
+      <div class="symbol-cell"><a href="${tvUrl}" target="_blank">${s.symbol}</a></div>
+      <div class="tf-cell">${s.tf}</div>
+      <div class="dir-cell ${dirClass}">
+        ${dirLabel}
+        <div class="dir-status">${statusBadge}</div>
+      </div>
+      <div class="zone-cell ${zoneClass}">${zoneLabel}</div>
+      <div class="detail-cell">
+        <div class="trade-plan-row">
+          <span class="tp-item tp-entry"><span class="tp-label">ENTRY:</span> ${fmt(tp.entry)} <span class="tp-pct">(${fmtPct(tp.entryPct)})</span></span>
+          <span class="tp-item tp-target"><span class="tp-label">TP1:</span> ${fmt(tp.tp1)} <span class="tp-pct">(${fmtPct(tp.tp1Pct)})</span></span>
+          <span class="tp-item tp-target"><span class="tp-label">TP2:</span> ${fmt(tp.tp2)} <span class="tp-pct">(${fmtPct(tp.tp2Pct)})</span></span>
+          <span class="tp-item tp-stop"><span class="tp-label">SL:</span> ${fmt(tp.sl)} <span class="tp-pct">(${fmtPct(tp.slPct)})</span></span>
+          ${rrBadge}
+        </div>
+        <div class="meta-row">
+          <span class="meta-item"><span class="label">${s.type}</span> ${s.ageBars} bar · break <span class="value">${fmt(s.breakPrice)}</span></span>
+        </div>
+      </div>
+      <div class="div-cell">${divHtml}</div>
+      <div class="price-cell">
+        ${fmt(s.currentPrice)}
+        <div class="change ${s.pctChange >= 0 ? 'up' : 'down'}">${s.pctChange >= 0 ? '+' : ''}${s.pctChange.toFixed(2)}%</div>
+      </div>
+      <div class="time-cell">${timeAgo(s.breakTime)}</div>
+    </div>`;
+}
+
+/* ---------- INIT & EVENTS ---------- */
+let _loadingSymbols = null;
+async function loadSymbols(force=false) {
+  // Zaten yükleme devam ediyorsa aynı promise'i dön
+  if (_loadingSymbols) return _loadingSymbols;
+  // Daha önce yüklenmiş ve coin listesi doluysa tekrar çekme
+  if (!force && state.symbols && state.symbols.length > 0) return true;
+
+  _loadingSymbols = (async () => {
+    $('statusText').textContent = 'COIN LİSTESİ ÇEKİLİYOR...';
+    log('Binance USDT perp listesi alınıyor...');
+    try {
+      state.symbols = await fetchExchangeInfo();
+      $('coinCount').textContent = state.symbols.length;
+      log(`${state.symbols.length} coin yüklendi`, 'ok');
+      $('statusText').textContent = 'HAZIR';
+      return true;
+    } catch(e) {
+      log('Coin listesi alınamadı: ' + e.message, 'err');
+      $('statusText').textContent = 'HATA';
+      return false;
+    } finally {
+      _loadingSymbols = null;
+    }
+  })();
+  return _loadingSymbols;
+}
+
+async function startScan() {
+  if (state.scanning) {
+    log('Tarama zaten çalışıyor', 'err');
+    return;
+  }
+  // Ban aktifse uyar
+  if (state.rateLimitedUntil > Date.now()) {
+    const wait = Math.ceil((state.rateLimitedUntil - Date.now()) / 1000);
+    log(`⛔ Binance ban aktif. ${wait}sn beklenmeli. Tarama başlatılırsa otomatik bekler.`, 'err');
+  }
+  if (!state.symbols || state.symbols.length === 0) {
+    const ok = await loadSymbols();
+    if (!ok) return;
+  }
+  if (state.activeTfs.length === 0) {
+    log('Hiç timeframe seçili değil!', 'err');
+    return;
+  }
+  // Audio context'i user gesture ile başlat
+  getAudio();
+
+  state.scanning = true;
+  $('startBtn').style.display = 'none';
+  $('stopBtn').style.display = 'inline-block';
+  log('Tarama başlatıldı 🐺', 'ok');
+  doScan();
+}
+
+function stopScan() {
+  state.scanning = false;
+  $('startBtn').style.display = 'inline-block';
+  $('stopBtn').style.display = 'none';
+  $('statusText').textContent = 'DURDURULDU';
+  $('statusDot').classList.remove('scanning');
+  $('statusDot').classList.add('idle');
+  log('Tarama durduruldu', 'err');
+}
+
+// Tab switch
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    const tab = t.dataset.tab;
+    state.currentTab = tab;
+    document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+    $('tab-' + tab).style.display = 'block';
+    // Filter row sadece signals tab'ında görünsün
+    $('filterRow').style.display = tab === 'signals' ? 'flex' : 'none';
+  });
+});
+
+// Filter
+document.querySelectorAll('.filter-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    state.currentFilter = b.dataset.filter;
+    renderSignals();
+  });
+});
+
+// TF buttons
+document.querySelectorAll('.tf-btn').forEach(b => {
+  b.addEventListener('click', () => {
+    b.classList.toggle('active');
+    state.activeTfs = [...document.querySelectorAll('.tf-btn.active')].map(x => x.dataset.tf);
+    $('tfCount').textContent = state.activeTfs.length;
+    log('Aktif TF: ' + state.activeTfs.join(', '));
+    // Pasif TF'lerin sinyallerini anında temizle ve render et
+    for (const [k, v] of [...state.signals.entries()]) {
+      if (!state.activeTfs.includes(v.tf)) {
+        state.signals.delete(k);
+      }
+    }
+    renderSignals();
+  });
+});
+
+// Settings inputs
+function bindInput(id, key, label, parseFn=parseInt) {
+  const inp = $(id);
+  const lbl = $(label);
+  inp.addEventListener('input', () => {
+    const v = parseFn(inp.value);
+    if (!isNaN(v)) {
+      state[key] = v;
+      if (lbl) lbl.textContent = v;
+    }
+  });
+}
+
+bindInput('pivotLenInput', 'pivotLen', 'pivotLenLabel');
+bindInput('scanIntervalInput', 'scanIntervalSec', 'scanIntervalLabel');
+bindInput('concurrencyInput', 'concurrency', 'concurrencyLabel');
+bindInput('maxAgeInput', 'maxAge', 'maxAgeLabel');
+bindInput('toleranceInput', 'tolerance', 'toleranceLabel', parseFloat);
+
+$('soundEnabled').addEventListener('change', e => state.soundEnabled = e.target.checked);
+$('soundConfluence').addEventListener('change', e => state.soundConfluence = e.target.checked);
+$('divEnabled').addEventListener('change', e => state.divEnabled = e.target.checked);
+$('divHidden').addEventListener('change', e => state.divHidden = e.target.checked);
+
+// Trade plan ayarları
+$('minRRInput').addEventListener('input', e => {
+  const v = parseFloat(e.target.value);
+  if (!isNaN(v) && v >= 0) {
+    state.minRR = v;
+    $('minRRLabel').textContent = 'Min R:R ' + v.toFixed(1);
+    renderSignals();
+  }
+});
+$('entryTolInput').addEventListener('input', e => {
+  const v = parseFloat(e.target.value);
+  if (!isNaN(v) && v >= 0.1) {
+    state.entryTolerancePct = v;
+    $('entryTolLabel').textContent = 'Entry Tolerans ±%' + v.toFixed(1);
+    // Mevcut sinyalleri yeni tolerans ile yeniden hesapla
+    for (const sig of state.signals.values()) {
+      sig.tradePlan = computeTradePlan(
+        { dir: sig.dir, fibStart: sig.fibStart, fibEnd: sig.fibEnd },
+        sig.currentPrice
+      );
+    }
+    renderSignals();
+  }
+});
+$('hideTpHit').addEventListener('change', e => { state.hideTpHit = e.target.checked; renderSignals(); });
+
+$('startBtn').addEventListener('click', startScan);
+$('stopBtn').addEventListener('click', stopScan);
+
+// Auto-refresh next scan countdown
+setInterval(() => {
+  // Rate limit aktifse onu göster
+  if (state.rateLimitedUntil > Date.now()) {
+    const wait = Math.ceil((state.rateLimitedUntil - Date.now()) / 1000);
+    $('statusText').textContent = `⛔ BAN: ${wait}sn bekleniyor`;
+    $('statusText').style.color = 'var(--red)';
+    $('nextScan').textContent = wait + 'sn';
+    return;
+  }
+  // Rate limit bitince renk normale dönsün
+  if ($('statusText').style.color === 'var(--red)' || $('statusText').style.color === 'rgb(239,68,68)') {
+    $('statusText').style.color = '';
+  }
+  if (state.scanning && state.nextScanAt > 0) {
+    const diff = Math.max(0, Math.ceil((state.nextScanAt - Date.now())/1000));
+    $('nextScan').textContent = diff + 'sn';
+  } else {
+    $('nextScan').textContent = '-';
+  }
+}, 1000);
+
+// Symbol list pre-load on page open
+loadSymbols();
+log('Wolf MAFS HunterKey scanner hazır 🐺', 'ok');
+</script>
+</body>
+</html>

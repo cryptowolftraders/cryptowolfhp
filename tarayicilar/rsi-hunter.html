@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐺 Alpha Predator Scanner</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#0a0e1a;
+  --bg2:#121826;
+  --card:#121826;
+  --card2:#1a2233;
+  --border:#1f2740;
+  --border2:#1f2740;
+  --green:#22c55e;
+  --green2:#22c55e;
+  --red:#ef4444;
+  --red2:#ef4444;
+  --gold:#f5b342;
+  --gold2:#f5b342;
+  --blue:#2dd4bf;
+  --cyan:#2dd4bf;
+  --text:#e8edf5;
+  --muted:#8892a8;
+  --muted2:#2dd4bf;
+  --wolf:#2dd4bf;
+}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Rajdhani',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* Arka plan efekti */
+body::before{
+  content:'';
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 10%, rgba(45,212,191,.08) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 80% 90%, rgba(34,197,94,.05) 0%, transparent 60%);
+  pointer-events:none;z-index:0;
+}
+
+/* HEADER */
+.header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(10,14,26,.95);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:8px 24px;
+  min-height:62px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;row-gap:8px;
+}
+.logo{
+  display:flex;align-items:center;gap:12px;
+}
+.logo-wolf{
+  font-size:28px;
+  filter:drop-shadow(0 0 8px rgba(34,197,94,.4));
+  animation:wolfBreath 3s ease-in-out infinite;
+}
+@keyframes wolfBreath{
+  0%,100%{filter:drop-shadow(0 0 8px rgba(34,197,94,.4));}
+  50%{filter:drop-shadow(0 0 16px rgba(34,197,94,.7));}
+}
+.logo-text{
+  font-size:20px;font-weight:700;letter-spacing:2px;
+  background:linear-gradient(135deg,var(--green),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.logo-sub{font-size:10px;color:var(--muted2);letter-spacing:3px;text-transform:uppercase;margin-top:-2px;}
+
+.header-stats{display:flex;align-items:center;gap:14px;flex-wrap:wrap;min-width:0;}
+.hstat{text-align:center;}
+.hstat-val{font-size:18px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--text);}
+.hstat-val.green{color:var(--green);}
+.hstat-val.red{color:var(--red);}
+.hstat-val.gold{color:var(--gold);}
+.hstat-lbl{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+
+.header-right{display:flex;align-items:center;gap:12px;}
+.scan-btn{
+  background:linear-gradient(135deg,var(--green2),var(--cyan));
+  border:none;border-radius:8px;
+  padding:8px 20px;
+  font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;
+  color:#000;cursor:pointer;
+  transition:all .2s;
+  display:flex;align-items:center;gap:6px;
+}
+.scan-btn:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(34,197,94,.3);}
+.scan-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.scan-btn.scanning{background:linear-gradient(135deg,var(--blue),var(--cyan));}
+
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);}
+.status-dot.live{background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 1.5s infinite;}
+.status-dot.scanning{background:var(--cyan);animation:pulse .5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+/* TF SEÇICI */
+.controls{
+  position:relative;z-index:1;
+  padding:10px 24px;
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  display:flex;flex-direction:column;gap:8px;
+}
+.ctrl-row{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.ctrl-label{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;white-space:nowrap;}
+.filter-group{display:flex;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;}
+.tf-group{display:flex;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;}
+.tf-btn{
+  flex-shrink:0;
+  padding:5px 14px;border-radius:6px;border:1px solid var(--border2);
+  background:var(--card);color:var(--muted2);
+  font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;letter-spacing:1px;
+  cursor:pointer;transition:all .2s;
+}
+.tf-btn:hover{border-color:var(--green);color:var(--green);}
+.tf-btn.active{background:rgba(34,197,94,.12);border-color:var(--green);color:var(--green);}
+
+.filter-group{display:flex;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;}
+.filter-btn{
+  padding:5px 14px;border-radius:6px;border:1px solid var(--border2);
+  background:var(--card);color:var(--muted2);
+  font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;
+  cursor:pointer;transition:all .2s;
+}
+.filter-btn.all.active{background:rgba(45,212,191,.15);border-color:var(--border2);color:var(--text);}
+.filter-btn.long.active{background:rgba(34,197,94,.12);border-color:var(--green);color:var(--green);}
+.filter-btn.short.active{background:rgba(239,68,68,.12);border-color:var(--red);color:var(--red);}
+
+.progress-bar{
+  height:2px;background:var(--border);border-radius:2px;overflow:hidden;
+  width:180px;
+}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--cyan));width:0%;transition:width .1s;}
+
+/* PROGRESS OVERLAY */
+.scan-overlay{
+  position:sticky;top:62px;z-index:50;
+  background:rgba(10,14,26,.9);backdrop-filter:blur(4px);
+  padding:10px 24px;
+  display:none;align-items:center;gap:16px;
+  border-bottom:1px solid var(--border);
+}
+.scan-overlay.show{display:flex;}
+.scan-text{font-size:12px;color:var(--cyan);font-family:'JetBrains Mono',monospace;}
+.scan-coin{font-size:12px;color:var(--muted2);font-family:'JetBrains Mono',monospace;}
+
+/* MAIN */
+.main{position:relative;z-index:1;padding:20px 24px;width:100%;}
+
+/* SINYAL KARTLARI */
+.signals-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;
+}
+.signals-title{
+  font-size:16px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text);
+  display:flex;align-items:center;gap:8px;
+}
+.badge{
+  padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;
+  font-family:'JetBrains Mono',monospace;
+}
+.badge.green{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3);}
+.badge.red{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3);}
+.badge.gold{background:rgba(245,179,66,.15);color:var(--gold);border:1px solid rgba(245,179,66,.3);}
+.badge.gray{background:rgba(136,146,168,.15);color:var(--muted2);border:1px solid rgba(136,146,168,.3);}
+
+.last-scan{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+
+.signals-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:14px;
+  width:100%;
+}
+
+/* SİNYAL KARTI */
+.signal-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px;
+  cursor:pointer;
+  transition:all .25s;
+  position:relative;
+  overflow:hidden;
+}
+.signal-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+}
+.signal-card.ultra-long::before{background:linear-gradient(90deg,var(--gold),var(--green));}
+.signal-card.ultra-short::before{background:linear-gradient(90deg,var(--gold),var(--red));}
+.signal-card:hover{
+  border-color:var(--border2);
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(0,0,0,.4);
+}
+.signal-card.ultra-long:hover{box-shadow:0 8px 24px rgba(34,197,94,.15);}
+.signal-card.ultra-short:hover{box-shadow:0 8px 24px rgba(239,68,68,.15);}
+
+.signal-card.new-card{animation:newCardIn .4s ease-out;}
+@keyframes newCardIn{
+  from{opacity:0;transform:scale(.95) translateY(10px);}
+  to{opacity:1;transform:scale(1) translateY(0);}
+}
+
+.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.card-symbol{
+  font-size:17px;font-weight:700;letter-spacing:1px;color:var(--text);
+  display:flex;align-items:center;gap:8px;
+}
+.card-symbol a{
+  color:inherit;text-decoration:none;
+  transition:color .15s;
+}
+.card-symbol a:hover{color:var(--cyan);}
+.symbol-tag{
+  font-size:9px;padding:2px 5px;border-radius:3px;
+  background:rgba(136,146,168,.2);color:var(--muted2);
+  font-family:'JetBrains Mono',monospace;letter-spacing:1px;
+}
+
+.card-badge{
+  padding:4px 10px;border-radius:6px;
+  font-size:12px;font-weight:700;letter-spacing:1px;
+  display:flex;align-items:center;gap:5px;
+}
+.card-badge.ultra-long{
+  background:linear-gradient(135deg,rgba(245,179,66,.15),rgba(34,197,94,.1));
+  border:1px solid rgba(245,179,66,.4);color:var(--gold);
+}
+.card-badge.ultra-short{
+  background:linear-gradient(135deg,rgba(245,179,66,.15),rgba(239,68,68,.1));
+  border:1px solid rgba(245,179,66,.4);color:var(--gold);
+}
+
+.card-price{
+  font-size:15px;font-weight:600;
+  font-family:'JetBrains Mono',monospace;color:var(--text);
+  margin-bottom:10px;
+}
+.card-price span{font-size:12px;margin-left:6px;}
+.price-up{color:var(--green);}
+.price-down{color:var(--red);}
+
+/* RSI MTF çubukları */
+.rsi-bars{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+.rsi-row{display:flex;align-items:center;gap:8px;}
+.rsi-tf{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;width:28px;}
+.rsi-bar-wrap{flex:1;height:5px;background:var(--bg);border-radius:3px;overflow:hidden;}
+.rsi-bar-fill{height:100%;border-radius:3px;transition:width .5s;}
+.rsi-bar-fill.ob{background:linear-gradient(90deg,var(--red2),var(--red));}
+.rsi-bar-fill.os{background:linear-gradient(90deg,var(--green2),var(--green));}
+.rsi-bar-fill.mid{background:var(--border2);}
+.rsi-val{font-size:10px;font-family:'JetBrains Mono',monospace;width:32px;text-align:right;}
+.rsi-val.ob{color:var(--red);}
+.rsi-val.os{color:var(--green);}
+.rsi-val.mid{color:var(--muted2);}
+
+.card-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid var(--border);padding-top:10px;
+  font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;
+}
+.card-time{color:var(--muted2);}
+.card-vol span{color:var(--muted2);}
+
+/* BOŞKEN */
+.empty-state{
+  grid-column:1/-1;
+  text-align:center;padding:80px 20px;
+}
+.empty-wolf{font-size:64px;margin-bottom:16px;opacity:.3;}
+.empty-text{font-size:16px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+.empty-sub{font-size:12px;color:var(--muted);margin-top:8px;}
+
+/* TOAST */
+.toast-wrap{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px;}
+.toast{
+  background:var(--card2);border:1px solid var(--border2);
+  border-radius:10px;padding:12px 16px;
+  font-size:13px;min-width:240px;
+  display:flex;align-items:center;gap:10px;
+  animation:toastIn .3s ease-out;
+  box-shadow:0 8px 24px rgba(0,0,0,.5);
+}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:translateX(0);}}
+.toast.long-toast{border-left:3px solid var(--green);}
+.toast.short-toast{border-left:3px solid var(--red);}
+.toast-icon{font-size:18px;}
+.toast-body{}
+.toast-sym{font-weight:700;font-size:14px;}
+.toast-msg{font-size:11px;color:var(--muted2);}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px;}
+
+/* OTO TARAMA */
+.auto-group{display:flex;align-items:center;gap:8px;}
+.auto-toggle{
+  position:relative;width:40px;height:22px;cursor:pointer;
+}
+.auto-toggle input{opacity:0;width:0;height:0;}
+.auto-slider{
+  position:absolute;inset:0;background:var(--border2);border-radius:22px;
+  transition:.3s;
+}
+.auto-slider:before{
+  content:'';position:absolute;height:16px;width:16px;
+  left:3px;bottom:3px;background:#fff;border-radius:50%;
+  transition:.3s;
+}
+.auto-toggle input:checked + .auto-slider{background:var(--green2);}
+.auto-toggle input:checked + .auto-slider:before{transform:translateX(18px);}
+
+.interval-select{
+  background:var(--card);border:1px solid var(--border2);border-radius:6px;
+  color:var(--text);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;
+  padding:4px 8px;cursor:pointer;outline:none;
+}
+.interval-select:focus{border-color:var(--green);}
+
+/* GERİ SAYIM */
+.countdown{
+  background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);
+  border-radius:8px;padding:3px 10px;
+  font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;
+  color:var(--green);min-width:52px;text-align:center;
+  transition:all .3s;
+}
+.countdown.urgent{
+  background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);
+  color:var(--red);animation:urgentPulse .5s infinite;
+}
+@keyframes urgentPulse{0%,100%{opacity:1;}50%{opacity:.5;}}
+
+/* SES TOGGLE */
+.sound-btn{
+  background:var(--card);border:1px solid var(--border2);border-radius:6px;
+  color:var(--muted2);font-size:16px;width:32px;height:32px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.sound-btn:hover{border-color:var(--green);color:var(--green);}
+.sound-btn.on{border-color:var(--green);color:var(--green);background:rgba(34,197,94,.08);}
+.sound-btn.off{border-color:var(--border);color:var(--muted);opacity:.6;}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .header{padding:8px 12px;}
+  .controls{padding:12px;}
+  .main{padding:12px;}
+  .signals-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo">
+    <div class="logo-wolf"><img src="data:image/png;base64,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" alt="Wolf" style="width:38px;height:38px;vertical-align:middle;margin-right:9px;filter:drop-shadow(0 0 6px rgba(45,212,191,0.55)) drop-shadow(0 0 12px rgba(45,212,191,0.3))"></div>
+    <div>
+      <div class="logo-text">ALPHA PREDATOR</div>
+      
+    </div>
+  </div>
+  <div class="header-stats">
+    <div class="hstat">
+      <div class="hstat-val" id="totalScanned">—</div>
+      <div class="hstat-lbl">Taranan</div>
+    </div>
+    <div style="width:1px;height:30px;background:var(--border);"></div>
+    <div class="hstat">
+      <div class="hstat-val green" id="longCount">0</div>
+      <div class="hstat-lbl">🐺 BUY</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-val red" id="shortCount">0</div>
+      <div class="hstat-lbl">🐺 SELL</div>
+    </div>
+    <div style="width:1px;height:30px;background:var(--border);"></div>
+    <div class="hstat">
+      <div class="hstat-val gold" id="signalCount">0</div>
+      <div class="hstat-lbl">Ultra Sinyal</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted2);">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="statusText">Hazır</span>
+    </div>
+    <div style="width:120px;">
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:3px;">
+        <span>İlerleme</span><span id="progressPct">0%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+    <button class="scan-btn" id="scanBtn" onclick="startScan()">
+      <span>⚡</span> TARA
+    </button>
+  </div>
+</header>
+
+<!-- SCAN OVERLAY -->
+<div class="scan-overlay" id="scanOverlay">
+  <div class="status-dot scanning"></div>
+  <div class="scan-text" id="scanStatus">Taranıyor...</div>
+  <div class="scan-coin" id="scanCoin"></div>
+</div>
+
+<!-- KONTROLLER -->
+<div class="controls">
+  <!-- Satır 1: TF + MTF bilgi -->
+  <div class="ctrl-row">
+    <span class="ctrl-label">Zaman Dilimi</span>
+    <div class="tf-group" id="tfGroup">
+      <button class="tf-btn active" onclick="setTF(this,'1')"  >1m</button>
+      <button class="tf-btn" onclick="setTF(this,'3')"  >3m</button>
+      <button class="tf-btn" onclick="setTF(this,'5')"  >5m</button>
+      <button class="tf-btn" onclick="setTF(this,'15')" >15m</button>
+      <button class="tf-btn" onclick="setTF(this,'30')" >30m</button>
+      <button class="tf-btn" onclick="setTF(this,'60')" >1H</button>
+      <button class="tf-btn" onclick="setTF(this,'240')">4H</button>
+      <button class="tf-btn" onclick="setTF(this,'D')"  >1G</button>
+    </div>
+    <span class="ctrl-label" style="margin-left:4px;">MTF RSI</span>
+    <div style="font-size:12px;color:var(--green);font-family:'JetBrains Mono',monospace;" id="mtfLabel">CUR + 1H + 4H</div>
+  </div>
+  <!-- Satır 2: Filtre + Oto + Ses -->
+  <div class="ctrl-row">
+    <span class="ctrl-label">Filtre</span>
+    <div class="filter-group">
+      <button class="filter-btn all active" onclick="setFilter(this,'all')">TÜM</button>
+      <button class="filter-btn long" onclick="setFilter(this,'long')">🐺 BUY</button>
+      <button class="filter-btn short" onclick="setFilter(this,'short')">🐺 SELL</button>
+    </div>
+    <div style="width:1px;height:22px;background:var(--border);margin:0 4px;"></div>
+    <span class="ctrl-label">OTO</span>
+    <label class="auto-toggle">
+      <input type="checkbox" id="autoToggle" onchange="toggleAuto()">
+      <span class="auto-slider"></span>
+    </label>
+    <select class="interval-select" id="intervalSelect" onchange="updateInterval()">
+      <option value="1">1 dk</option>
+      <option value="3">3 dk</option>
+      <option value="5" selected>5 dk</option>
+      <option value="10">10 dk</option>
+      <option value="15">15 dk</option>
+      <option value="30">30 dk</option>
+    </select>
+    <div class="countdown" id="countdown" style="display:none;">—</div>
+    <div style="width:1px;height:22px;background:var(--border);margin:0 4px;"></div>
+    <button class="sound-btn on" id="soundBtn" onclick="toggleSound()" title="Ses Aç/Kapat">🔔</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="signals-header">
+    <div class="signals-title">
+      🐺 Ultra Sinyaller
+      <span class="badge gold" id="totalBadge">0</span>
+    </div>
+    <div class="last-scan" id="lastScan">Henüz taranmadı</div>
+  </div>
+  <div class="signals-grid" id="signalsGrid">
+    <div class="empty-state">
+      <div class="empty-wolf">🐺</div>
+      <div class="empty-text">Av Bekleniyor</div>
+      <div class="empty-sub">TARA butonuna bas — 3 TF RSI uyumu arıyor</div>
+    </div>
+  </div>
+</main>
+
+<!-- TOAST -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+// ─── AYARLAR ────────────────────────────────────────────────────────────────
+const RSI_PERIOD = 14;
+const OB = 70, OS = 30;
+const CANDLES_NEEDED = 100;
+
+// MTF haritası: her TF için hangi üst TF'ler kontrol edilsin
+const MTF_MAP = {
+  '1':  {upper1:'15', upper2:'60',  label:'CUR + 15m + 1H'},
+  '3':  {upper1:'15', upper2:'60',  label:'CUR + 15m + 1H'},
+  '5':  {upper1:'60', upper2:'240', label:'CUR + 1H + 4H'},
+  '15': {upper1:'60', upper2:'240', label:'CUR + 1H + 4H'},
+  '30': {upper1:'60', upper2:'240', label:'CUR + 1H + 4H'},
+  '60': {upper1:'240',upper2:'D',   label:'CUR + 4H + 1G'},
+  '240':{upper1:'D',  upper2:'W',   label:'CUR + 1G + 1H'},
+  'D':  {upper1:'W',  upper2:'M',   label:'CUR + 1H + 1A'},
+};
+
+let currentTF = '1';
+let currentFilter = 'all';
+let isScanning = false;
+let signals = [];
+let coinList = [];
+
+// ─── PERP API ──────────────────────────────────────────────────────────────
+const API = 'https://web-production-2bdde.up.railway.app';
+
+// TF kodu (1,3,5,15,30,60,240,D,W,M) → API interval
+const TF_API = {
+  '1':'1m', '3':'3m', '5':'5m', '15':'15m', '30':'30m',
+  '60':'1h', '120':'2h', '240':'4h', '360':'6h', '720':'12h',
+  'D':'1d', 'W':'1w', 'M':'1M',
+};
+
+// Coin listesi günlük önbellek (delist olanlar düşer, yeni eklenenler girer)
+const COIN_CACHE_KEY = 'ap_perp_coins_v1';
+const COIN_CACHE_TTL = 24 * 60 * 60 * 1000;   // 1 gün
+
+async function fetchSymbolsFromExchange() {
+  const r = await fetch(`${API}/fapi/v1/exchangeInfo`);
+  const d = await r.json();
+  return d.symbols
+    .filter(s =>
+      s.contractType === 'PERPETUAL' &&
+      s.quoteAsset === 'USDT' &&
+      s.status === 'TRADING' &&
+      s.symbol.endsWith('USDT'))
+    .map(s => s.symbol)
+    .sort();
+}
+
+// force=true → her zaman taze çek. Aksi halde önbellek 1 günden eskiyse yeniler.
+async function getCoins(force = false) {
+  let cache = null;
+  try { cache = JSON.parse(localStorage.getItem(COIN_CACHE_KEY)); } catch(e) {}
+  const fresh = cache && cache.list?.length && (Date.now() - cache.ts) < COIN_CACHE_TTL;
+
+  if (!force && fresh) return cache.list;
+
+  try {
+    const list = await fetchSymbolsFromExchange();
+    // değişiklik bilgisi (delist / yeni eklenen)
+    if (cache?.list?.length) {
+      const added   = list.filter(x => !cache.list.includes(x));
+      const removed  = cache.list.filter(x => !list.includes(x));
+      if (added.length || removed.length) {
+        const parts = [];
+        if (added.length)   parts.push(`+${added.length} yeni`);
+        if (removed.length) parts.push(`−${removed.length} çıkarılan`);
+        showToastMsg('🔄 Coin listesi güncellendi: ' + parts.join(', '), 'info');
+        console.log('Yeni eklenen:', added, '| Çıkarılan (delist):', removed);
+      }
+    }
+    localStorage.setItem(COIN_CACHE_KEY, JSON.stringify({ ts: Date.now(), list }));
+    return list;
+  } catch(e) {
+    // ağ hatası: elde eski liste varsa onu kullan
+    if (cache?.list?.length) return cache.list;
+    throw e;
+  }
+}
+
+async function getKlines(symbol, interval, limit = CANDLES_NEEDED) {
+  const iv = TF_API[interval] || interval;
+  const r = await fetch(`${API}/fapi/v1/klines?symbol=${symbol}&interval=${iv}&limit=${limit}`);
+  if (!r.ok) return null;
+  const d = await r.json();
+  if (!Array.isArray(d) || !d.length) return null;
+  // [openTime, open, high, low, close, volume, closeTime, quoteVolume, ...] — eski→yeni sıralı
+  return d.map(c => ({
+    o: parseFloat(c[1]),
+    h: parseFloat(c[2]),
+    l: parseFloat(c[3]),
+    c: parseFloat(c[4]),
+    v: parseFloat(c[5]),
+  }));
+}
+
+async function getTicker(symbol) {
+  const r = await fetch(`${API}/fapi/v1/ticker/24hr?symbol=${symbol}`);
+  if (!r.ok) return null;
+  const t = await r.json();
+  if (!t || !t.lastPrice) return null;
+  return {
+    price: parseFloat(t.lastPrice),
+    change: parseFloat(t.priceChangePercent),   // zaten yüzde
+    vol24h: parseFloat(t.quoteVolume),           // USDT cinsi 24s hacim
+  };
+}
+
+// ─── RSI HESAPLAMA ────────────────────────────────────────────────────────────
+function calcRSI(closes, period = RSI_PERIOD) {
+  if (closes.length < period + 1) return null;
+  let gains = 0, losses = 0;
+  for (let i = 1; i <= period; i++) {
+    const d = closes[i] - closes[i - 1];
+    if (d >= 0) gains += d; else losses -= d;
+  }
+  let avgGain = gains / period;
+  let avgLoss = losses / period;
+  for (let i = period + 1; i < closes.length; i++) {
+    const d = closes[i] - closes[i - 1];
+    const g = d >= 0 ? d : 0;
+    const l = d < 0 ? -d : 0;
+    avgGain = (avgGain * (period - 1) + g) / period;
+    avgLoss = (avgLoss * (period - 1) + l) / period;
+  }
+  if (avgLoss === 0) return 100;
+  const rs = avgGain / avgLoss;
+  return 100 - (100 / (1 + rs));
+}
+
+// ─── ULTRA SİNYAL KONTROLÜ ────────────────────────────────────────────────────
+// Ultra Long: 3 TF'de de RSI < OS (oversold)
+// Ultra Short: 3 TF'de de RSI > OB (overbought)
+async function checkUltraSignal(symbol, tf) {
+  const mtf = MTF_MAP[tf] || MTF_MAP['15'];
+  try {
+    // 3 TF paralel çek
+    const [k1, k2, k3] = await Promise.all([
+      getKlines(symbol, tf),
+      getKlines(symbol, mtf.upper1),
+      getKlines(symbol, mtf.upper2),
+    ]);
+    if (!k1 || !k2 || !k3) return null;
+
+    const rsi1 = calcRSI(k1.map(c => c.c));
+    const rsi2 = calcRSI(k2.map(c => c.c));
+    const rsi3 = calcRSI(k3.map(c => c.c));
+    if (rsi1 === null || rsi2 === null || rsi3 === null) return null;
+
+    const ultraLong  = rsi1 < OS && rsi2 < OS && rsi3 < OS;
+    const ultraShort = rsi1 > OB && rsi2 > OB && rsi3 > OB;
+
+    if (!ultraLong && !ultraShort) return null;
+
+    const ticker = await getTicker(symbol);
+    if (!ticker) return null;
+
+    return {
+      symbol,
+      type: ultraLong ? 'ultra-long' : 'ultra-short',
+      rsi: [
+        {tf: tf,         val: rsi1, label: 'CUR'},
+        {tf: mtf.upper1, val: rsi2, label: mtf.upper1 === 'D' ? '1G' : mtf.upper1 + 'm'},
+        {tf: mtf.upper2, val: rsi3, label: mtf.upper2 === 'D' ? '1G' : mtf.upper2 === 'W' ? '1H' : mtf.upper2 + 'm'},
+      ],
+      price: ticker.price,
+      change: ticker.change,
+      vol24h: ticker.vol24h,
+      time: new Date(),
+    };
+  } catch(e) {
+    return null;
+  }
+}
+
+// ─── TARAMA ──────────────────────────────────────────────────────────────────
+async function startScan() {
+  if (isScanning) return;
+  isScanning = true;
+
+  const btn = document.getElementById('scanBtn');
+  btn.disabled = true;
+  btn.classList.add('scanning');
+  btn.innerHTML = '<span>⏳</span> Taranıyor';
+
+  document.getElementById('statusDot').classList.add('scanning');
+  document.getElementById('statusText').textContent = 'Taranıyor...';
+  document.getElementById('scanOverlay').classList.add('show');
+
+  signals = [];
+  renderSignals();
+
+  try {
+    // Coin listesini çek
+    document.getElementById('scanStatus').textContent = 'Coin listesi alınıyor...';
+    coinList = await getCoins();   // günlük önbellek: delist düşer, yeni eklenen girer
+    const total = coinList.length;
+    document.getElementById('totalScanned').textContent = total;
+
+    let scanned = 0;
+    let longCnt = 0, shortCnt = 0;
+
+    // Paralel tarama (5'er grup)
+    const BATCH = 5;
+    for (let i = 0; i < coinList.length; i += BATCH) {
+      const batch = coinList.slice(i, i + BATCH);
+      const results = await Promise.all(batch.map(s => checkUltraSignal(s, currentTF)));
+
+      for (let j = 0; j < results.length; j++) {
+        scanned++;
+        const sig = results[j];
+        const coin = batch[j];
+
+        // Progress
+        const pct = Math.round(scanned / total * 100);
+        document.getElementById('progressFill').style.width = pct + '%';
+        document.getElementById('progressPct').textContent = pct + '%';
+        document.getElementById('scanCoin').textContent = coin;
+        document.getElementById('scanStatus').textContent = `${scanned}/${total} tarandı`;
+
+        if (sig) {
+          signals.push(sig);
+          if (sig.type === 'ultra-long') longCnt++;
+          else shortCnt++;
+          document.getElementById('longCount').textContent  = longCnt;
+          document.getElementById('shortCount').textContent = shortCnt;
+          document.getElementById('signalCount').textContent = signals.length;
+          document.getElementById('totalBadge').textContent  = signals.length;
+          renderSignals();
+          showToast(sig);
+        }
+      }
+
+      // Rate limit önlemi
+      await sleep(45);
+    }
+
+    const now = new Date();
+    document.getElementById('lastScan').textContent =
+      `Son tarama: ${now.toLocaleTimeString('tr-TR')} — ${scanned} coin`;
+
+  } catch(e) {
+    console.error(e);
+    showToastMsg('❌ Hata: ' + e.message, 'error');
+  }
+
+  isScanning = false;
+  btn.disabled = false;
+  btn.classList.remove('scanning');
+  btn.innerHTML = '<span>⚡</span> TARA';
+  document.getElementById('statusDot').classList.remove('scanning');
+  document.getElementById('statusDot').classList.add('live');
+  document.getElementById('statusText').textContent = 'Tamamlandı';
+  document.getElementById('scanOverlay').classList.remove('show');
+  document.getElementById('progressFill').style.width = '0%';
+  document.getElementById('progressPct').textContent = '0%';
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function renderSignals() {
+  const grid = document.getElementById('signalsGrid');
+  let filtered = signals;
+  if (currentFilter === 'long')  filtered = signals.filter(s => s.type === 'ultra-long');
+  if (currentFilter === 'short') filtered = signals.filter(s => s.type === 'ultra-short');
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-wolf">🐺</div>
+        <div class="empty-text">${isScanning ? 'Av Aranıyor...' : 'Sinyal Bulunamadı'}</div>
+        <div class="empty-sub">${isScanning ? '3 TF RSI uyumu taranıyor' : 'Farklı TF dene veya yeniden tara'}</div>
+      </div>`;
+    return;
+  }
+
+  // Önce ultra-long, sonra ultra-short, her ikisi fiyat değişimine göre sıralı
+  filtered.sort((a,b) => {
+    if (a.type !== b.type) return a.type === 'ultra-long' ? -1 : 1;
+    return Math.abs(b.change) - Math.abs(a.change);
+  });
+
+  grid.innerHTML = filtered.map(s => signalCard(s)).join('');
+}
+
+function signalCard(s) {
+  const isLong = s.type === 'ultra-long';
+  const chgCls = s.change >= 0 ? 'price-up' : 'price-down';
+  const chgStr = (s.change >= 0 ? '+' : '') + s.change.toFixed(2) + '%';
+  const tvUrl  = `https://tr.tradingview.com/chart/?symbol=BINANCE:${s.symbol}.P`;
+
+  const rsiBars = s.rsi.map(r => {
+    const cls = r.val > OB ? 'ob' : r.val < OS ? 'os' : 'mid';
+    const w = r.val.toFixed(0);
+    return `
+      <div class="rsi-row">
+        <div class="rsi-tf">${r.label}</div>
+        <div class="rsi-bar-wrap">
+          <div class="rsi-bar-fill ${cls}" style="width:${w}%"></div>
+        </div>
+        <div class="rsi-val ${cls}">${r.val.toFixed(1)}</div>
+      </div>`;
+  }).join('');
+
+  const volStr = s.vol24h > 1e9 ? (s.vol24h/1e9).toFixed(1)+'B' :
+                 s.vol24h > 1e6 ? (s.vol24h/1e6).toFixed(1)+'M' :
+                 s.vol24h > 1e3 ? (s.vol24h/1e3).toFixed(1)+'K' : s.vol24h.toFixed(0);
+
+  return `
+  <div class="signal-card ${s.type} new-card">
+    <div class="card-top">
+      <div class="card-symbol">
+        <a href="${tvUrl}" target="_blank" title="TradingView'de Aç">${s.symbol.replace('USDT','')}</a>
+        <span class="symbol-tag">USDT.P</span>
+      </div>
+      <div class="card-badge ${s.type}">
+        🐺 ${isLong ? 'ULTRA BUY' : 'ULTRA SELL'}
+      </div>
+    </div>
+    <div class="card-price">
+      $${formatPrice(s.price)}
+      <span class="${chgCls}">${chgStr}</span>
+    </div>
+    <div class="rsi-bars">${rsiBars}</div>
+    <div class="card-footer">
+      <div class="card-time">${s.time.toLocaleTimeString('tr-TR')}</div>
+      <div class="card-vol">Hacim: <span>${volStr}</span></div>
+      <a href="${tvUrl}" target="_blank"
+         style="color:var(--cyan);text-decoration:none;font-size:11px;">
+        Grafik →
+      </a>
+    </div>
+  </div>`;
+}
+
+function formatPrice(p) {
+  if (p >= 1000) return p.toLocaleString('en-US', {maximumFractionDigits:2});
+  if (p >= 1)    return p.toFixed(4);
+  if (p >= 0.01) return p.toFixed(5);
+  return p.toFixed(6);
+}
+
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+function showToast(sig) {
+  // Ses çal
+  playAlarm(sig.type);
+
+  const wrap = document.getElementById('toastWrap');
+  const isLong = sig.type === 'ultra-long';
+  const div = document.createElement('div');
+  div.className = `toast ${isLong ? 'long-toast' : 'short-toast'}`;
+  div.innerHTML = `
+    <div class="toast-icon">🐺</div>
+    <div class="toast-body">
+      <div class="toast-sym" style="color:${isLong ? 'var(--green)':'var(--red)'}">
+        ${isLong ? 'ULTRA BUY' : 'ULTRA SELL'} — ${sig.symbol}
+      </div>
+      <div class="toast-msg">RSI: ${sig.rsi.map(r=>r.val.toFixed(1)).join(' / ')}</div>
+    </div>`;
+  wrap.appendChild(div);
+  setTimeout(() => { div.style.opacity='0'; div.style.transition='opacity .3s'; setTimeout(()=>div.remove(),300); }, 4000);
+}
+
+function showToastMsg(msg, type='info') {
+  const wrap = document.getElementById('toastWrap');
+  const div = document.createElement('div');
+  div.className = 'toast';
+  div.innerHTML = `<div class="toast-icon">ℹ️</div><div>${msg}</div>`;
+  wrap.appendChild(div);
+  setTimeout(() => div.remove(), 3000);
+}
+
+// ─── KONTROLLER ───────────────────────────────────────────────────────────────
+function setTF(btn, tf) {
+  document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentTF = tf;
+  const mtf = MTF_MAP[tf] || MTF_MAP['15'];
+  document.getElementById('mtfLabel').textContent = mtf.label;
+  coinList = [];
+}
+
+function setFilter(btn, f) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = f;
+  renderSignals();
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ─── OTO TARAMA ───────────────────────────────────────────────────────────────
+let autoTimer     = null;   // setInterval handle
+let countdownTimer= null;   // setInterval handle
+let nextScanIn    = 0;      // saniye
+let soundEnabled  = true;
+
+function toggleAuto() {
+  const on = document.getElementById('autoToggle').checked;
+  const cd = document.getElementById('countdown');
+  if (on) {
+    cd.style.display = 'block';
+    scheduleNext();
+  } else {
+    cd.style.display = 'none';
+    cd.textContent = '—';
+    cd.classList.remove('urgent');
+    clearTimeout(autoTimer);
+    clearInterval(countdownTimer);
+    autoTimer = null; countdownTimer = null;
+  }
+}
+
+function updateInterval() {
+  if (document.getElementById('autoToggle').checked) {
+    clearTimeout(autoTimer);
+    clearInterval(countdownTimer);
+    scheduleNext();
+  }
+}
+
+function scheduleNext() {
+  const mins = parseInt(document.getElementById('intervalSelect').value);
+  nextScanIn = mins * 60;
+  updateCountdown();
+
+  // Geri sayım güncelle her saniye
+  clearInterval(countdownTimer);
+  countdownTimer = setInterval(() => {
+    nextScanIn--;
+    updateCountdown();
+    if (nextScanIn <= 0) {
+      clearInterval(countdownTimer);
+      if (!isScanning) {
+        startScan().then(() => {
+          if (document.getElementById('autoToggle').checked) scheduleNext();
+        });
+      }
+    }
+  }, 1000);
+}
+
+function updateCountdown() {
+  const cd = document.getElementById('countdown');
+  const m = Math.floor(nextScanIn / 60);
+  const s = nextScanIn % 60;
+  cd.textContent = m + ':' + String(s).padStart(2,'0');
+  cd.classList.toggle('urgent', nextScanIn <= 10 && nextScanIn > 0);
+}
+
+// ─── SES ALARMI (Web Audio API) ──────────────────────────────────────────────
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  const btn = document.getElementById('soundBtn');
+  btn.textContent = soundEnabled ? '🔔' : '🔕';
+  btn.className   = 'sound-btn ' + (soundEnabled ? 'on' : 'off');
+}
+
+function playAlarm(type) {
+  if (!soundEnabled) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+    if (type === 'ultra-long') {
+      // BUY: iki yükselen bip (do-mi)
+      playBeep(ctx, 440, 0.00, 0.15, 'sine');
+      playBeep(ctx, 554, 0.18, 0.15, 'sine');
+      playBeep(ctx, 659, 0.36, 0.25, 'sine');
+    } else {
+      // SELL: alçalan bip (mi-do)
+      playBeep(ctx, 659, 0.00, 0.15, 'sawtooth');
+      playBeep(ctx, 554, 0.18, 0.15, 'sawtooth');
+      playBeep(ctx, 440, 0.36, 0.25, 'sawtooth');
+    }
+
+    // Kapat
+    setTimeout(() => ctx.close(), 1200);
+  } catch(e) { console.log('Ses çalınamadı:', e); }
+}
+
+function playBeep(ctx, freq, startTime, duration, type) {
+  const osc  = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.type      = type;
+  osc.frequency.setValueAtTime(freq, ctx.currentTime + startTime);
+  gain.gain.setValueAtTime(0.3, ctx.currentTime + startTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + startTime + duration);
+  osc.start(ctx.currentTime + startTime);
+  osc.stop(ctx.currentTime + startTime + duration);
+}
+
+// ─── BAŞLANGIÇ ────────────────────────────────────────────────────────────────
+document.getElementById('mtfLabel').textContent = MTF_MAP[currentTF].label;
+
+// Sayfa açıldığında güncel coin listesini hazırla (gün dönmüşse otomatik yeniler)
+(async () => {
+  try {
+    document.getElementById('statusText').textContent = 'Coin listesi yükleniyor...';
+    coinList = await getCoins();
+    document.getElementById('totalScanned').textContent = coinList.length;
+    document.getElementById('statusText').textContent = `Hazır · ${coinList.length} coin`;
+  } catch(e) {
+    document.getElementById('statusText').textContent = 'Liste alınamadı';
+    showToastMsg('❌ Coin listesi alınamadı: ' + e.message, 'error');
+  }
+})();
+</script>
+</body>
+</html>

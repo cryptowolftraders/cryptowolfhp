@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐺 Wolf OB Scanner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e1a; --bg2:#121826; --panel:#121826; --panel2:#121826;
+    --border:#1a2233; --border2:#1f2740;
+    --txt:#e8edf5; --muted:#8892a8; --muted2:#1f2740;
+    --teal:#22c55e; --teal-dim:#22c55e;
+    --bull:#22c55e; --bear:#ef4444; --gold:#f5b342;
+    --glow:0 0 0 1px rgba(34,197,94,.15), 0 0 22px -6px rgba(34,197,94,.35);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:
+      radial-gradient(900px 500px at 85% -10%, rgba(34,197,94,.07), transparent 60%),
+      radial-gradient(700px 400px at 5% 0%, rgba(245,179,66,.05), transparent 55%),
+      linear-gradient(180deg,#0a0e1a,#0a0e1a);
+    color:var(--txt); font-family:'Sora',sans-serif; line-height:1.5;
+    -webkit-font-smoothing:antialiased; padding:0 0 60px;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; opacity:.4; z-index:0;
+    background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+    background-size:44px 44px;
+  }
+  .wrap{position:relative; z-index:1; max-width:1340px; margin:0 auto; padding:0 20px}
+
+  /* Header */
+  header{padding:28px 0 18px; border-bottom:1px solid var(--border)}
+  .brand{display:flex; align-items:center; gap:16px}
+  .logo{
+    width:58px; height:58px; flex:0 0 58px; display:grid; place-items:center;
+    font-size:30px; border-radius:14px;
+    background:linear-gradient(155deg,#1a2233,#0a0e1a);
+    border:1px solid var(--border2); box-shadow:var(--glow);
+  }
+  h1{font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:26px; letter-spacing:.5px; line-height:1.1}
+  h1 span{color:var(--teal)}
+  .sub{color:var(--muted); font-size:13px; margin-top:3px; letter-spacing:.3px}
+  .topmeta{margin-left:auto; text-align:right; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--muted)}
+  .topmeta b{color:var(--teal)}
+
+  /* Banner (new / delist) */
+  .banner{margin-top:18px; display:none; gap:14px; flex-wrap:wrap}
+  .banner.show{display:flex}
+  .bcard{flex:1 1 300px; background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:13px 16px}
+  .bcard h4{font-family:'Chakra Petch',sans-serif; font-size:12px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-bottom:9px}
+  .bcard.new h4{color:var(--bull)} .bcard.del h4{color:var(--bear)}
+  .chips{display:flex; flex-wrap:wrap; gap:6px}
+  .chip{font-family:'JetBrains Mono',monospace; font-size:11px; padding:3px 8px; border-radius:6px; background:#121826; border:1px solid var(--border2)}
+  .bcard.new .chip{color:var(--bull); border-color:rgba(34,197,94,.3)}
+  .bcard.del .chip{color:var(--bear); border-color:rgba(239,68,68,.3)}
+  .chip.none{color:var(--muted2)}
+
+  /* Controls */
+  .panel{background:linear-gradient(180deg,var(--panel),var(--bg2)); border:1px solid var(--border); border-radius:16px; padding:18px 20px; margin-top:20px}
+  .ctitle{font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:11px; display:flex; align-items:center; gap:8px}
+  .ctitle::before{content:""; width:14px; height:2px; background:var(--teal); display:inline-block}
+
+  .tfgrid{display:flex; flex-wrap:wrap; gap:7px; margin-bottom:6px}
+  .tf{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; font-weight:500;
+    padding:7px 12px; border-radius:9px; cursor:pointer; user-select:none;
+    background:#121826; border:1px solid var(--border2); color:var(--muted); transition:.15s;
+  }
+  .tf:hover{border-color:var(--teal-dim); color:var(--txt)}
+  .tf.on{background:linear-gradient(180deg,rgba(34,197,94,.16),rgba(34,197,94,.05)); border-color:var(--teal); color:var(--teal); box-shadow:0 0 14px -5px rgba(34,197,94,.5)}
+  .tf.dis{opacity:.32; cursor:not-allowed; text-decoration:line-through}
+  .tfnote{font-size:11px; color:var(--muted2); margin-top:4px}
+
+  .row{display:flex; flex-wrap:wrap; gap:22px; margin-top:18px; align-items:flex-end}
+  .field{display:flex; flex-direction:column; gap:6px}
+  .field label{font-size:11px; letter-spacing:.5px; color:var(--muted); text-transform:uppercase; font-family:'Chakra Petch',sans-serif}
+  select,input[type=number]{
+    background:#121826; border:1px solid var(--border2); color:var(--txt); border-radius:9px;
+    padding:8px 11px; font-family:'JetBrains Mono',monospace; font-size:13px; outline:none; min-width:96px;
+  }
+  select:focus,input:focus{border-color:var(--teal)}
+  .check{display:flex; align-items:center; gap:8px; cursor:pointer; font-size:13px; color:var(--txt); padding-bottom:9px}
+  .check input{accent-color:var(--teal); width:16px; height:16px}
+
+  .actions{display:flex; gap:12px; margin-top:20px; flex-wrap:wrap; align-items:center}
+  button.run{
+    font-family:'Chakra Petch',sans-serif; font-weight:700; letter-spacing:1px; font-size:14px;
+    padding:12px 28px; border-radius:11px; border:1px solid var(--teal); cursor:pointer;
+    background:linear-gradient(180deg,rgba(34,197,94,.22),rgba(34,197,94,.06)); color:var(--teal);
+    box-shadow:0 0 20px -7px rgba(34,197,94,.6); transition:.15s;
+  }
+  button.run:hover{background:rgba(34,197,94,.3); color:#e8edf5}
+  button.run:disabled{opacity:.4; cursor:not-allowed; box-shadow:none}
+  button.stop{
+    font-family:'Chakra Petch',sans-serif; font-weight:600; letter-spacing:1px; font-size:13px;
+    padding:12px 22px; border-radius:11px; border:1px solid var(--bear); cursor:pointer;
+    background:rgba(239,68,68,.08); color:var(--bear);
+  }
+  button.stop:disabled{opacity:.35; cursor:not-allowed}
+  .est{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--muted)}
+
+  /* Progress */
+  .progwrap{margin-top:18px; display:none}
+  .progwrap.show{display:block}
+  .pbar{height:8px; background:#121826; border:1px solid var(--border2); border-radius:6px; overflow:hidden}
+  .pfill{height:100%; width:0%; background:linear-gradient(90deg,var(--teal-dim),var(--teal)); transition:width .25s; box-shadow:0 0 12px rgba(34,197,94,.6)}
+  .ptext{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--muted); margin-top:7px; display:flex; justify-content:space-between}
+
+  /* Stats */
+  .stats{display:flex; gap:12px; flex-wrap:wrap; margin-top:22px}
+  .stat{flex:1 1 130px; background:var(--panel); border:1px solid var(--border); border-radius:13px; padding:14px 16px}
+  .stat .n{font-family:'Chakra Petch',sans-serif; font-size:26px; font-weight:700}
+  .stat .l{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.6px; margin-top:2px}
+  .stat.al .n{color:var(--bull)} .stat.sat .n{color:var(--bear)} .stat.cf .n{color:var(--gold)} .stat.tot .n{color:var(--teal)}
+
+  /* Table */
+  .tablewrap{margin-top:22px; background:var(--panel); border:1px solid var(--border); border-radius:16px; overflow:hidden}
+  table{width:100%; border-collapse:collapse; font-size:13px}
+  thead th{
+    font-family:'Chakra Petch',sans-serif; font-weight:600; font-size:11px; letter-spacing:.8px; text-transform:uppercase;
+    color:var(--muted); text-align:left; padding:13px 14px; border-bottom:1px solid var(--border2);
+    background:var(--bg2); cursor:pointer; white-space:nowrap; user-select:none; position:sticky; top:0;
+  }
+  thead th:hover{color:var(--teal)}
+  thead th .ar{color:var(--teal); font-size:10px}
+  tbody td{padding:11px 14px; border-bottom:1px solid rgba(26,34,51,.55); font-family:'JetBrains Mono',monospace; vertical-align:middle}
+  tbody tr:hover{background:rgba(34,197,94,.035)}
+  tbody tr:last-child td{border-bottom:none}
+  .sym{font-weight:700; font-family:'Sora',sans-serif; color:var(--txt)}
+  .sym a{color:inherit; text-decoration:none}
+  .sym a:hover{color:var(--teal)}
+  .pos{color:var(--bull)} .neg{color:var(--bear)}
+  .pill{font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:11px; letter-spacing:.5px; padding:3px 9px; border-radius:7px; display:inline-block}
+  .pill.al{background:rgba(34,197,94,.14); color:var(--bull); border:1px solid rgba(34,197,94,.35)}
+  .pill.sat{background:rgba(239,68,68,.13); color:var(--bear); border:1px solid rgba(239,68,68,.35)}
+  .pill.none{background:#121826; color:var(--muted2); border:1px solid var(--border2)}
+  .inside{background:var(--gold)!important; color:#121826!important; border-color:var(--gold)!important; box-shadow:0 0 12px -3px rgba(245,179,66,.6)}
+  .tfb{font-size:10px; padding:2px 6px; border-radius:5px; background:#121826; border:1px solid var(--border2); color:var(--muted); margin-right:3px}
+  .strength{display:flex; align-items:center; gap:7px}
+  .sbar{width:54px; height:6px; background:#121826; border-radius:4px; overflow:hidden; border:1px solid var(--border2)}
+  .sbar i{display:block; height:100%; background:linear-gradient(90deg,var(--teal-dim),var(--gold))}
+  .xcnt{color:var(--gold); font-weight:700; font-family:'Chakra Petch',sans-serif}
+  .empty{padding:48px; text-align:center; color:var(--muted); font-family:'Sora',sans-serif}
+  .err{color:var(--bear); font-family:'JetBrains Mono',monospace; font-size:12px; margin-top:10px; display:none}
+  footer{margin-top:30px; text-align:center; color:var(--muted2); font-size:11.5px; font-family:'JetBrains Mono',monospace; line-height:1.7}
+  .spin{display:inline-block; width:13px; height:13px; border:2px solid rgba(34,197,94,.3); border-top-color:var(--teal); border-radius:50%; animation:sp .7s linear infinite; vertical-align:-2px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+</style>
+<style>
+.header,.header-row,.brand,.brand-row,.header-stats,.controls{flex-wrap:wrap;}
+.tf-group,.filter-group,.filter-row,.filter-pills,.filter-bar,.tabs,.actions,.tfgrid,.seg,.segmented,.tf-btns,.tf-list{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;}
+.tf-btn,.filter-btn,.tab,.pill,.seg-btn{flex-shrink:0;}
+.tablewrap,#tablewrap,.table-wrap,.tbl-wrap,.table-container,.feed{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch;}
+@media(max-width:860px){
+.header{height:auto!important;min-height:0;row-gap:8px;}
+.grid,.signals-grid,.tools-grid,.coins-grid,.card-grid,.dash-grid,.setup-grid,.portfolio-grid{grid-template-columns:1fr!important;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <div class="logo"><img src="data:image/png;base64,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" alt="Wolf" style="width:38px;height:38px;vertical-align:middle;margin-right:9px;filter:drop-shadow(0 0 6px rgba(45,212,191,0.55)) drop-shadow(0 0 12px rgba(45,212,191,0.3))"></div>
+      <div>
+        <h1>WOLF <span>OB</span> SCANNER <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold);border:1px solid var(--border2);padding:2px 8px;border-radius:6px;vertical-align:middle;margin-left:6px">v2.0</span></h1>
+      </div>
+      <div class="topmeta">
+        <div>Sürüm: <b style="color:var(--gold)">v2.0</b></div>
+        <div>Sembol: <b id="symCount">—</b></div>
+        <div>Son tarama: <b id="lastScan">—</b></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Controls -->
+  <div class="panel">
+    <div class="ctitle">Zaman Dilimleri</div>
+    <div class="tfgrid" id="tfGrid"></div>
+    <div class="tfnote">Yüksek TF + düşük TF birlikte seçince konfluens daha anlamlı olur.</div>
+
+    <div class="row">
+      <div class="field">
+        <label>Tarama Kapsamı</label>
+        <select id="scope">
+          <option value="50">Top 50 (hacim)</option>
+          <option value="100">Top 100 (hacim)</option>
+          <option value="200" selected>Top 200 (hacim)</option>
+          <option value="0">Tümü</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Mum Sayısı / TF</label>
+        <select id="limit">
+          <option value="200">200</option>
+          <option value="300">300</option>
+          <option value="500">500</option>
+          <option value="1000" selected>1000</option>
+          <option value="1500">1500</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Yön</label>
+        <select id="dir"><option value="all">Hepsi</option><option value="al">Sadece AL</option><option value="sat">Sadece SAT</option></select>
+      </div>
+      <div class="field">
+        <label>Min. TF Kesişimi</label>
+        <select id="minTf"><option value="1" selected>1+</option><option value="2">2+</option><option value="3">3+</option><option value="4">4+</option></select>
+      </div>
+      <div class="field">
+        <label>Max Mesafe %</label>
+        <input type="number" id="maxDist" value="3" min="0.1" step="0.1">
+      </div>
+      <label class="check"><input type="checkbox" id="onlyInside"> Sadece bölge içindekiler</label>
+    </div>
+
+    <div class="actions">
+      <button class="run" id="scanBtn">⚡ TARAMAYI BAŞLAT</button>
+      <button class="stop" id="stopBtn" disabled>DURDUR</button>
+      <span class="est" id="est"></span>
+    </div>
+
+    <div class="progwrap" id="progwrap">
+      <div class="pbar"><div class="pfill" id="pfill"></div></div>
+      <div class="ptext"><span id="ptxt">Hazır</span><span id="petc"></span></div>
+    </div>
+    <div class="err" id="err"></div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats" id="stats" style="display:none">
+    <div class="stat tot"><div class="n" id="stTot">0</div><div class="l">Sinyalli Coin</div></div>
+    <div class="stat al"><div class="n" id="stAl">0</div><div class="l">AL Bölgesi</div></div>
+    <div class="stat sat"><div class="n" id="stSat">0</div><div class="l">SAT Bölgesi</div></div>
+    <div class="stat cf"><div class="n" id="stCf">0</div><div class="l">Bölge İçinde</div></div>
+  </div>
+
+  <!-- Table -->
+  <div class="tablewrap" id="tablewrap" style="display:none">
+    <table>
+      <thead><tr>
+        <th data-k="rank">#</th>
+        <th data-k="sym">Coin</th>
+        <th data-k="price">Fiyat</th>
+        <th data-k="chg">24s %</th>
+        <th data-k="dir">Sinyal</th>
+        <th data-k="zone">OB Bölgesi</th>
+        <th data-k="dist">Mesafe</th>
+        <th data-k="tfs">Zaman Dilimleri</th>
+        <th data-k="score">Güç</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  </div>
+
+<script>
+"use strict";
+const BASE = "https://web-production-2bdde.up.railway.app";
+
+/* ---------- Zaman dilimleri (destekli) + konfluens ağırlığı ---------- */
+const TFS = [
+  {tf:'1m', sec:60,      w:1.0},
+  {tf:'3m', sec:180,     w:1.3},
+  {tf:'5m', sec:300,     w:1.6},
+  {tf:'15m',sec:900,     w:2.0},
+  {tf:'30m',sec:1800,    w:2.4},
+  {tf:'1h', sec:3600,    w:3.0},
+  {tf:'2h', sec:7200,    w:3.6},
+  {tf:'4h', sec:14400,   w:4.6},
+  {tf:'6h', sec:21600,   w:5.2},
+  {tf:'8h', sec:28800,   w:5.6},
+  {tf:'12h',sec:43200,   w:6.2},
+  {tf:'1d', sec:86400,   w:7.5},
+  {tf:'3d', sec:259200,  w:8.5},
+  {tf:'1w', sec:604800,  w:9.5},
+  {tf:'1M', sec:2592000, w:10.0},
+];
+const TFW = Object.fromEntries(TFS.map(t=>[t.tf,t.w]));
+const TFSEC = Object.fromEntries(TFS.map(t=>[t.tf,t.sec]));
+const DEFAULT_TFS = ['15m','1h','4h'];
+let selectedTFs = new Set(DEFAULT_TFS);
+
+/* ---------- DOM ---------- */
+const $ = id => document.getElementById(id);
+const tfGrid=$('tfGrid');
+TFS.forEach(t=>{
+  const el=document.createElement('div');
+  el.className='tf'+(selectedTFs.has(t.tf)?' on':'');
+  el.textContent=t.tf; el.dataset.tf=t.tf;
+  el.onclick=()=>{ if(selectedTFs.has(t.tf)){selectedTFs.delete(t.tf);el.classList.remove('on');} else {selectedTFs.add(t.tf);el.classList.add('on');} updateEst(); };
+  tfGrid.appendChild(el);
+});
+
+/* ---------- Yardımcılar ---------- */
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const todayStr=()=>new Date().toISOString().slice(0,10);
+function fmtPrice(p){ p=+p; if(p>=1000)return p.toLocaleString('en-US',{maximumFractionDigits:1}); if(p>=1)return p.toFixed(3); if(p>=0.01)return p.toFixed(5); if(p>=0.0001)return p.toFixed(7); return p.toPrecision(4);}
+function lsGet(k){ try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;} }
+function lsSet(k,v){ try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} }
+
+/* ---------- Rate limiter (ağırlık bazlı pacing) ---------- */
+const WEIGHT_BUDGET=1800; // /dk güvenli tavan (limit 2400)
+let winStart=Date.now(), wUsed=0;
+async function gate(cost){
+  while(true){
+    const now=Date.now();
+    if(now-winStart>=60000){winStart=now;wUsed=0;}
+    if(wUsed+cost<=WEIGHT_BUDGET){wUsed+=cost;return;}
+    await sleep(60000-(now-winStart)+60);
+  }
+}
+async function fetchJSON(url,cost){
+  for(let attempt=0;attempt<4;attempt++){
+    await gate(cost);
+    try{
+      const r=await fetch(url);
+      if(r.status===429||r.status===418){ await sleep(2000*(attempt+1)); winStart=Date.now(); wUsed=WEIGHT_BUDGET; continue; }
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      return await r.json();
+    }catch(e){ if(attempt===3) throw e; await sleep(700*(attempt+1)); }
+  }
+}
+async function pool(items,worker,conc){
+  let idx=0;
+  async function next(){ if(idx>=items.length||cancel) return; const i=idx++; try{await worker(items[i],i);}catch(e){} return next(); }
+  await Promise.all(Array.from({length:Math.min(conc,items.length)},next));
+}
+
+/* ---------- EMA yardımcısı ---------- */
+function emaArr(arr,len){
+  const k=2/(len+1); const out=new Array(arr.length); let prev=arr[0];
+  for(let i=0;i<arr.length;i++){ prev = i===0?arr[0] : arr[i]*k+prev*(1-k); out[i]=prev; }
+  return out;
+}
+
+/* ---------- 5 YÖNTEMLİ OB TESPİTİ (Pine indikatörü ile birebir aynı) ----------
+   1) Swing OB Fitil  2) Swing OB Gövde  3) Hacim Pivot  4) Momentum/ROC  5) EMA Kesişim
+   Her zone {top, btm, bull, method}. mitigation ile sadece aktif (kırılmamış) bölgeler döner. */
+function detectAllOB(C, P){
+  const n=C.length; const active=[];
+  const sl=P.swing, emaSlow=P.emaFast+13;
+  if(n < sl*2+6) return active;
+  const O=C.map(x=>x.o),H=C.map(x=>x.h),L=C.map(x=>x.l),CL=C.map(x=>x.c),V=C.map(x=>x.v);
+  const e1=P.useM[4]?emaArr(CL,P.emaFast):null, e2=P.useM[4]?emaArr(CL,emaSlow):null;
+  const pc=new Array(n).fill(0);
+  if(P.useM[3]) for(let i=4;i<n;i++){ pc[i]= O[i-4]!==0? (O[i]-O[i-4])/O[i-4]*100 : 0; }
+  // ATR(14, Wilder) — yinelenen bölge elemesi için (indikatörle aynı eşik)
+  const atrArr=new Array(n).fill(0);
+  { let a=0; for(let i=1;i<n;i++){ const trI=Math.max(H[i]-L[i],Math.abs(H[i]-CL[i-1]),Math.abs(L[i]-CL[i-1])); a = i===1? trI : a+(trI-a)/14; atrArr[i]=a; } }
+  let os=0,prevOs=0, topY=null,topX=null,topC=true, btmY=null,btmX=null,btmC=true;
+  const addZ=(top,btm,bull,m,thr)=>{
+    if(top<=btm) return;
+    for(const z of active){ if(z.method===m && z.bull===bull && Math.abs(z.top-top)<thr && Math.abs(z.btm-btm)<thr) return; }
+    active.push({top,btm,bull,method:m});
+  };
+
+  for(let i=sl;i<n;i++){
+    let upper=-Infinity,lower=Infinity;
+    for(let k=i-sl+1;k<=i;k++){ if(H[k]>upper)upper=H[k]; if(L[k]<lower)lower=L[k]; }
+    const hb=H[i-sl], lb=L[i-sl];
+    prevOs=os; os = hb>upper?0 : lb<lower?1 : os;
+    if(os===0&&prevOs!==0){ topY=hb; topX=i-sl; topC=false; }
+    if(os===1&&prevOs!==1){ btmY=lb; btmX=i-sl; btmC=false; }
+
+    // M1/M2 — Swing OB (fitil + gövde) — Pine ile aynı: offset 1→lim (yeniden eskiye)
+    if((P.useM[0]||P.useM[1]) && topY!==null && CL[i]>topY && !topC){
+      topC=true; let minima=L[i-1],maxima=H[i-1],locOff=1;
+      const lim=Math.max(1,Math.min((i-topX)-1,499));
+      for(let off=1;off<=lim;off++){ if(L[i-off]<minima){minima=L[i-off];maxima=H[i-off];locOff=off;} }
+      const loc=i-locOff;
+      if(P.useM[0]) addZ(maxima,minima,true,1,atrArr[i]*0.15);
+      if(P.useM[1]) addZ(Math.max(O[loc],CL[loc]),Math.min(O[loc],CL[loc]),true,2,atrArr[i]*0.15);
+    }
+    if((P.useM[0]||P.useM[1]) && btmY!==null && CL[i]<btmY && !btmC){
+      btmC=true; let maxima=H[i-1],minima=L[i-1],locOff=1;
+      const lim=Math.max(1,Math.min((i-btmX)-1,499));
+      for(let off=1;off<=lim;off++){ if(H[i-off]>maxima){maxima=H[i-off];minima=L[i-off];locOff=off;} }
+      const loc=i-locOff;
+      if(P.useM[0]) addZ(maxima,minima,false,1,atrArr[i]*0.15);
+      if(P.useM[1]) addZ(Math.max(O[loc],CL[loc]),Math.min(O[loc],CL[loc]),false,2,atrArr[i]*0.15);
+    }
+
+    // M3 — Hacim Pivot OB (pivothigh(volume, sl, sl))
+    if(P.useM[2] && i-2*sl>=0){
+      const c=i-sl; let isPiv=true;
+      for(let k=1;k<=sl;k++){ if(V[c]<V[c+k]||V[c]<V[c-k]){isPiv=false;break;} }
+      if(isPiv){
+        const hl2c=(H[c]+L[c])/2;
+        if(os===1) addZ(hl2c, L[c], true, 3, atrArr[i]*0.15);
+        else if(os===0) addZ(H[c], hl2c, false, 3, atrArr[i]*0.15);
+      }
+    }
+
+    // M4 — Momentum (ROC) OB
+    if(P.useM[3] && i>=5){
+      if(pc[i]>P.sensPc && pc[i-1]<=P.sensPc){
+        for(let j=4;j<=15 && i-j>=0;j++){ if(CL[i-j]<O[i-j]){ addZ(H[i-j],L[i-j],true,4,atrArr[i]*0.15); break; } }
+      }
+      if(pc[i]<-P.sensPc && pc[i-1]>=-P.sensPc){
+        for(let j=4;j<=15 && i-j>=0;j++){ if(CL[i-j]>O[i-j]){ addZ(H[i-j],L[i-j],false,4,atrArr[i]*0.15); break; } }
+      }
+    }
+
+    // M5 — EMA Kesişim OB — Pine ile aynı: ta.lowest(emaSlow) mevcut barı dahil eder
+    if(P.useM[4] && i>=emaSlow){
+      const up = e1[i]>e2[i] && e1[i-1]<=e2[i-1];
+      const dn = e1[i]<e2[i] && e1[i-1]>=e2[i-1];
+      if(up||dn){
+        let lowestV=Infinity,highestV=-Infinity;
+        for(let k=0;k<emaSlow;k++){ if(L[i-k]<lowestV)lowestV=L[i-k]; if(H[i-k]>highestV)highestV=H[i-k]; }
+        if(up){ for(let k=1;k<=emaSlow && i-k>=0;k++){ if(L[i-k]===lowestV){ addZ(Math.min(O[i-k],CL[i-k]),lowestV,true,5,atrArr[i]*0.15); break; } } }
+        if(dn){ for(let k=1;k<=emaSlow && i-k>=0;k++){ if(H[i-k]===highestV){ addZ(highestV,Math.max(O[i-k],CL[i-k]),false,5,atrArr[i]*0.15); break; } } }
+      }
+    }
+
+    // mitigation
+    for(let z=active.length-1;z>=0;z--){
+      const Z=active[z]; const v=Z.bull?(P.mitWick?L[i]:CL[i]):(P.mitWick?H[i]:CL[i]);
+      if(Z.bull? v<Z.btm : v>Z.top) active.splice(z,1);
+    }
+    while(active.length>80) active.shift();   // Pine: maxZones = 80
+  }
+  return active;
+}
+
+/* ---------- Konfluens: TEK bir TF içinde kaç bölge (oy) aynı yeri gösteriyor
+   (Pine indikatörüyle birebir aynı greedy + sayım) → onaylı bölgeler döner. */
+function methodBands(zones, dir, minM, maxClusters){
+  const Z=zones.filter(z=>z.bull===dir);
+  if(!Z.length) return [];
+  const cand=[];
+  for(let a=0;a<Z.length;a++){
+    const p=Z[a].btm; let lo=-Infinity,hi=Infinity,cnt=0; const mset={};
+    for(let b=0;b<Z.length;b++){ if(Z[b].btm<=p&&Z[b].top>=p){ cnt++; if(Z[b].btm>lo)lo=Z[b].btm; if(Z[b].top<hi)hi=Z[b].top; mset[Z[b].method]=1; } }
+    cand.push({lo,hi,cnt,methods:Object.keys(mset).map(Number)});
+  }
+  const used=new Array(cand.length).fill(false); const out=[];
+  while(out.length<maxClusters){
+    let bi=-1,bc=minM-1;
+    for(let i=0;i<cand.length;i++){ if(!used[i]&&cand[i].cnt>bc){bc=cand[i].cnt;bi=i;} }
+    if(bi<0) break;
+    const s=cand[bi]; out.push(s);
+    for(let i=0;i<cand.length;i++){ if(cand[i].lo<=s.hi && s.lo<=cand[i].hi) used[i]=true; }
+  }
+  return out;
+}
+
+/* ---------- Sinyal analizi: önce fiyatın İÇİNDE olduğu bölge, yoksa en yakın ---------- */
+// Bir yöndeki (bull/bear) bölgeleri analiz eder. inside ise fiyatı kapsayan bölgelerin
+// kesişimini ve O bölgelerin gerçek TF'lerini döner — böylece "İÇERİDE" hangi TF'den belli olur.
+function analyzeDir(Z, price, bull){
+  if(!Z.length) return null;
+  const cont = Z.filter(z=>price>=z.btm && price<=z.top);
+  if(cont.length){
+    let lo=-Infinity,hi=Infinity; const tfMap={}; let mmax=0;
+    cont.forEach(z=>{ if(z.btm>lo)lo=z.btm; if(z.top<hi)hi=z.top; tfMap[z.tf]=TFW[z.tf]||1; if(z.mcount>mmax)mmax=z.mcount; });
+    const tfs=Object.keys(tfMap); const w=tfs.reduce((s,t)=>s+tfMap[t],0);
+    return {dir:bull?'al':'sat', inside:1, dist:0, lo, hi, tfs, tfCount:tfs.length, mcount:mmax, w};
+  }
+  let best=null,bestD=Infinity,bestW=0;
+  for(const z of Z){
+    const d = price>z.top ? (price-z.top)/price*100 : (z.btm-price)/price*100;
+    const zw = TFW[z.tf]||1;
+    if(d<bestD || (Math.abs(d-bestD)<1e-9 && zw>bestW)){ bestD=d; bestW=zw; best=z; }
+  }
+  const tfMap={}; let mmax=best.mcount;
+  Z.forEach(z=>{ if(z.btm<=best.top && z.top>=best.btm){ tfMap[z.tf]=TFW[z.tf]||1; if(z.mcount>mmax)mmax=z.mcount; } });
+  const tfs=Object.keys(tfMap); const w=tfs.reduce((s,t)=>s+tfMap[t],0);
+  return {dir:bull?'al':'sat', inside:0, dist:bestD, lo:best.btm, hi:best.top, tfs, tfCount:tfs.length, mcount:mmax, w};
+}
+function analyze(zones, price){
+  const bull = analyzeDir(zones.filter(z=>z.bull), price, true);
+  const bear = analyzeDir(zones.filter(z=>!z.bull), price, false);
+  const res=[]; if(bull)res.push(bull); if(bear)res.push(bear);
+  if(!res.length) return null;
+  // İÇERİDE olanı tercih; ikisi de içerideyse daha çok yöntem onaylayanı; değilse en yakını
+  res.sort((a,b)=> a.inside!==b.inside ? b.inside-a.inside : (a.inside? (b.mcount-a.mcount)||(b.w-a.w) : a.dist-b.dist));
+  return res[0];
+}
+function _unused_strongestBand(zones,dir){
+  const Z=zones.filter(z=>z.bull===dir);
+  if(!Z.length) return null;
+  let best=null;
+  for(let a=0;a<Z.length;a++){
+    const p=Z[a].btm; let lo=-Infinity,hi=Infinity; const tfMap={};
+    for(let b=0;b<Z.length;b++){
+      if(Z[b].btm<=p && Z[b].top>=p){
+        if(Z[b].btm>lo)lo=Z[b].btm; if(Z[b].top<hi)hi=Z[b].top;
+        tfMap[Z[b].tf]=TFW[Z[b].tf]||1;
+      }
+    }
+    const tfs=Object.keys(tfMap); const w=tfs.reduce((s,t)=>s+tfMap[t],0);
+    if(!best || w>best.w || (w===best.w && tfs.length>best.cnt)) best={lo,hi,w,cnt:tfs.length,tfs};
+  }
+  return best;
+}
+
+/* ---------- Durum ---------- */
+let allSymbols=[];     // {symbol, vol, price, chg}
+let results=[];        // satırlar
+let cancel=false;
+let sortKey='score', sortDir=-1;
+
+/* ---------- Süre tahmini ---------- */
+function updateEst(){
+  const scope=+$('scope').value;
+  const nSym = scope===0 ? (allSymbols.length||400) : Math.min(scope, allSymbols.length||scope);
+  const reqs = nSym*selectedTFs.size;
+  const lv=+$('limit').value; const cost = lv<=100?1:lv<=500?2:lv<=1000?5:10;
+  const mins = (reqs*cost)/WEIGHT_BUDGET;
+  $('est').textContent = selectedTFs.size? `~${reqs} istek · tahmini ${mins<1?'<1':Math.ceil(mins)} dk` : 'En az 1 zaman dilimi seç';
+}
+
+/* ---------- Sembol listesi + günlük yeni/delist kontrol ---------- */
+async function loadSymbols(){
+  $('symCount').textContent='yükleniyor…';
+  const [info,tickers]=await Promise.all([
+    fetchJSON(BASE+'/fapi/v1/exchangeInfo',1),
+    fetchJSON(BASE+'/fapi/v1/ticker/24hr',40)
+  ]);
+  const live = info.symbols.filter(s=>s.contractType==='PERPETUAL'&&s.quoteAsset==='USDT'&&s.status==='TRADING').map(s=>s.symbol);
+  const liveSet=new Set(live);
+  const tmap=Object.fromEntries(tickers.map(t=>[t.symbol,t]));
+  allSymbols = live.map(sym=>({
+    symbol:sym,
+    vol:+(tmap[sym]?.quoteVolume||0),
+    price:+(tmap[sym]?.lastPrice||0),
+    chg:+(tmap[sym]?.priceChangePercent||0)
+  })).sort((a,b)=>b.vol-a.vol);
+  $('symCount').textContent=live.length;
+  updateEst();
+}
+
+/* ---------- Tarama ---------- */
+async function scan(){
+  if(!selectedTFs.size){ showErr('En az bir zaman dilimi seç.'); return; }
+  cancel=false; results=[];
+  $('scanBtn').disabled=true; $('stopBtn').disabled=false; $('err').style.display='none';
+  $('progwrap').classList.add('show');
+  $('stats').style.display='none'; $('tablewrap').style.display='none';
+
+  const scope=+$('scope').value;
+  const limit=+$('limit').value;
+  const tfs=[...selectedTFs];
+  // --- Sabit ayarlar (indikatörle aynı, değişmez) ---
+  const P = { swing:10, mitWick:true, useM:[true,true,true,true,true], sensPc:1.5, emaFast:5 };
+  const minMethod = 2;   // min. kesişim (oy)
+  const MAXCL = 3;       // TF başına max onaylı bölge (indikatörle aynı)
+  const cost=limit<=100?1:limit<=500?2:limit<=1000?5:10;
+
+  let list = scope===0? allSymbols : allSymbols.slice(0,scope);
+  let done=0; const total=list.length; const t0=Date.now();
+
+  await pool(list, async(item)=>{
+    if(cancel) return;
+    const confirmed=[]; const livePrice=item.price;
+    for(const tf of tfs){
+      if(cancel) return;
+      try{
+        const kl=await fetchJSON(`${BASE}/fapi/v1/klines?symbol=${item.symbol}&interval=${tf}&limit=${limit}`,cost);
+        // REPAINT YOK: oluşmakta olan son mumu at → sadece kapanmış mumlar (indikatör NR ile aynı)
+        if(kl.length && +kl[kl.length-1][6] > Date.now()) kl.pop();
+        const C=kl.map(r=>({o:+r[1],h:+r[2],l:+r[3],c:+r[4],v:+r[5]}));
+        const zs=detectAllOB(C,P);                       // 5 yöntem, ham OB'ler
+        for(const dir of [true,false]){
+          const bands=methodBands(zs, dir, minMethod, MAXCL); // TF içi yöntem konfluensi
+          bands.forEach(b=> confirmed.push({top:b.hi, btm:b.lo, bull:dir, tf, mcount:b.cnt, methods:b.methods}));
+        }
+      }catch(e){}
+    }
+    const price = livePrice || (confirmed.length? (confirmed[0].top+confirmed[0].btm)/2 : 0);
+    const s = analyze(confirmed, price);
+    if(s){
+      results.push({symbol:item.symbol, price, chg:item.chg, ...s});
+    }
+    done++;
+    const frac=done/total; $('pfill').style.width=(frac*100).toFixed(1)+'%';
+    $('ptxt').innerHTML=`<span class="spin"></span> ${item.symbol} · ${done}/${total} coin`;
+    const el=(Date.now()-t0)/1000; const eta=el/done*(total-done);
+    $('petc').textContent=`geçen ${el.toFixed(0)}s · kalan ~${eta.toFixed(0)}s`;
+  }, 12);
+
+  finishScan(done,total);
+}
+function finishScan(done,total){
+  $('scanBtn').disabled=false; $('stopBtn').disabled=true;
+  $('ptxt').innerHTML = cancel? `Durduruldu · ${done}/${total}` : `✓ Tamamlandı · ${done}/${total} coin tarandı`;
+  $('lastScan').textContent=new Date().toLocaleTimeString('tr-TR');
+  applyFilterSort();
+}
+
+/* ---------- Filtre + sırala + render ---------- */
+function applyFilterSort(){
+  const dir=$('dir').value, minTf=+$('minTf').value, maxDist=+$('maxDist').value, onlyIn=$('onlyInside').checked;
+  let rows=results.filter(r=>{
+    if(dir==='al'&&r.dir!=='al')return false;
+    if(dir==='sat'&&r.dir!=='sat')return false;
+    if(r.tfCount<minTf)return false;
+    if(onlyIn&&!r.inside)return false;
+    if(!r.inside && r.dist>maxDist)return false;
+    return true;
+  });
+  rows.forEach(r=>{ const prox=r.inside?1:Math.max(0,1-r.dist/(maxDist||10)); r.score=r.mcount*r.w*(0.4+0.6*prox)*(r.inside?1.5:1); });
+  rows.sort((a,b)=>{
+    let av,bv;
+    switch(sortKey){
+      case 'sym': av=a.symbol; bv=b.symbol; return sortDir*av.localeCompare(bv);
+      case 'price': av=a.price;bv=b.price;break;
+      case 'chg': av=a.chg;bv=b.chg;break;
+      case 'dir': av=a.dir;bv=b.dir; return sortDir*av.localeCompare(bv);
+      case 'dist': av=a.inside?-1:a.dist; bv=b.inside?-1:b.dist; break;
+      case 'tfs': av=a.mcount*100+a.tfCount;bv=b.mcount*100+b.tfCount;break;
+      default: av=a.score;bv=b.score;
+    }
+    return sortDir*(av-bv);
+  });
+  renderTable(rows);
+  // stats
+  $('stats').style.display='flex';
+  $('stTot').textContent=rows.length;
+  $('stAl').textContent=rows.filter(r=>r.dir==='al').length;
+  $('stSat').textContent=rows.filter(r=>r.dir==='sat').length;
+  $('stCf').textContent=rows.filter(r=>r.inside).length;
+}
+function renderTable(rows){
+  $('tablewrap').style.display='block';
+  const tb=$('tbody');
+  if(!rows.length){ tb.innerHTML=`<tr><td colspan="9" class="empty">Filtrelere uyan sinyal yok. Mesafeyi artır ya da min. TF'yi düşür.</td></tr>`; return; }
+  tb.innerHTML=rows.map((r,i)=>{
+    const tv=`https://www.tradingview.com/chart/?symbol=BINANCE:${r.symbol}.P`;
+    const sortedTfs = r.tfs.slice().sort((a,b)=>(TFW[b]||0)-(TFW[a]||0));
+    const topTf = sortedTfs[0]||'';
+    const pillClass = r.inside? 'pill '+r.dir+' inside' : 'pill '+r.dir;
+    const base = r.dir==='al'?'AL':'SAT';
+    const pillTxt = (r.inside? base+' · İÇERİDE' : base) + (topTf? ' · '+topTf : '');
+    const distTxt = r.inside? '<span class="xcnt">İÇERİDE</span>' : r.dist.toFixed(2)+'%';
+    const tfb = sortedTfs.map(t=>`<span class="tfb">${t}</span>`).join('');
+    return `<tr>
+      <td style="color:var(--muted2)">${i+1}</td>
+      <td class="sym"><a href="${tv}" target="_blank">${r.symbol.replace('USDT','')}<span style="color:var(--muted2)">USDT</span></a></td>
+      <td>${fmtPrice(r.price)}</td>
+      <td class="${r.chg>=0?'pos':'neg'}">${r.chg>=0?'+':''}${r.chg.toFixed(2)}%</td>
+      <td><span class="${pillClass}">${pillTxt}</span></td>
+      <td>${fmtPrice(r.hi)} – ${fmtPrice(r.lo)}</td>
+      <td>${distTxt}</td>
+      <td>${tfb}</td>
+      <td><div class="strength"><span class="xcnt" title="kesişen yöntem sayısı">x${r.mcount}</span><span style="color:var(--muted2);font-size:10px">${r.tfCount}TF</span><div class="sbar"><i style="width:${(r.mcount/5*100).toFixed(0)}%"></i></div></div></td>
+    </tr>`;
+  }).join('');
+}
+function showErr(m){ const e=$('err'); e.textContent='⚠ '+m; e.style.display='block'; }
+
+/* ---------- Events ---------- */
+$('scanBtn').onclick=scan;
+$('stopBtn').onclick=()=>{cancel=true;};
+['scope','limit'].forEach(id=>$(id).onchange=updateEst);
+['dir','minTf','maxDist','onlyInside'].forEach(id=>$(id).addEventListener('change',()=>{ if(results.length) applyFilterSort(); }));
+document.querySelectorAll('thead th').forEach(th=>{
+  th.onclick=()=>{ const k=th.dataset.k; if(k==='rank')return; if(sortKey===k)sortDir*=-1; else{sortKey=k;sortDir=(k==='sym'||k==='dist')?1:-1;}
+    document.querySelectorAll('thead th .ar').forEach(a=>a.remove());
+    const ar=document.createElement('span'); ar.className='ar'; ar.textContent=sortDir<0?' ▼':' ▲'; th.appendChild(ar);
+    if(results.length) applyFilterSort(); };
+});
+
+/* ---------- Başlat ---------- */
+loadSymbols().catch(e=>showErr('Sembol listesi alınamadı: '+e.message+' (bağlantı/CORS kontrol et)'));
+</script>
+</body>
+</html>

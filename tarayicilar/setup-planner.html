@@ -1,0 +1,2181 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Wolf Setup Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e1a;
+  --panel: #1a2233;
+  --panel-2: #1a2233;
+  --gold: #f5b342;
+  --gold-light: #f5b342;
+  --gold-dim: #f5b342;
+  --green: #22c55e;
+  --green-soft: rgba(34,197,94, 0.15);
+  --red: #ef4444;
+  --red-soft: rgba(239,68,68, 0.15);
+  --text: #e8edf5;
+  --text-dim: #8892a8;
+  --text-faint: #8892a8;
+  --border: #1f2740;
+  --border-light: #1f2740;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg); color: var(--text); font-family: 'Manrope', sans-serif; min-height: 100vh; }
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: radial-gradient(ellipse at top, rgba(245,179,66,0.06), transparent 60%),
+              radial-gradient(ellipse at bottom right, rgba(34,197,94,0.04), transparent 50%);
+  pointer-events: none; z-index: 0;
+}
+
+.app { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 24px; }
+
+/* ===== Header ===== */
+.header { display: grid; grid-template-columns: auto 1fr auto; gap: 24px; align-items: center; margin-bottom: 24px; padding: 18px 22px; border: 1px solid var(--border); border-radius: 8px; background:
+  linear-gradient(135deg, rgba(245,179,66,0.06) 0%, transparent 40%, transparent 60%, rgba(239,68,68,0.05) 100%),
+  linear-gradient(180deg, var(--panel) 0%, var(--bg) 100%);
+  position: relative; overflow: hidden;
+}
+.header::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.header::after {
+  content: ''; position: absolute; bottom: 0; left: 25%; right: 25%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+}
+
+.brand { display: flex; align-items: center; gap: 14px; }
+.wolf-logo { width: 80px; height: 80px; flex-shrink: 0; border-radius: 50%; overflow: hidden; border: 2px solid var(--gold); box-shadow: 0 0 0 1px rgba(245,179,66,0.2), 0 4px 16px rgba(245,179,66,0.3), inset 0 0 20px rgba(0,0,0,0.4); position: relative; }
+.wolf-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wolf-logo::after {
+  content: ''; position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle at 30% 30%, transparent 50%, rgba(0,0,0,0.3) 100%);
+}
+.brand-text { display: flex; flex-direction: column; line-height: 1; }
+.brand-title { font-family: 'Bebas Neue', sans-serif; font-size: 38px; letter-spacing: 4px; color: var(--gold); line-height: 0.95; }
+.brand-sub { font-family: 'Manrope', sans-serif; font-size: 10px; letter-spacing: 6px; color: var(--text-dim); margin-top: 4px; text-transform: uppercase; font-weight: 600; }
+.brand-tool { font-family: 'Manrope', sans-serif; font-size: 11px; color: var(--text); margin-top: 8px; font-weight: 500; letter-spacing: 0.5px; }
+.brand-tool span { color: var(--gold-light); }
+
+.slogan-block { text-align: center; padding: 0 20px; position: relative; }
+.slogan-quote { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--text); letter-spacing: 2.5px; line-height: 1.1; position: relative; display: inline-block; }
+.slogan-quote::before, .slogan-quote::after {
+  content: ''; position: absolute; top: 50%; width: 20px; height: 1px; background: var(--gold);
+}
+.slogan-quote::before { right: 100%; margin-right: 14px; }
+.slogan-quote::after { left: 100%; margin-left: 14px; }
+.slogan-quote-mark { color: var(--gold); font-family: 'Bebas Neue', sans-serif; font-size: 28px; font-style: italic; opacity: 0.6; padding: 0 2px; vertical-align: -2px; }
+.slogan-accent { color: var(--gold); }
+.slogan-signature { font-family: 'Manrope', sans-serif; font-size: 9px; letter-spacing: 4px; color: var(--text-dim); margin-top: 8px; text-transform: uppercase; font-weight: 500; }
+.slogan-signature .dash { color: var(--gold); margin-right: 6px; }
+.slogan-signature .author { color: var(--gold-light); font-weight: 700; }
+
+.header-actions { display: flex; gap: 10px; }
+
+@media (max-width: 1100px) {
+  .header { grid-template-columns: 1fr; gap: 14px; padding: 16px; }
+  .slogan-block { padding: 8px 0; }
+  .header-actions { justify-content: flex-end; }
+  .brand { justify-content: flex-start; }
+  .slogan-quote { font-size: 18px; }
+  .slogan-quote::before, .slogan-quote::after { width: 12px; }
+}
+.btn { background: transparent; border: 1px solid var(--border-light); color: var(--text); padding: 9px 16px; font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; border-radius: 4px; transition: all 0.15s; letter-spacing: 0.3px; }
+.btn:hover { border-color: var(--gold); color: var(--gold-light); }
+.btn-primary { background: var(--gold); color: var(--bg); border-color: var(--gold); font-weight: 700; }
+.btn-primary:hover { background: var(--gold-light); border-color: var(--gold-light); color: var(--bg); }
+.btn-danger:hover { border-color: var(--red); color: var(--red); }
+.btn-small { padding: 5px 10px; font-size: 11px; }
+
+/* ===== Layout ===== */
+.grid { display: grid; grid-template-columns: 1fr 360px; gap: 20px; }
+@media (max-width: 1100px) { .grid { grid-template-columns: 1fr; } }
+
+.panel { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 20px; position: relative; }
+.panel-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--gold); margin-bottom: 18px; padding-bottom: 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+.panel-title-icon { width: 4px; height: 18px; background: var(--gold); }
+
+/* ===== Setup inputs ===== */
+.setup-grid { display: grid; grid-template-columns: 1.2fr 0.9fr 0.9fr 0.9fr 0.9fr 0.9fr; gap: 12px; margin-bottom: 16px; }
+@media (max-width: 900px) { .setup-grid { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 700px) { .setup-grid { grid-template-columns: 1fr 1fr; } }
+
+.field { display: flex; flex-direction: column; }
+.field label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px; font-weight: 600; }
+.input, .select { background: var(--panel-2); border: 1px solid var(--border); color: var(--text); padding: 10px 12px; font-family: 'JetBrains Mono', monospace; font-size: 14px; border-radius: 4px; outline: none; transition: border-color 0.15s; width: 100%; }
+.input:focus, .select:focus { border-color: var(--gold); }
+.input::placeholder { color: var(--text-faint); }
+
+/* Coin search autocomplete */
+.coin-wrap { position: relative; }
+.coin-input-row { display: flex; gap: 4px; }
+.coin-input-row .input { flex: 1; min-width: 0; }
+.sort-btn { background: var(--panel-2); border: 1px solid var(--border); color: var(--text-dim); width: 34px; padding: 0; cursor: pointer; border-radius: 4px; font-size: 12px; font-weight: 700; transition: all 0.15s; flex-shrink: 0; }
+.sort-btn:hover { border-color: var(--gold); color: var(--gold); }
+.sort-btn.active { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+.sort-btn:nth-child(2) { color: var(--green); }
+.sort-btn:nth-child(2):hover { background: rgba(34,197,94,0.1); color: var(--green); border-color: var(--green); }
+.sort-btn:nth-child(2).active { background: var(--green); color: var(--bg); border-color: var(--green); }
+.sort-btn:nth-child(3) { color: var(--red); }
+.sort-btn:nth-child(3):hover { background: rgba(239,68,68,0.1); color: var(--red); border-color: var(--red); }
+.sort-btn:nth-child(3).active { background: var(--red); color: var(--text); border-color: var(--red); }
+.coin-list { position: absolute; top: 100%; left: 0; right: 0; background: var(--panel-2); border: 1px solid var(--border-light); border-radius: 4px; margin-top: 4px; max-height: 280px; overflow-y: auto; z-index: 50; display: none; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+.coin-list.open { display: block; }
+.coin-item { padding: 9px 12px; cursor: pointer; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text); border-bottom: 1px solid rgba(255,255,255,0.04); display: flex; justify-content: space-between; align-items: center; }
+.coin-item:hover, .coin-item.active { background: rgba(245,179,66,0.1); color: var(--gold-light); }
+.coin-item-price { font-size: 11px; color: var(--text-dim); }
+.coin-list::-webkit-scrollbar { width: 6px; }
+.coin-list::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+.loading-mark { font-size: 11px; color: var(--text-dim); padding: 8px 12px; }
+
+/* Direction & mode tabs */
+.tabs { display: flex; gap: 0; background: var(--panel-2); border: 1px solid var(--border); border-radius: 4px; padding: 3px; }
+.tab { flex: 1; padding: 8px 12px; text-align: center; font-size: 12px; font-weight: 600; color: var(--text-dim); cursor: pointer; border-radius: 3px; transition: all 0.15s; letter-spacing: 0.5px; }
+.tab.active { background: var(--gold); color: var(--bg); }
+.tab.short.active { background: var(--red); color: var(--text); }
+.tab.long.active { background: var(--green); color: var(--bg); }
+
+/* Live price strip */
+.live-strip { display: flex; gap: 24px; padding: 12px 16px; background: var(--panel-2); border: 1px solid var(--border); border-radius: 4px; margin-bottom: 18px; flex-wrap: wrap; }
+.live-cell { display: flex; flex-direction: column; }
+.live-cell-label { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 3px; }
+.live-cell-val { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--text); font-weight: 500; }
+.live-cell-val.pulse { animation: pulse 0.5s ease; }
+@keyframes pulse { 0% { color: var(--gold-light); } 100% { color: var(--text); } }
+.live-dot { display: inline-block; width: 6px; height: 6px; background: var(--green); border-radius: 50%; margin-right: 6px; animation: blink 2s ease infinite; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+/* ===== Table ===== */
+.table-wrap { overflow-x: auto; margin-top: 8px; border: 1px solid var(--border); border-radius: 6px; }
+table { width: 100%; border-collapse: collapse; font-family: 'JetBrains Mono', monospace; }
+th { background: linear-gradient(180deg, var(--panel-2), var(--panel)); color: var(--gold); text-align: right; padding: 11px 12px; font-family: 'Manrope', sans-serif; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; border-bottom: 2px solid var(--gold-dim); white-space: nowrap; }
+th:first-child { text-align: center; width: 50px; }
+td { padding: 9px 12px; font-size: 13px; color: var(--text); text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; }
+td:first-child { text-align: center; font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: var(--gold); letter-spacing: 1px; }
+tr.entry-row { background: rgba(245,179,66,0.04); }
+tr.entry-row td:first-child { background: rgba(245,179,66,0.15); }
+tr.adds-row:hover { background: rgba(255,255,255,0.02); }
+.cell-input { background: transparent; border: 1px solid var(--border); color: var(--text); padding: 5px 8px; font-family: 'JetBrains Mono', monospace; font-size: 13px; width: 100%; min-width: 80px; text-align: right; border-radius: 3px; outline: none; transition: border-color 0.15s; }
+.cell-input:focus { border-color: var(--gold); background: rgba(245,179,66,0.05); }
+.cell-input::placeholder { color: var(--text-faint); }
+.cell-amount-auto { background: rgba(245,179,66,0.04); border-style: dashed; color: var(--gold-light); cursor: not-allowed; }
+.cell-amount-auto:focus { border-color: var(--border); background: rgba(245,179,66,0.04); }
+.cell-readonly { color: var(--text-dim); }
+.cell-pos { color: var(--green); }
+.cell-neg { color: var(--red); }
+.cell-avg { color: var(--gold-light); font-weight: 500; }
+.cell-liq { color: var(--red); font-weight: 500; }
+.cell-tp { color: var(--green); font-weight: 500; }
+
+/* ===== Side panel: summary + risk + tracker ===== */
+.summary-card { background: var(--panel-2); border-left: 3px solid var(--gold); padding: 14px 16px; border-radius: 4px; margin-bottom: 12px; }
+.summary-card.danger { border-left-color: var(--red); }
+.summary-card.success { border-left-color: var(--green); }
+.summary-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px; font-weight: 600; }
+.summary-val { font-family: 'JetBrains Mono', monospace; font-size: 22px; color: var(--text); font-weight: 500; line-height: 1.2; }
+.summary-val.gold { color: var(--gold-light); }
+.summary-val.green { color: var(--green); }
+.summary-val.red { color: var(--red); }
+.summary-sub { font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+
+.tracker-bar { width: 100%; height: 8px; background: var(--panel); border-radius: 4px; overflow: hidden; margin-top: 10px; position: relative; }
+.tracker-fill { height: 100%; transition: width 0.3s; }
+.tracker-fill.safe { background: var(--green); }
+.tracker-fill.warn { background: var(--gold); }
+.tracker-fill.danger { background: var(--red); }
+.tracker-marker { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--text-dim); }
+
+/* ===== Wallet overview (right panel) ===== */
+.wallet-overview { background: var(--panel-2); border: 1px solid var(--border); border-radius: 4px; padding: 14px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 8px; }
+.wallet-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; }
+.wallet-row .wallet-lbl { color: var(--text-dim); font-family: 'Manrope', sans-serif; font-weight: 600; letter-spacing: 0.5px; }
+.wallet-row .wallet-val { color: var(--text); font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+.wallet-row .wallet-val.green { color: var(--green); }
+.wallet-row .wallet-val.red { color: var(--red); }
+.wallet-row-total { border-top: 1px dashed var(--border); padding-top: 8px; margin-top: 4px; }
+.wallet-row-total .wallet-lbl { color: var(--gold); font-weight: 700; }
+.wallet-row-total .wallet-val { color: var(--gold); font-size: 15px; font-weight: 700; }
+
+/* ===== Active positions mini list ===== */
+.active-positions { display: flex; flex-direction: column; gap: 8px; max-height: 280px; overflow-y: auto; padding-right: 4px; }
+.active-positions::-webkit-scrollbar { width: 6px; }
+.active-positions::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+.active-pos-item { background: var(--panel-2); border: 1px solid var(--border); border-left: 3px solid var(--gold-dim); padding: 10px 12px; border-radius: 4px; cursor: pointer; transition: all 0.15s; }
+.active-pos-item:hover { border-color: var(--gold); border-left-color: var(--gold); }
+.active-pos-item.long { border-left-color: var(--green); }
+.active-pos-item.short { border-left-color: var(--red); }
+.active-pos-item.danger { border-left-color: var(--red); background: rgba(239,68,68,0.05); }
+.active-pos-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.active-pos-sym { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 1px; color: var(--gold); }
+.active-pos-side { font-size: 9px; padding: 2px 6px; border-radius: 2px; letter-spacing: 1px; font-weight: 700; }
+.active-pos-side.long { background: var(--green); color: var(--bg); }
+.active-pos-side.short { background: var(--red); color: var(--text); }
+.active-pos-stats { display: flex; justify-content: space-between; font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-dim); }
+.active-pos-stats .pnl-val.green { color: var(--green); }
+.active-pos-stats .pnl-val.red { color: var(--red); }
+.empty-state-mini { padding: 24px 12px; text-align: center; color: var(--text-faint); font-size: 11px; font-style: italic; }
+
+/* ===== Icon button (kept) ===== */
+.icon-btn { background: transparent; border: none; color: var(--text-dim); cursor: pointer; padding: 4px 6px; border-radius: 3px; font-size: 13px; transition: color 0.15s; }
+.icon-btn:hover { color: var(--gold); }
+.icon-btn.delete:hover { color: var(--red); }
+.empty-state { padding: 30px 16px; text-align: center; color: var(--text-faint); font-size: 12px; font-style: italic; }
+
+/* ===== Pending entry status indicator (otomatik, manuel tıklama yok) ===== */
+.pending-status { padding: 3px 8px; border-radius: 3px; font-size: 10px; font-family: 'Manrope', sans-serif; font-weight: 600; letter-spacing: 0.3px; }
+.pending-status.waiting { background: rgba(245,179,66,0.1); color: var(--gold-dim); border: 1px solid rgba(245,179,66,0.2); }
+.pending-status.filled { background: var(--green); color: var(--bg); border: 1px solid var(--green); }
+
+/* ===== Modal ===== */
+.modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(4px); }
+.modal-bg.open { display: flex; }
+.modal { background: var(--panel); border: 1px solid var(--gold-dim); border-radius: 8px; padding: 24px; max-width: 460px; width: 90%; }
+.modal h3 { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: var(--gold); margin-bottom: 14px; }
+.modal p { color: var(--text-dim); font-size: 13px; margin-bottom: 14px; line-height: 1.5; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
+
+/* ===== Toast ===== */
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(120%); background: var(--panel-2); border: 1px solid var(--gold); color: var(--text); padding: 12px 20px; border-radius: 4px; font-size: 13px; font-weight: 500; z-index: 200; transition: transform 0.3s; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.error { border-color: var(--red); }
+.toast.success { border-color: var(--green); }
+
+/* ===== Footer ===== */
+.footer { text-align: center; padding: 30px 0 10px; color: var(--text-faint); font-size: 11px; }
+.footer span { color: var(--gold-dim); }
+
+/* ===== Compact mode (mobile) ===== */
+@media (max-width: 700px) {
+  .app { padding: 12px; }
+  .brand-title { font-size: 32px; }
+  .header { flex-direction: column; gap: 14px; }
+  th, td { padding: 8px 6px; font-size: 11px; }
+  .cell-input { font-size: 11px; padding: 4px 6px; min-width: 60px; }
+}
+
+/* Helper texts */
+.helper { font-size: 11px; color: var(--text-faint); font-style: italic; margin-top: 8px; }
+
+/* Row add button */
+.btn-add-row { width: 100%; background: transparent; border: 1px dashed var(--border-light); color: var(--text-dim); padding: 10px; font-size: 12px; cursor: pointer; border-radius: 4px; transition: all 0.15s; margin-top: 10px; letter-spacing: 0.5px; }
+.btn-add-row:hover { border-color: var(--gold); color: var(--gold); background: rgba(245,179,66,0.04); }
+
+/* Big save button at end of setup */
+.btn-save-setup { width: 100%; background: var(--gold); color: var(--bg); border: none; padding: 16px; font-size: 14px; font-weight: 700; cursor: pointer; border-radius: 4px; transition: all 0.15s; margin-top: 18px; letter-spacing: 1.5px; font-family: 'Manrope', sans-serif; text-transform: uppercase; box-shadow: 0 4px 16px rgba(245,179,66,0.25); }
+.btn-save-setup:hover { background: var(--gold-bright, #f5b342); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(245,179,66,0.35); }
+.btn-save-setup:active { transform: translateY(0); }
+.btn-save-setup.update-mode { background: var(--green); color: var(--bg); box-shadow: 0 4px 16px rgba(34,197,94,0.25); }
+.btn-save-setup.update-mode:hover { background: #22c55e; box-shadow: 0 6px 20px rgba(34,197,94,0.35); }
+
+/* ===== Tab navigation ===== */
+.tab-nav { display: flex; gap: 4px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 0; }
+.tab-nav-item { padding: 12px 20px; cursor: pointer; color: var(--text-dim); font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 0.5px; border-bottom: 2px solid transparent; transition: all 0.15s; margin-bottom: -1px; display: flex; align-items: center; gap: 8px; }
+.tab-nav-item:hover { color: var(--gold-light); }
+.tab-nav-item.active { color: var(--gold); border-bottom-color: var(--gold); }
+.tab-nav-item .count { background: var(--panel-2); color: var(--text); padding: 2px 7px; border-radius: 10px; font-size: 10px; font-weight: 700; }
+.tab-nav-item.active .count { background: var(--gold); color: var(--bg); }
+
+.view { display: none; }
+.view.active { display: block; }
+
+/* ===== Portfolio view ===== */
+.portfolio-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+
+.portfolio-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 12px; flex-wrap: wrap; }
+.portfolio-meta { display: flex; gap: 16px; font-size: 12px; color: var(--text-dim); flex-wrap: wrap; }
+.portfolio-meta strong { color: var(--text); font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+
+/* Combined dashboard at top */
+.dash-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+@media (max-width: 900px) { .dash-grid { grid-template-columns: 1fr 1fr; } }
+
+.dash-card { background: var(--panel-2); border: 1px solid var(--border); padding: 14px 16px; border-radius: 6px; position: relative; }
+.dash-card.gold { border-left: 3px solid var(--gold); }
+.dash-card.red { border-left: 3px solid var(--red); }
+.dash-card.green { border-left: 3px solid var(--green); }
+.dash-card-label { font-size: 9px; color: var(--text-dim); letter-spacing: 1.2px; text-transform: uppercase; font-weight: 600; margin-bottom: 6px; }
+.dash-card-val { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 500; line-height: 1.1; }
+.dash-card-val.gold { color: var(--gold-light); }
+.dash-card-val.green { color: var(--green); }
+.dash-card-val.red { color: var(--red); }
+.dash-card-sub { font-size: 11px; color: var(--text-dim); margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+
+/* Risk map: heatmap of positions */
+.risk-map { background: var(--panel-2); border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin-bottom: 16px; }
+.risk-map-title { font-family: 'Manrope', sans-serif; font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+.risk-map-legend { display: flex; gap: 14px; font-size: 10px; }
+.legend-item { display: flex; align-items: center; gap: 5px; color: var(--text-dim); text-transform: none; letter-spacing: 0; }
+.legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+.legend-dot.safe { background: var(--green); }
+.legend-dot.warn { background: var(--gold); }
+.legend-dot.danger { background: var(--red); }
+
+.risk-map-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+.risk-tile { background: var(--panel); padding: 12px; border-radius: 4px; border: 1px solid var(--border); position: relative; overflow: hidden; }
+.risk-tile-bg { position: absolute; inset: 0; opacity: 0.15; pointer-events: none; }
+.risk-tile-bg.safe { background: var(--green); }
+.risk-tile-bg.warn { background: var(--gold); }
+.risk-tile-bg.danger { background: var(--red); }
+.risk-tile-sym { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 13px; color: var(--text); display: flex; align-items: center; gap: 6px; position: relative; }
+.risk-tile-side { font-size: 9px; padding: 1px 5px; border-radius: 2px; font-weight: 700; letter-spacing: 1px; }
+.risk-tile-side.long { background: var(--green); color: var(--bg); }
+.risk-tile-side.short { background: var(--red); color: var(--text); }
+.risk-tile-score { font-family: 'JetBrains Mono', monospace; font-size: 22px; font-weight: 500; margin-top: 8px; line-height: 1; position: relative; }
+.risk-tile-score.safe { color: var(--green); }
+.risk-tile-score.warn { color: var(--gold); }
+.risk-tile-score.danger { color: var(--red); }
+.risk-tile-sub { font-size: 10px; color: var(--text-dim); margin-top: 4px; font-family: 'JetBrains Mono', monospace; position: relative; }
+
+/* Liq distance bar chart */
+.liq-bars { background: var(--panel-2); border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin-bottom: 16px; }
+.liq-bar-row { display: grid; grid-template-columns: 90px 1fr 90px; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.liq-bar-row:last-child { border-bottom: none; }
+.liq-bar-sym { font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 12px; color: var(--text); }
+.liq-bar-track { position: relative; height: 22px; background: var(--panel); border-radius: 3px; overflow: hidden; }
+.liq-bar-fill { position: absolute; left: 0; top: 0; bottom: 0; transition: width 0.3s; }
+.liq-bar-fill.safe { background: linear-gradient(90deg, var(--green), rgba(34,197,94,0.5)); }
+.liq-bar-fill.warn { background: linear-gradient(90deg, var(--gold), rgba(245,179,66,0.5)); }
+.liq-bar-fill.danger { background: linear-gradient(90deg, var(--red), rgba(239,68,68,0.5)); }
+.liq-bar-marker { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--text); z-index: 2; }
+.liq-bar-marker-label { position: absolute; top: -16px; font-size: 9px; color: var(--text-dim); transform: translateX(-50%); white-space: nowrap; }
+.liq-bar-pct { font-family: 'JetBrains Mono', monospace; font-size: 12px; text-align: right; font-weight: 500; }
+.liq-bar-pct.safe { color: var(--green); }
+.liq-bar-pct.warn { color: var(--gold); }
+.liq-bar-pct.danger { color: var(--red); }
+
+/* Price axis chart */
+.price-axis-chart { background: var(--panel-2); border: 1px solid var(--border); border-radius: 6px; padding: 20px 16px; margin-bottom: 16px; }
+.price-axis-row { position: relative; display: grid; grid-template-columns: 90px 1fr; gap: 12px; align-items: center; height: 40px; margin-bottom: 4px; }
+.price-axis-label { font-family: 'Manrope', sans-serif; font-weight: 600; font-size: 11px; color: var(--text); }
+.price-axis-wrap { position: relative; height: 100%; }
+.price-axis-track { position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: var(--border); transform: translateY(-50%); border-radius: 2px; }
+.price-axis-zone { position: absolute; top: 50%; transform: translateY(-50%); height: 8px; border-radius: 4px; opacity: 0.4; }
+.price-axis-zone.safe { background: var(--green); }
+.price-axis-zone.danger { background: var(--red); }
+.price-axis-point { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; border-radius: 50%; z-index: 3; cursor: pointer; }
+.price-axis-point.entry { background: var(--gold); border: 2px solid var(--bg); }
+.price-axis-point.current { background: var(--text); border: 2px solid var(--bg); width: 14px; height: 14px; }
+.price-axis-point.liq { background: var(--red); border: 2px solid var(--bg); }
+.price-axis-point.tp { background: var(--green); border: 2px solid var(--bg); }
+.price-axis-empty { color: var(--text-dim); font-size: 11px; }
+
+/* Position cards */
+.pos-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; }
+.pos-card { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 14px; position: relative; }
+.pos-card.danger { border-color: var(--red); box-shadow: 0 0 0 1px rgba(239,68,68,0.2); }
+.pos-card.warn { border-color: var(--gold-dim); }
+.pos-card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 8px; }
+.pos-card-sym { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 15px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+.pos-card-side { font-size: 9px; padding: 2px 7px; border-radius: 2px; letter-spacing: 1px; font-weight: 700; }
+.pos-card-side.long { background: var(--green); color: var(--bg); }
+.pos-card-side.short { background: var(--red); color: var(--text); }
+.pos-card-actions { display: flex; gap: 4px; }
+.pos-card-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.pos-card-field { display: flex; flex-direction: column; }
+.pos-card-field label { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; font-weight: 600; }
+.pos-card-input { background: var(--panel-2); border: 1px solid var(--border); color: var(--text); padding: 6px 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px; border-radius: 3px; outline: none; width: 100%; }
+.pos-card-input:focus { border-color: var(--gold); }
+.pos-card-stats { background: var(--panel-2); border-radius: 4px; padding: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; font-size: 11px; }
+.pos-card-stat-row { display: flex; justify-content: space-between; align-items: baseline; }
+.pos-card-stat-lbl { color: var(--text-dim); font-size: 10px; }
+.pos-card-stat-val { color: var(--text); font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 11px; }
+.pos-card-stat-val.green { color: var(--green); }
+.pos-card-stat-val.red { color: var(--red); }
+.pos-card-stat-val.gold { color: var(--gold-light); }
+
+.add-pos-card { background: transparent; border: 2px dashed var(--border-light); padding: 30px 16px; text-align: center; color: var(--text-dim); cursor: pointer; border-radius: 6px; font-size: 13px; transition: all 0.15s; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; font-family: 'Manrope', sans-serif; font-weight: 600; letter-spacing: 0.5px; }
+.add-pos-card:hover { border-color: var(--gold); color: var(--gold); background: rgba(245,179,66,0.04); }
+.add-pos-card-icon { font-size: 32px; line-height: 1; }
+
+.empty-portfolio { text-align: center; padding: 60px 20px; color: var(--text-faint); }
+.empty-portfolio-icon { font-size: 48px; color: var(--gold-dim); margin-bottom: 14px; }
+.empty-portfolio-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--gold); letter-spacing: 2px; margin-bottom: 8px; }
+.empty-portfolio-text { font-size: 13px; max-width: 400px; margin: 0 auto 20px; line-height: 1.6; }
+
+/* ===== Pending entries (E1/E2/E3) on portfolio card ===== */
+.pending-section { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border); }
+.pending-title { font-family: 'Bebas Neue', sans-serif; font-size: 12px; color: var(--gold-dim); letter-spacing: 1.5px; margin-bottom: 8px; }
+.pending-list { display: flex; flex-direction: column; gap: 4px; }
+.pending-row { display: grid; grid-template-columns: 40px 1fr 1fr auto; gap: 8px; align-items: center; padding: 6px 8px; background: rgba(26,34,51,0.5); border-left: 2px solid var(--border-light); border-radius: 3px; font-size: 11px; }
+.pending-row.near { border-left-color: var(--gold); background: rgba(245,179,66,0.06); }
+.pending-row.filled { border-left-color: var(--green); background: rgba(34,197,94,0.04); opacity: 0.85; }
+.pending-row.filled .pending-price, .pending-row.filled .pending-amt { color: var(--text-dim); }
+.pending-lbl { font-family: 'Bebas Neue', sans-serif; color: var(--gold); font-size: 12px; letter-spacing: 1px; }
+.pending-price { font-family: 'JetBrains Mono', monospace; color: var(--text); font-weight: 600; }
+.pending-amt { font-family: 'JetBrains Mono', monospace; color: var(--text-dim); }
+.pending-flag { font-size: 10px; color: var(--gold); font-weight: 700; }
+</style>
+<style>
+.header,.header-row,.brand,.brand-row,.header-stats,.controls{flex-wrap:wrap;}
+.tf-group,.filter-group,.filter-row,.filter-pills,.filter-bar,.tabs,.actions,.tfgrid,.seg,.segmented,.tf-btns,.tf-list{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%;}
+.tf-btn,.filter-btn,.tab,.pill,.seg-btn{flex-shrink:0;}
+.tablewrap,#tablewrap,.table-wrap,.tbl-wrap,.table-container,.feed{overflow-x:auto;max-width:100%;-webkit-overflow-scrolling:touch;}
+@media(max-width:860px){
+.header{height:auto!important;min-height:0;row-gap:8px;}
+.grid,.signals-grid,.tools-grid,.coins-grid,.card-grid,.dash-grid,.setup-grid,.portfolio-grid{grid-template-columns:1fr!important;}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <div class="brand">
+    <div class="wolf-logo"><img src="data:image/png;base64,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" alt="Wolf"></div>
+    <div class="brand-text">
+      <div class="brand-title">WOLF</div>
+      <div class="brand-sub">SYSTEM</div>
+      
+    </div>
+  </div>
+
+  <div class="slogan-block">
+    <div class="slogan-quote">
+      <span class="slogan-quote-mark">"</span>Her likidite avlanır.<span class="slogan-accent"> Soru:</span> kim avcı?<span class="slogan-quote-mark">"</span>
+    </div>
+    <div class="slogan-signature">
+      <span class="dash">—</span> BY <span class="author">@CRYPTOWOLFHP</span>
+    </div>
+  </div>
+
+  <div class="header-actions">
+    <button class="btn" id="btnNew">+ Yeni Setup</button>
+  </div>
+</div>
+
+<!-- ===== TAB NAVIGATION ===== -->
+<div class="tab-nav">
+  <div class="tab-nav-item active" data-view="planner">SETUP PLANNER</div>
+  <div class="tab-nav-item" data-view="portfolio">PORTFÖY RİSKİ <span class="count" id="portfolioCount">0</span></div>
+</div>
+
+<!-- ===== PLANNER VIEW ===== -->
+<div class="view active" id="viewPlanner">
+<div class="grid">
+
+  <!-- ===== MAIN PANEL ===== -->
+  <div>
+    <div class="panel">
+      <div class="panel-title"><span class="panel-title-icon"></span>SETUP PARAMETRELERİ</div>
+
+      <div class="setup-grid">
+        <div class="field">
+          <label>Coin</label>
+          <div class="coin-wrap">
+            <div class="coin-input-row">
+              <input type="text" class="input" id="coinInput" placeholder="BTC, ETH, INUSDT..." autocomplete="off" />
+              <button class="sort-btn" id="sortGainers" title="En çok yükselenler">▲</button>
+              <button class="sort-btn" id="sortLosers" title="En çok düşenler">▼</button>
+            </div>
+            <div class="coin-list" id="coinList"></div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Yön</label>
+          <div class="tabs">
+            <div class="tab long active" data-side="LONG">LONG</div>
+            <div class="tab short" data-side="SHORT">SHORT</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Kaldıraç</label>
+          <input type="number" class="input" id="leverageInput" value="10" min="1" max="125" />
+        </div>
+        <div class="field">
+          <label>Kasa ($)</label>
+          <input type="number" class="input" id="walletInput" value="1000" min="0" step="10" />
+        </div>
+        <div class="field">
+          <label>Margin Tipi</label>
+          <select class="select" id="marginType">
+            <option value="CROSS">Cross</option>
+            <option value="ISO">Isolated</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>İlk İşlem ($)</label>
+          <input type="text" inputmode="decimal" class="input" id="firstAmount" value="100" placeholder="100" />
+        </div>
+      </div>
+
+      <!-- Live price strip -->
+      <div class="live-strip" id="liveStrip" style="display:none;">
+        <div class="live-cell">
+          <div class="live-cell-label"><span class="live-dot"></span>Anlık Fiyat</div>
+          <div class="live-cell-val" id="livePrice">—</div>
+        </div>
+        <div class="live-cell">
+          <div class="live-cell-label">24h Değişim</div>
+          <div class="live-cell-val" id="liveChange">—</div>
+        </div>
+        <div class="live-cell">
+          <div class="live-cell-label">24h Hacim</div>
+          <div class="live-cell-val" id="liveVolume">—</div>
+        </div>
+        <div class="live-cell">
+          <div class="live-cell-label">Funding</div>
+          <div class="live-cell-val" id="liveFunding">—</div>
+        </div>
+      </div>
+
+      <!-- ===== TABLE ===== -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Fiyat</th>
+              <th>Miktar ($)</th>
+              <th>Kümülatif ($)</th>
+              <th>Ort. Giriş</th>
+              <th>Likidasyon</th>
+              <th>+30% TP Fiyatı</th>
+              <th title="Kasanın %8'i kaybedildiğinde tetiklenen SL fiyatı">%8 Kasa SL</th>
+              <th>Kasa Riski</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="rowsBody"></tbody>
+        </table>
+      </div>
+
+      <button class="btn-add-row" id="btnAddRow">+ Yeni Ekleme Satırı</button>
+
+      <div class="helper">
+        Üstteki "İlk İşlem ($)" alanına başlangıç miktarını yaz. Tablo otomatik dolar (martingale: GİRİŞ = X, E1 = X, E2 = 2X, E3 = 4X...). Sen sadece her satırın <strong>fiyatını</strong> manuel girersin. <strong>%8 Kasa SL</strong>: kasanın %8'ini kaybedeceğin fiyatı her eklemede yeniden hesaplar.
+      </div>
+
+      <button class="btn-save-setup" id="btnSave">🐺 Kaydet → Portföye Ekle</button>
+    </div>
+  </div>
+
+  <!-- ===== SIDE PANEL ===== -->
+  <div>
+    <div class="panel" style="margin-bottom:20px;">
+      <div class="panel-title"><span class="panel-title-icon"></span>KASA & AÇIK POZİSYONLAR</div>
+      <div class="wallet-overview">
+        <div class="wallet-row">
+          <span class="wallet-lbl">Toplam Kasa</span>
+          <span class="wallet-val" id="wlTotal">$0</span>
+        </div>
+        <div class="wallet-row">
+          <span class="wallet-lbl">Aktif Margin</span>
+          <span class="wallet-val" id="wlMargin">$0</span>
+        </div>
+        <div class="wallet-row">
+          <span class="wallet-lbl">Anlık PnL</span>
+          <span class="wallet-val" id="wlPnl">$0</span>
+        </div>
+        <div class="wallet-row wallet-row-total">
+          <span class="wallet-lbl">Kullanılabilir Kasa</span>
+          <span class="wallet-val" id="wlAvailable">$0</span>
+        </div>
+      </div>
+      <div class="active-positions" id="activePosMini">
+        <div class="empty-state-mini">Henüz açık pozisyon yok. Setup'ı doldurup "Kaydet" → otomatik portföye eklenir.</div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-bottom:20px;">
+      <div class="panel-title"><span class="panel-title-icon"></span>YENİ SETUP DURUMU</div>
+
+      <div class="summary-card">
+        <div class="summary-label">Toplam Pozisyon</div>
+        <div class="summary-val gold" id="sumNotional">$0</div>
+        <div class="summary-sub" id="sumMargin">Margin: $0</div>
+      </div>
+
+      <div class="summary-card" id="cardLiq">
+        <div class="summary-label">Aktif Likidasyon</div>
+        <div class="summary-val red" id="sumLiq">—</div>
+        <div class="summary-sub" id="sumLiqPct">— uzakta</div>
+      </div>
+
+      <div class="summary-card success">
+        <div class="summary-label">+30% TP Hedefi</div>
+        <div class="summary-val green" id="sumTP">—</div>
+        <div class="summary-sub" id="sumTPProfit">Kazanç: —</div>
+      </div>
+
+      <div class="summary-card">
+        <div class="summary-label">Ortalama Giriş</div>
+        <div class="summary-val gold" id="sumAvg">—</div>
+      </div>
+
+      <!-- Kasa risk tracker -->
+      <div class="summary-card" id="cardRisk">
+        <div class="summary-label">Kasa Riski (%10 limit)</div>
+        <div class="summary-val" id="sumRiskPct">0%</div>
+        <div class="summary-sub" id="sumRiskAmt">$0 / $100</div>
+        <div class="tracker-bar">
+          <div class="tracker-fill safe" id="riskFill" style="width:0%"></div>
+          <div class="tracker-marker" style="left:100%"></div>
+        </div>
+      </div>
+
+      <!-- Daily %8 stop tracker -->
+      <div class="summary-card" id="cardDaily">
+        <div class="summary-label">Bugünkü Kayıp (%8 stop)</div>
+        <div class="summary-val" id="sumDailyPct">0%</div>
+        <div class="summary-sub" id="sumDailyAmt">$0 / $70</div>
+        <div class="tracker-bar">
+          <div class="tracker-fill safe" id="dailyFill" style="width:0%"></div>
+        </div>
+        <input type="number" class="input" id="dailyLossInput" placeholder="Bugünkü kayıp ($)" style="margin-top:10px; font-size:12px;" value="0" step="1" />
+      </div>
+    </div>
+  </div>
+
+</div>
+</div><!-- /viewPlanner -->
+
+<!-- ===== PORTFOLIO VIEW ===== -->
+<div class="view" id="viewPortfolio">
+  <div class="portfolio-header">
+    <div class="portfolio-meta">
+      <span>Cüzdan: <strong id="pfWallet">$0</strong></span>
+      <span>Margin Tipi: <strong id="pfMargin">CROSS</strong></span>
+      <span>Pozisyon: <strong id="pfCount">0</strong></span>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <button class="btn btn-small" id="btnPfRefresh">↻ Fiyatları Yenile</button>
+      <button class="btn btn-small" id="btnPfClear">Tümünü Temizle</button>
+    </div>
+  </div>
+
+  <div id="pfEmpty" class="empty-portfolio">
+    <div class="empty-portfolio-icon">⬡</div>
+    <div class="empty-portfolio-title">PORTFÖY BOŞ</div>
+    <div class="empty-portfolio-text">
+      Aynı anda açık birden fazla pozisyonun toplam likidasyon riskini görmek için pozisyon ekle.
+      Cross margin'de bir pozisyondaki zarar diğerlerinin liq fiyatını yaklaştırır — bu görünüm
+      o etkiyi anlık olarak hesaplar.
+    </div>
+    <button class="btn btn-primary" id="btnAddFirstPos">+ Setup Planner'da Başla</button>
+  </div>
+
+  <div id="pfContent" style="display:none;">
+
+    <!-- Combined Dashboard -->
+    <div class="dash-grid">
+      <div class="dash-card gold">
+        <div class="dash-card-label">Toplam Notional</div>
+        <div class="dash-card-val gold" id="dashNotional">$0</div>
+        <div class="dash-card-sub" id="dashNotionalSub">Margin: $0</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-label">Anlık Toplam PnL</div>
+        <div class="dash-card-val" id="dashPnl">$0</div>
+        <div class="dash-card-sub" id="dashPnlPct">0.0%</div>
+      </div>
+      <div class="dash-card red">
+        <div class="dash-card-label">Kasa Kullanımı</div>
+        <div class="dash-card-val" id="dashUsage">0%</div>
+        <div class="dash-card-sub" id="dashUsageSub">$0 / $0</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-label">Portföy Risk Skoru</div>
+        <div class="dash-card-val" id="dashRisk">0</div>
+        <div class="dash-card-sub" id="dashRiskSub">0 – 100 (yüksek = riskli)</div>
+      </div>
+    </div>
+
+    <!-- Risk Heatmap -->
+    <div class="risk-map">
+      <div class="risk-map-title">
+        <span>RİSK HARİTASI · LİQ MESAFELERİ</span>
+        <div class="risk-map-legend">
+          <div class="legend-item"><span class="legend-dot safe"></span>Güvenli (>%30)</div>
+          <div class="legend-item"><span class="legend-dot warn"></span>Uyarı (%15-30)</div>
+          <div class="legend-item"><span class="legend-dot danger"></span>Tehlike (&lt;%15)</div>
+        </div>
+      </div>
+      <div class="risk-map-grid" id="riskGrid"></div>
+    </div>
+
+    <!-- Liq Distance Bar Chart -->
+    <div class="liq-bars">
+      <div class="risk-map-title" style="margin-bottom:18px;">
+        <span>LİKİDASYON MESAFE BAR'LARI</span>
+        <span style="font-size:10px; color:var(--text-dim); text-transform:none; letter-spacing:0;">Beyaz dikey çizgi = anlık fiyat</span>
+      </div>
+      <div id="liqBars"></div>
+    </div>
+
+    <!-- Price Axis Chart -->
+    <div class="price-axis-chart">
+      <div class="risk-map-title" style="margin-bottom:18px;">
+        <span>FİYAT AKSİ GRAFİĞİ</span>
+        <span style="font-size:10px; color:var(--text-dim); text-transform:none; letter-spacing:0;">
+          <span style="color:var(--gold);">●</span> Giriş &nbsp;
+          <span style="color:var(--text);">●</span> Anlık &nbsp;
+          <span style="color:var(--red);">●</span> Liq &nbsp;
+          <span style="color:var(--green);">●</span> +30% TP
+        </span>
+      </div>
+      <div id="priceAxis"></div>
+    </div>
+
+    <!-- Position Cards -->
+    <div class="risk-map-title" style="margin-bottom:14px;">
+      <span>POZİSYON KARTLARI</span>
+    </div>
+    <div class="pos-cards" id="posCards"></div>
+  </div>
+</div><!-- /viewPortfolio -->
+
+<div class="footer">Wolf System · <span>cryptowolfhp.com</span> · @CryptoWolfHP</div>
+
+</div>
+
+<!-- ===== Toast ===== -->
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+
+// ===== STATE =====
+const state = {
+  coin: null,            // { symbol, lastPrice, ... }
+  side: 'LONG',
+  leverage: 10,
+  wallet: 1000,
+  marginType: 'CROSS',
+  firstAmount: 100,      // İlk işlem miktarı ($)
+  rows: [],              // [{ price, amount }]
+  livePrice: null,
+  liveInterval: null,
+  editingPosId: null,    // Düzenleme modu - portföydeki pozisyon ID'si
+};
+
+// State for one row: { price: Number|null, amount: Number|null }
+function freshRow() { return { price: null, amount: null }; }
+
+// Compute martingale amount for row i based on firstAmount
+// Row 0 (GİRİŞ) = firstAmount
+// Row i (Ei, i>=1) = sum of all previous amounts (= current cumulative position)
+// So row amounts: firstAmount, firstAmount, 2*firstAmount, 4*firstAmount, 8*firstAmount, ...
+function computeMartingaleAmount(i, firstAmount) {
+  const f = parseFloat(firstAmount);
+  if (isNaN(f) || f <= 0) return null;
+  if (i === 0) return f;
+  // i=1: cumulative after row 0 = f, so add f => row 1 amount = f
+  // i=2: cumulative after row 1 = 2f, so add 2f => row 2 amount = 2f
+  // i=3: cumulative after row 2 = 4f, so add 4f => row 3 amount = 4f
+  // i=4: row 4 amount = 8f, etc.
+  // General: row i amount = f * 2^(i-1) for i >= 1
+  return f * Math.pow(2, i - 1);
+}
+
+// Initialize with GIRIS + 3 empty add rows
+function defaultRows() {
+  return [freshRow(), freshRow(), freshRow(), freshRow()];
+}
+state.rows = defaultRows();
+
+// ===== BINANCE FUTURES SYMBOLS =====
+let allSymbols = [];     // [{symbol, lastPrice, change, volume, fundingRate}]
+let symbolsLoaded = false;
+
+async function loadBinanceSymbols() {
+  try {
+    // Get all USDT-margined perpetual futures with 24h stats (temiz evren: exchangeInfo)
+    const [res, iRes] = await Promise.all([
+      fetch('https://web-production-2bdde.up.railway.app/fapi/v1/ticker/24hr'),
+      fetch('https://web-production-2bdde.up.railway.app/fapi/v1/exchangeInfo')
+    ]);
+    if (!res.ok || !iRes.ok) throw new Error('API err');
+    const data = await res.json();
+    const info = await iRes.json();
+    const validPerp = new Set(
+      (info.symbols || [])
+        .filter(s => s.contractType === 'PERPETUAL' && s.quoteAsset === 'USDT' && s.status === 'TRADING')
+        .map(s => s.symbol)
+    );
+    allSymbols = data
+      .filter(d => validPerp.has(d.symbol))
+      .map(d => ({
+        symbol: d.symbol,
+        lastPrice: parseFloat(d.lastPrice),
+        change: parseFloat(d.priceChangePercent),
+        volume: parseFloat(d.quoteVolume),
+      }))
+      .sort((a, b) => b.volume - a.volume);  // sort by volume desc
+    symbolsLoaded = true;
+  } catch (e) {
+    console.warn('Binance API failed, using offline fallback', e);
+    allSymbols = [];
+    symbolsLoaded = true;  // mark as done even if failed
+  }
+}
+
+async function fetchLivePrice(symbol) {
+  try {
+    const [tick, fund] = await Promise.all([
+      fetch(`https://web-production-2bdde.up.railway.app/fapi/v1/ticker/24hr?symbol=${symbol}`).then(r => r.json()),
+      fetch(`https://web-production-2bdde.up.railway.app/fapi/v1/premiumIndex?symbol=${symbol}`).then(r => r.json()),
+    ]);
+    return {
+      lastPrice: parseFloat(tick.lastPrice),
+      change: parseFloat(tick.priceChangePercent),
+      volume: parseFloat(tick.quoteVolume),
+      fundingRate: parseFloat(fund.lastFundingRate) * 100,
+    };
+  } catch (e) { return null; }
+}
+
+// ===== COIN AUTOCOMPLETE =====
+const coinInput = document.getElementById('coinInput');
+const coinList = document.getElementById('coinList');
+let activeIdx = -1;
+let filteredCoins = [];
+let sortMode = 'volume';  // 'volume' | 'gainers' | 'losers'
+
+function applySort(list) {
+  if (sortMode === 'gainers') return [...list].sort((a, b) => b.change - a.change);
+  if (sortMode === 'losers')  return [...list].sort((a, b) => a.change - b.change);
+  return list;  // volume = already sorted by volume desc in loadBinanceSymbols
+}
+
+document.getElementById('sortGainers').addEventListener('click', () => {
+  sortMode = sortMode === 'gainers' ? 'volume' : 'gainers';
+  document.getElementById('sortGainers').classList.toggle('active', sortMode === 'gainers');
+  document.getElementById('sortLosers').classList.remove('active');
+  showCoinResults(coinInput.value);
+  if (!coinList.classList.contains('open')) {
+    coinInput.focus();
+  }
+});
+document.getElementById('sortLosers').addEventListener('click', () => {
+  sortMode = sortMode === 'losers' ? 'volume' : 'losers';
+  document.getElementById('sortLosers').classList.toggle('active', sortMode === 'losers');
+  document.getElementById('sortGainers').classList.remove('active');
+  showCoinResults(coinInput.value);
+  if (!coinList.classList.contains('open')) {
+    coinInput.focus();
+  }
+});
+
+coinInput.addEventListener('focus', () => {
+  if (!symbolsLoaded) {
+    coinList.innerHTML = '<div class="loading-mark">Binance Futures listesi yükleniyor…</div>';
+    coinList.classList.add('open');
+  } else {
+    showCoinResults(coinInput.value);
+  }
+});
+
+coinInput.addEventListener('input', () => {
+  showCoinResults(coinInput.value);
+});
+
+coinInput.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowDown') { e.preventDefault(); activeIdx = Math.min(activeIdx + 1, filteredCoins.length - 1); renderCoinList(); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); activeIdx = Math.max(activeIdx - 1, 0); renderCoinList(); }
+  else if (e.key === 'Enter') { e.preventDefault(); if (activeIdx >= 0 && filteredCoins[activeIdx]) selectCoin(filteredCoins[activeIdx]); }
+  else if (e.key === 'Escape') { coinList.classList.remove('open'); }
+});
+
+document.addEventListener('click', (e) => {
+  if (!coinInput.contains(e.target) && !coinList.contains(e.target)) coinList.classList.remove('open');
+});
+
+function showCoinResults(query) {
+  if (!symbolsLoaded || allSymbols.length === 0) {
+    coinList.innerHTML = '<div class="loading-mark">Binance listesi yüklenemedi. İnternet bağlantısını kontrol et veya coin adını manuel gir.</div>';
+    coinList.classList.add('open');
+    filteredCoins = [];
+    return;
+  }
+  const q = (query || '').toUpperCase().trim();
+  let base = q ? allSymbols.filter(s => s.symbol.includes(q)) : allSymbols;
+  base = applySort(base);
+  filteredCoins = base.slice(0, 50);
+  activeIdx = filteredCoins.length > 0 ? 0 : -1;
+  renderCoinList();
+  coinList.classList.add('open');
+}
+
+function renderCoinList() {
+  if (filteredCoins.length === 0) {
+    coinList.innerHTML = '<div class="loading-mark">Eşleşen coin yok.</div>';
+    return;
+  }
+  coinList.innerHTML = filteredCoins.map((s, i) => `
+    <div class="coin-item ${i === activeIdx ? 'active' : ''}" data-symbol="${s.symbol}">
+      <span>${s.symbol}</span>
+      <span class="coin-item-price">${formatPrice(s.lastPrice)} <span style="color:${s.change>=0 ? 'var(--green)' : 'var(--red)'}">${s.change>=0?'+':''}${s.change.toFixed(2)}%</span></span>
+    </div>
+  `).join('');
+  coinList.querySelectorAll('.coin-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const sym = el.dataset.symbol;
+      const c = allSymbols.find(x => x.symbol === sym);
+      if (c) selectCoin(c);
+    });
+  });
+}
+
+async function selectCoin(coin) {
+  state.coin = coin;
+  coinInput.value = coin.symbol;
+  coinList.classList.remove('open');
+  // Start live price polling
+  startLivePolling();
+  // Use last price as default first row price if empty
+  if (state.rows[0].price == null) {
+    state.rows[0].price = coin.lastPrice;
+    // Update just the price input in row 0
+    const priceInput = document.querySelector('input.cell-input[data-i="0"][data-k="price"]');
+    if (priceInput) priceInput.value = coin.lastPrice;
+  }
+  recompute();
+  updateSummary();
+}
+
+function startLivePolling() {
+  stopLivePolling();
+  if (!state.coin) return;
+  document.getElementById('liveStrip').style.display = 'flex';
+  const tick = async () => {
+    const data = await fetchLivePrice(state.coin.symbol);
+    if (data) {
+      state.livePrice = data.lastPrice;
+      const el = document.getElementById('livePrice');
+      el.textContent = formatPrice(data.lastPrice);
+      el.classList.add('pulse');
+      setTimeout(() => el.classList.remove('pulse'), 500);
+      const changeEl = document.getElementById('liveChange');
+      changeEl.textContent = `${data.change>=0?'+':''}${data.change.toFixed(2)}%`;
+      changeEl.style.color = data.change >= 0 ? 'var(--green)' : 'var(--red)';
+      document.getElementById('liveVolume').textContent = formatVol(data.volume);
+      const fEl = document.getElementById('liveFunding');
+      fEl.textContent = `${data.fundingRate>=0?'+':''}${data.fundingRate.toFixed(4)}%`;
+      fEl.style.color = Math.abs(data.fundingRate) > 0.05 ? 'var(--red)' : 'var(--text)';
+    }
+  };
+  tick();
+  state.liveInterval = setInterval(tick, 5000);
+}
+
+function stopLivePolling() {
+  if (state.liveInterval) clearInterval(state.liveInterval);
+  state.liveInterval = null;
+}
+
+// ===== UTILITIES =====
+function formatVol(v) {
+  if (v == null) return '—';
+  if (v >= 1e9) return (v/1e9).toFixed(2)+'B';
+  if (v >= 1e6) return (v/1e6).toFixed(2)+'M';
+  if (v >= 1e3) return (v/1e3).toFixed(2)+'K';
+  return v.toFixed(0);
+}
+function formatUsd(v, signed=false) {
+  if (v == null || isNaN(v)) return '—';
+  const sign = signed && v > 0 ? '+' : '';
+  return sign + '$' + Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace(',','×').replace('.', ',').replace('×','.');
+}
+
+// ===== LIQUIDATION CALCULATION =====
+// Simplified Binance USDT-margined perpetual futures liquidation formula
+// For ISOLATED: liq_price ≈ avg_entry × (1 ± (1/lev - MMR) / (1 ∓ MMR))
+// For CROSS: more complex, depends on whole wallet. We approximate with maintenance margin rate ~0.5%
+// Use MMR = 0.005 (0.5%, typical for most pairs at low tier)
+// Sign convention:
+//   LONG  liq = avg × (1 - 1/lev + MMR) / (1 - MMR)  -- approx isolated
+//   SHORT liq = avg × (1 + 1/lev - MMR) / (1 + MMR)
+// For CROSS we approximate using available margin = wallet (whole) minus used margin in other positions (assumed 0)
+const MMR = 0.005;
+
+function computeLiquidation(avgPrice, side, leverage, marginType, totalNotional, wallet) {
+  if (!avgPrice || !leverage) return null;
+  // Position margin = notional / leverage
+  const positionMargin = totalNotional / leverage;
+  // Available margin (Cross uses whole wallet; Isolated uses only position margin)
+  const availableMargin = marginType === 'CROSS' ? wallet : positionMargin;
+  // Effective leverage in terms of liq calc: notional / availableMargin
+  if (availableMargin <= 0) return null;
+  const effLev = totalNotional / availableMargin;
+
+  if (side === 'LONG') {
+    // price drop that wipes available margin: dP/P = (availableMargin - notional*MMR) / notional
+    // liq = avg * (1 - (1 - MMR*effLev) / effLev)  -- simplified
+    const liq = avgPrice * (1 - (1 - MMR * effLev) / effLev);
+    return Math.max(0, liq);
+  } else {
+    const liq = avgPrice * (1 + (1 - MMR * effLev) / effLev);
+    return liq;
+  }
+}
+
+// Helper: parse number that accepts both comma and dot
+function parseDecimal(v) {
+  if (v == null || v === '') return null;
+  const s = String(v).trim().replace(',', '.');
+  const n = parseFloat(s);
+  return isNaN(n) ? null : n;
+}
+
+// Higher precision price formatter for shitcoins
+function formatPrice(p) {
+  if (p == null || isNaN(p)) return '—';
+  if (p >= 1000) return p.toFixed(2);
+  if (p >= 1) return p.toFixed(4);
+  if (p >= 0.01) return p.toFixed(5);
+  if (p >= 0.0001) return p.toFixed(7);
+  if (p >= 0.000001) return p.toFixed(9);
+  return p.toFixed(11);  // very small shitcoins
+}
+
+// ===== ROW RECOMPUTATION =====
+// Auto-fill amounts based on firstAmount + martingale schema
+function syncRowAmounts() {
+  state.rows.forEach((row, i) => {
+    row.amount = computeMartingaleAmount(i, state.firstAmount);
+  });
+}
+
+// Build full table once (when row count changes)
+function renderRowsFull() {
+  syncRowAmounts();
+  const tbody = document.getElementById('rowsBody');
+  tbody.innerHTML = '';
+  state.rows.forEach((row, i) => {
+    const isFirst = i === 0;
+    const label = isFirst ? 'GİRİŞ' : 'E' + i;
+    const tr = document.createElement('tr');
+    tr.className = isFirst ? 'entry-row' : 'adds-row';
+    tr.dataset.i = i;
+    const amountDisplay = row.amount != null ? row.amount.toFixed(2) : '';
+    tr.innerHTML = `
+      <td>${label}</td>
+      <td><input type="text" inputmode="decimal" class="cell-input" data-i="${i}" data-k="price" value="${row.price ?? ''}" placeholder="—" /></td>
+      <td><input type="text" class="cell-input cell-amount-auto" data-i="${i}" value="${amountDisplay}" readonly title="Martingale otomatik hesaplar" /></td>
+      <td class="cell-cum cell-readonly">—</td>
+      <td class="cell-avg-val cell-avg">—</td>
+      <td class="cell-liq-val cell-liq">—</td>
+      <td class="cell-tp-val cell-tp">—</td>
+      <td class="cell-sl-val" style="color:var(--red)">—</td>
+      <td class="cell-risk cell-readonly">—</td>
+      <td>${i >= 1 ? `<button class="icon-btn delete" data-del="${i}">×</button>` : ''}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+  // Hook price inputs only (amount is read-only)
+  tbody.querySelectorAll('input.cell-input[data-k="price"]').forEach(inp => {
+    inp.addEventListener('input', (e) => {
+      const i = parseInt(e.target.dataset.i);
+      const raw = e.target.value;
+      const parsed = parseDecimal(raw);
+      state.rows[i].price = parsed;
+      recompute();
+      updateSummary();
+    });
+    inp.addEventListener('blur', (e) => {
+      const v = e.target.value.trim();
+      if (v && v.includes(',')) e.target.value = v.replace(',', '.');
+    });
+  });
+  tbody.querySelectorAll('button[data-del]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const i = parseInt(e.target.dataset.del);
+      state.rows.splice(i, 1);
+      renderRowsFull();
+      recompute();
+      updateSummary();
+    });
+  });
+}
+
+// Light recompute: only updates read-only cells, never touches inputs
+function recompute() {
+  const tbody = document.getElementById('rowsBody');
+  let cumQty = 0;
+  let cumCost = 0;
+  let cumAmount = 0;
+  const wallet = state.wallet;
+  const lev = state.leverage;
+  const side = state.side;
+
+  state.rows.forEach((row, i) => {
+    const p = row.price;
+    const a = row.amount;
+    const isValid = p != null && p > 0 && a != null && a > 0;
+
+    const tr = tbody.querySelector(`tr[data-i="${i}"]`);
+    if (!tr) return;
+
+    if (!isValid) {
+      tr.querySelector('.cell-cum').textContent = '—';
+      tr.querySelector('.cell-avg-val').textContent = '—';
+      tr.querySelector('.cell-liq-val').textContent = '—';
+      tr.querySelector('.cell-tp-val').textContent = '—';
+      tr.querySelector('.cell-sl-val').textContent = '—';
+      tr.querySelector('.cell-risk').textContent = '—';
+      tr.querySelector('.cell-risk').classList.remove('cell-neg');
+      return;
+    }
+
+    const qty = a / p;
+    cumQty += qty;
+    cumCost += qty * p;
+    cumAmount += a;
+    const avgPrice = cumCost / cumQty;
+    const liq = computeLiquidation(avgPrice, side, lev, state.marginType, cumAmount, wallet);
+    const moveFrac = 0.30 / lev;
+    const tpPrice = side === 'LONG' ? avgPrice * (1 + moveFrac) : avgPrice * (1 - moveFrac);
+
+    // SL: kasa'nın %8'i = max dolar kayıp
+    // Kayıp = (avg - sl) * qty = wallet * 0.08    (Long)
+    // Kayıp = (sl - avg) * qty = wallet * 0.08    (Short)
+    // -> sl - avg = ±wallet*0.08 / qty
+    // -> sl = avg ∓ wallet*0.08 / cumQty
+    // Edge case: if notional < max loss (8% wallet), SL is impossible without negative price
+    // -> show "—" indicating this position cannot lose 8% wallet alone
+    const maxLoss = wallet * 0.08;
+    let slPrice = null;
+    if (cumQty > 0 && cumAmount > maxLoss) {
+      // Pozisyon, max loss'tan büyük → SL fiyatı geçerli
+      const slPriceDelta = maxLoss / cumQty;
+      slPrice = side === 'LONG' ? avgPrice - slPriceDelta : avgPrice + slPriceDelta;
+      // Long için SL negatif olamaz (fiyat 0'a kadar düşse bile kayıp = notional)
+      if (side === 'LONG' && slPrice < 0) slPrice = null;
+    }
+
+    const marginUsed = cumAmount / lev;
+    const riskPct = wallet > 0 ? (marginUsed / wallet) * 100 : 0;
+
+    tr.querySelector('.cell-cum').textContent = formatUsd(cumAmount);
+    tr.querySelector('.cell-avg-val').textContent = formatPrice(avgPrice);
+    tr.querySelector('.cell-liq-val').textContent = liq != null ? formatPrice(liq) : '—';
+    tr.querySelector('.cell-tp-val').textContent = formatPrice(tpPrice);
+    tr.querySelector('.cell-sl-val').textContent = slPrice != null ? formatPrice(slPrice) : '— (uzak)';
+    const riskCell = tr.querySelector('.cell-risk');
+    riskCell.textContent = riskPct.toFixed(1) + '%';
+    riskCell.classList.toggle('cell-neg', riskPct > 10);
+  });
+}
+
+function renderRows() {
+  renderRowsFull();
+  recompute();
+}
+
+function updateSummary() {
+  // Find last fully valid row
+  let lastValid = -1;
+  let cumQty = 0, cumCost = 0, cumAmount = 0;
+  state.rows.forEach((r, i) => {
+    const p = parseFloat(r.price), a = parseFloat(r.amount);
+    if (!isNaN(p) && p > 0 && !isNaN(a) && a > 0) {
+      cumQty += a / p;
+      cumCost += (a / p) * p;  // = a
+      cumAmount += a;
+      lastValid = i;
+    }
+  });
+
+  if (lastValid < 0) {
+    document.getElementById('sumNotional').textContent = '$0';
+    document.getElementById('sumMargin').textContent = 'Margin: $0';
+    document.getElementById('sumLiq').textContent = '—';
+    document.getElementById('sumLiqPct').textContent = '— uzakta';
+    document.getElementById('sumTP').textContent = '—';
+    document.getElementById('sumTPProfit').textContent = 'Kazanç: —';
+    document.getElementById('sumAvg').textContent = '—';
+    document.getElementById('sumRiskPct').textContent = '0%';
+    document.getElementById('sumRiskAmt').textContent = `$0 / $${(state.wallet*0.1).toFixed(0)}`;
+    document.getElementById('riskFill').style.width = '0%';
+    document.getElementById('riskFill').className = 'tracker-fill safe';
+    updateDailyTracker();
+    return;
+  }
+
+  const avgPrice = cumCost / cumQty;
+  const liq = computeLiquidation(avgPrice, state.side, state.leverage, state.marginType, cumAmount, state.wallet);
+  const moveFrac = 0.30 / state.leverage;
+  const tpPrice = state.side === 'LONG' ? avgPrice * (1 + moveFrac) : avgPrice * (1 - moveFrac);
+  const marginUsed = cumAmount / state.leverage;
+  const riskAbs = marginUsed;
+  const riskLimit = state.wallet * 0.10;
+  const riskPct = state.wallet > 0 ? (marginUsed / state.wallet) * 100 : 0;
+  const tpProfit = (cumAmount / state.leverage) * 0.30;  // %30 of margin
+
+  document.getElementById('sumNotional').textContent = formatUsd(cumAmount);
+  document.getElementById('sumMargin').textContent = `Margin: ${formatUsd(marginUsed)}`;
+  document.getElementById('sumLiq').textContent = liq != null ? formatPrice(liq) : '—';
+  const livePrice = state.livePrice;
+  if (liq != null && livePrice) {
+    const dist = ((Math.abs(livePrice - liq) / livePrice) * 100);
+    document.getElementById('sumLiqPct').textContent = `Anlık fiyattan ${dist.toFixed(2)}% uzakta`;
+  } else if (liq != null) {
+    const dist = ((Math.abs(avgPrice - liq) / avgPrice) * 100);
+    document.getElementById('sumLiqPct').textContent = `Ortalamadan ${dist.toFixed(2)}% uzakta`;
+  } else {
+    document.getElementById('sumLiqPct').textContent = '—';
+  }
+  document.getElementById('sumTP').textContent = formatPrice(tpPrice);
+  document.getElementById('sumTPProfit').textContent = `Kazanç: ${formatUsd(tpProfit, true)}`;
+  document.getElementById('sumAvg').textContent = formatPrice(avgPrice);
+
+  // Risk bar
+  document.getElementById('sumRiskPct').textContent = `${riskPct.toFixed(1)}%`;
+  document.getElementById('sumRiskAmt').textContent = `${formatUsd(marginUsed)} / ${formatUsd(riskLimit)}`;
+  const ratio = Math.min(riskPct / 10, 2);  // 10% is the limit
+  const fillEl = document.getElementById('riskFill');
+  fillEl.style.width = Math.min(ratio * 100, 100) + '%';
+  fillEl.className = 'tracker-fill ' + (riskPct < 7 ? 'safe' : riskPct < 10 ? 'warn' : 'danger');
+  const cardRisk = document.getElementById('cardRisk');
+  cardRisk.className = 'summary-card' + (riskPct >= 10 ? ' danger' : '');
+  document.getElementById('sumRiskPct').className = 'summary-val ' + (riskPct >= 10 ? 'red' : riskPct >= 7 ? 'gold' : 'green');
+
+  updateDailyTracker();
+}
+
+function updateDailyTracker() {
+  const lossAbs = parseFloat(document.getElementById('dailyLossInput').value) || 0;
+  const limit = state.wallet * 0.08;
+  const pct = state.wallet > 0 ? (lossAbs / state.wallet) * 100 : 0;
+  document.getElementById('sumDailyPct').textContent = `${pct.toFixed(1)}%`;
+  document.getElementById('sumDailyAmt').textContent = `${formatUsd(lossAbs)} / ${formatUsd(limit)}`;
+  const ratio = Math.min(pct / 8, 2);
+  const fillEl = document.getElementById('dailyFill');
+  fillEl.style.width = Math.min(ratio * 100, 100) + '%';
+  fillEl.className = 'tracker-fill ' + (pct < 5 ? 'safe' : pct < 8 ? 'warn' : 'danger');
+  const cardDaily = document.getElementById('cardDaily');
+  cardDaily.className = 'summary-card' + (pct >= 8 ? ' danger' : '');
+  document.getElementById('sumDailyPct').className = 'summary-val ' + (pct >= 8 ? 'red' : pct >= 5 ? 'gold' : 'green');
+}
+
+document.getElementById('dailyLossInput').addEventListener('input', updateDailyTracker);
+
+// ===== SIDE TABS =====
+document.querySelectorAll('.tab[data-side]').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab[data-side]').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    state.side = tab.dataset.side;
+    recompute();
+  });
+});
+
+// ===== Setup inputs =====
+document.getElementById('leverageInput').addEventListener('input', (e) => { state.leverage = parseDecimal(e.target.value) || 10; recompute(); updateSummary(); });
+document.getElementById('walletInput').addEventListener('input', (e) => { state.wallet = parseDecimal(e.target.value) || 0; recompute(); updateSummary(); });
+document.getElementById('marginType').addEventListener('change', (e) => { state.marginType = e.target.value; recompute(); updateSummary(); });
+document.getElementById('firstAmount').addEventListener('input', (e) => {
+  state.firstAmount = parseDecimal(e.target.value) || 0;
+  // Update amount cells in table without re-rendering inputs
+  syncRowAmounts();
+  document.querySelectorAll('input.cell-amount-auto').forEach((inp, i) => {
+    inp.value = state.rows[i]?.amount != null ? state.rows[i].amount.toFixed(2) : '';
+  });
+  recompute();
+  updateSummary();
+});
+document.getElementById('firstAmount').addEventListener('blur', (e) => {
+  const v = e.target.value.trim();
+  if (v && v.includes(',')) e.target.value = v.replace(',', '.');
+});
+
+// ===== Add row =====
+document.getElementById('btnAddRow').addEventListener('click', () => {
+  if (state.rows.length >= 15) { toast('En fazla 15 ekleme satırı.', 'error'); return; }
+  state.rows.push(freshRow());
+  renderRows();
+});
+
+// ===== New / Reset =====
+document.getElementById('btnNew').addEventListener('click', () => {
+  if (confirm('Mevcut setup\'ı temizleyip yeni başlatılsın mı?')) resetSetup();
+});
+
+function resetSetup() {
+  stopLivePolling();
+  state.coin = null;
+  state.side = 'LONG';
+  state.leverage = 10;
+  state.wallet = parseFloat(document.getElementById('walletInput').value) || 1000;  // keep wallet
+  state.rows = defaultRows();
+  state.livePrice = null;
+  coinInput.value = '';
+  document.querySelectorAll('.tab[data-side]').forEach(t => t.classList.toggle('active', t.dataset.side === 'LONG'));
+  document.getElementById('leverageInput').value = 10;
+  document.getElementById('liveStrip').style.display = 'none';
+  renderRows();
+}
+
+// ===== escapeHtml utility =====
+function escapeHtml(str) {
+  return str.replace(/[<>&"]/g, c => ({ '<':'&lt;', '>':'&gt;', '&':'&amp;', '"':'&quot;' }[c]));
+}
+
+
+// ===== TRANSFER TO PORTFOLIO =====
+// GİRİŞ → açık pozisyon olarak portföye gönderilir
+// E1/E2/E3 → bekleyen emir olarak iliştirilir
+function transferToPortfolio() {
+  // Doğrulama
+  const symbol = state.coin?.symbol || coinInput.value.trim().toUpperCase();
+  if (!symbol) {
+    toast('Coin seç önce.', 'error');
+    return;
+  }
+  const entryRow = state.rows[0];
+  if (!entryRow.price || !state.firstAmount) {
+    toast('GİRİŞ fiyatı ve ilk işlem tutarı gerekli.', 'error');
+    return;
+  }
+
+  // GİRİŞ → aktif pozisyon
+  const avgPrice = entryRow.price;
+  const entryNotional = state.firstAmount;
+  const qty = entryNotional / avgPrice;
+
+  // E1/E2/E3 → bekleyen emirler (sadece fiyatı dolu olanlar)
+  const pending = [];
+  for (let i = 1; i < state.rows.length; i++) {
+    const r = state.rows[i];
+    if (r.price && r.amount) {
+      pending.push({
+        label: `E${i}`,
+        price: r.price,
+        amount: r.amount,
+        status: 'waiting',
+      });
+    }
+  }
+
+  // Yeni pozisyon oluştur
+  const newPos = freshPos();
+  newPos.symbol = symbol;
+  newPos.side = state.side;
+  newPos.avg = avgPrice;
+  newPos.qty = qty;
+  newPos.leverage = state.leverage;
+  newPos.currentPrice = state.livePrice || avgPrice;
+  newPos.pendingEntries = pending;
+  newPos.firstAmount = state.firstAmount;
+  newPos.planMeta = {
+    transferredAt: Date.now(),
+  };
+
+  // Portföye ekle
+  portfolio.positions.push(newPos);
+  // Cüzdanı eşitle
+  portfolio.walletPf = state.wallet;
+  persistPortfolio();
+
+  // Bildirim
+  const pendingTxt = pending.length > 0 ? ` + ${pending.length} bekleyen ekleme` : '';
+  toast(`✓ ${symbol} ${state.side} Portföy'e eklendi${pendingTxt}.`, 'success');
+
+  // Setup'ı sıfırla (yeni plana hazır ol)
+  setTimeout(() => {
+    resetSetup();
+    updateWalletOverview();
+    updateActivePosMini();
+  }, 600);
+
+  // Bildirim sayacını güncelle
+  updatePortfolioCount();
+  updateWalletOverview();
+  updateActivePosMini();
+}
+
+function updatePortfolioCount() {
+  const cnt = document.getElementById('portfolioCount');
+  if (cnt) cnt.textContent = portfolio.positions.length;
+}
+
+// ===== CANLI KASA TAKİBİ =====
+// Aktif pozisyonların margin'i + anlık PnL → kullanılabilir kasa
+function updateWalletOverview() {
+  const wlTotal = document.getElementById('wlTotal');
+  const wlMargin = document.getElementById('wlMargin');
+  const wlPnl = document.getElementById('wlPnl');
+  const wlAvailable = document.getElementById('wlAvailable');
+  if (!wlTotal) return;  // Bu görünümde değiliz
+
+  const total = portfolio.walletPf || 0;
+  let totalMargin = 0;
+  let totalPnl = 0;
+
+  portfolio.positions.forEach(p => {
+    if (!p.avg || !p.qty || !p.leverage) return;
+    const notional = p.avg * p.qty;
+    const margin = notional / p.leverage;
+    totalMargin += margin;
+    if (p.currentPrice != null) {
+      const pnl = p.side === 'LONG' ? (p.currentPrice - p.avg) * p.qty : (p.avg - p.currentPrice) * p.qty;
+      totalPnl += pnl;
+    }
+  });
+
+  const available = total - totalMargin + totalPnl;
+
+  wlTotal.textContent = formatUsd(total);
+  wlMargin.textContent = formatUsd(totalMargin);
+  wlPnl.textContent = formatUsd(totalPnl, true);
+  wlPnl.className = 'wallet-val ' + (totalPnl > 0 ? 'green' : totalPnl < 0 ? 'red' : '');
+  wlAvailable.textContent = formatUsd(available);
+  wlAvailable.className = 'wallet-val ' + (available < total * 0.3 ? 'red' : available < total * 0.5 ? 'gold' : 'green');
+}
+
+// Mini pozisyon listesi (sağ paneldeki açık pozisyonlar)
+function updateActivePosMini() {
+  const container = document.getElementById('activePosMini');
+  if (!container) return;
+
+  if (portfolio.positions.length === 0) {
+    container.innerHTML = '<div class="empty-state-mini">Henüz açık pozisyon yok. Setup\'ı doldurup "Kaydet" → otomatik portföye eklenir.</div>';
+    return;
+  }
+
+  container.innerHTML = portfolio.positions.map(p => {
+    if (!p.avg || !p.qty) return '';
+    const notional = p.avg * p.qty;
+    const margin = notional / p.leverage;
+    let pnl = 0;
+    if (p.currentPrice != null) {
+      pnl = p.side === 'LONG' ? (p.currentPrice - p.avg) * p.qty : (p.avg - p.currentPrice) * p.qty;
+    }
+    const pnlPct = margin > 0 ? (pnl / margin) * 100 : 0;
+    const pnlClass = pnl >= 0 ? 'green' : 'red';
+    const sideClass = p.side.toLowerCase();
+
+    // Bekleyen ekler sayısı
+    const waitingCount = (p.pendingEntries || []).filter(pe => pe.status === 'waiting').length;
+    const filledCount = (p.pendingEntries || []).filter(pe => pe.status === 'filled').length;
+
+    return `
+      <div class="active-pos-item ${sideClass}" data-pos-id="${p.id}">
+        <div class="active-pos-head">
+          <span class="active-pos-sym">${escapeHtml(p.symbol)}</span>
+          <span class="active-pos-side ${sideClass}">${p.side}</span>
+        </div>
+        <div class="active-pos-stats">
+          <span>${p.leverage}x · Margin: ${formatUsd(margin)}</span>
+          <span class="pnl-val ${pnlClass}">${formatUsd(pnl, true)} (${pnlPct.toFixed(1)}%)</span>
+        </div>
+        ${(p.pendingEntries && p.pendingEntries.length > 0) ? `
+          <div class="active-pos-stats" style="margin-top:4px;">
+            <span style="color: var(--gold-dim);">⏳ ${waitingCount} bekleyen · ✓ ${filledCount} alındı</span>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }).join('');
+
+  // Tıklama → portföy sekmesine geç
+  container.querySelectorAll('.active-pos-item').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelector('.tab-nav-item[data-view="portfolio"]').click();
+    });
+  });
+}
+
+document.getElementById('btnSave').addEventListener('click', transferToPortfolio);
+
+// ===== EDIT POSITION FROM PORTFOLIO =====
+// Portföydeki bir pozisyonu Setup Planner'a yükle (düzenleme için)
+function editPositionInPlanner(posId) {
+  const pos = portfolio.positions.find(p => p.id === posId);
+  if (!pos) return;
+  // Setup'a yükle
+  stopLivePolling();
+  state.side = pos.side;
+  state.leverage = pos.leverage;
+  state.wallet = portfolio.walletPf;
+  state.marginType = portfolio.marginTypePf;
+  state.firstAmount = pos.firstAmount || (pos.avg * pos.qty);
+
+  // GİRİŞ + bekleyen ekleri Setup'a yükle
+  const rows = [{ price: pos.avg, amount: state.firstAmount }];
+  (pos.pendingEntries || []).forEach(pe => {
+    rows.push({ price: pe.price, amount: pe.amount });
+  });
+  while (rows.length < 4) rows.push({ price: null, amount: null });
+  state.rows = rows.map(r => ({ price: r.price, amount: null }));
+
+  // UI'yı doldur
+  coinInput.value = pos.symbol;
+  document.getElementById('leverageInput').value = pos.leverage;
+  document.getElementById('walletInput').value = state.wallet;
+  document.getElementById('marginType').value = state.marginType;
+  document.getElementById('firstAmount').value = state.firstAmount;
+  document.querySelectorAll('.tab[data-side]').forEach(t => t.classList.toggle('active', t.dataset.side === pos.side));
+
+  // Coin'i bul ve live polling başlat
+  if (pos.symbol && symbolsLoaded) {
+    const c = allSymbols.find(s => s.symbol === pos.symbol);
+    if (c) { state.coin = c; startLivePolling(); }
+  }
+  renderRows();
+
+  // Planner sekmesine geç
+  document.querySelector('.tab-nav-item[data-view="planner"]').click();
+
+  // Düzenleme moduna gir - güncelleme ID'sini hatırla
+  state.editingPosId = posId;
+  // Kaydet butonunu Güncelle yap
+  const btnEx = document.getElementById('btnSave');
+  btnEx.innerHTML = '✓ Güncelle';
+  btnEx.title = 'Bu pozisyonu portföyde güncelle';
+
+  toast(`"${pos.symbol}" düzenleniyor. Değişiklikleri "Güncelle" ile kaydet.`, 'success');
+}
+
+// transferToPortfolio'yu düzenleme moduna duyarlı hale getirelim
+const originalTransfer = transferToPortfolio;
+window.transferToPortfolio = function() {
+  if (state.editingPosId) {
+    // Güncelleme modu
+    const pos = portfolio.positions.find(p => p.id === state.editingPosId);
+    if (!pos) { state.editingPosId = null; return originalTransfer(); }
+    const symbol = state.coin?.symbol || coinInput.value.trim().toUpperCase();
+    if (!symbol || !state.rows[0].price || !state.firstAmount) {
+      toast('Coin, GİRİŞ fiyatı ve ilk işlem tutarı gerekli.', 'error');
+      return;
+    }
+    pos.symbol = symbol;
+    pos.side = state.side;
+    pos.avg = state.rows[0].price;
+    pos.qty = state.firstAmount / pos.avg;
+    pos.leverage = state.leverage;
+    pos.firstAmount = state.firstAmount;
+    // Bekleyen ekleri güncelle (ama mevcut filled olanları koru!)
+    const oldPending = pos.pendingEntries || [];
+    const pending = [];
+    for (let i = 1; i < state.rows.length; i++) {
+      const r = state.rows[i];
+      if (r.price && r.amount) {
+        // Eski entry varsa filled status'u koru
+        const oldPe = oldPending.find(p => p.label === `E${i}`);
+        pending.push({
+          label: `E${i}`,
+          price: r.price,
+          amount: r.amount,
+          status: oldPe?.status || 'waiting'
+        });
+      }
+    }
+    pos.pendingEntries = pending;
+    portfolio.walletPf = state.wallet;
+    persistPortfolio();
+    toast(`✓ ${symbol} güncellendi.`, 'success');
+    // Çık
+    state.editingPosId = null;
+    const btnEx = document.getElementById('btnSave');
+    btnEx.innerHTML = '🐺 Kaydet → Portföye';
+    btnEx.title = '';
+    resetSetup();
+    updateWalletOverview();
+    updateActivePosMini();
+    // Portföy sekmesine git
+    document.querySelector('.tab-nav-item[data-view="portfolio"]').click();
+  } else {
+    originalTransfer();
+  }
+};
+// Eski listener'ı kaldırıp yenisini bağlayalım
+document.getElementById('btnSave').replaceWith(document.getElementById('btnSave').cloneNode(true));
+document.getElementById('btnSave').addEventListener('click', () => window.transferToPortfolio());
+
+
+
+// ===== Toast =====
+let toastTimer = null;
+function toast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// ===== TAB NAVIGATION =====
+document.querySelectorAll('.tab-nav-item').forEach(t => {
+  t.addEventListener('click', () => {
+    const view = t.dataset.view;
+    document.querySelectorAll('.tab-nav-item').forEach(x => x.classList.toggle('active', x.dataset.view === view));
+    document.querySelectorAll('.view').forEach(x => x.classList.toggle('active', x.id === 'view' + view.charAt(0).toUpperCase() + view.slice(1)));
+    if (view === 'portfolio') renderPortfolio();
+  });
+});
+
+// ===== PORTFOLIO STATE =====
+const PORTFOLIO_KEY = 'wolf_portfolio_v1';
+const portfolio = {
+  positions: [],   // [{ id, symbol, side, avg, qty, leverage, currentPrice, pendingEntries, firstAmount, planMeta }]
+  walletPf: 1000,
+  marginTypePf: 'CROSS',
+};
+
+function freshPos() {
+  return {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2,5),
+    symbol: '',
+    side: 'LONG',
+    avg: null,
+    qty: null,
+    leverage: 10,
+    currentPrice: null,
+    pendingEntries: [],  // [{ label: 'E1', price: 0.0012, amount: 100, status: 'waiting' }]
+    firstAmount: null,
+    planMeta: null,
+  };
+}
+
+function loadPortfolio() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(PORTFOLIO_KEY) || '{}');
+    portfolio.positions = stored.positions || [];
+    portfolio.walletPf = stored.walletPf ?? 1000;
+    portfolio.marginTypePf = stored.marginTypePf || 'CROSS';
+  } catch { /* ignore */ }
+}
+
+function persistPortfolio() {
+  localStorage.setItem(PORTFOLIO_KEY, JSON.stringify({
+    positions: portfolio.positions,
+    walletPf: portfolio.walletPf,
+    marginTypePf: portfolio.marginTypePf,
+  }));
+}
+
+// ===== MULTI-POSITION CROSS LIQUIDATION MATH =====
+function computePortfolioLiq(positions, idx, wallet) {
+  const p = positions[idx];
+  if (!p.avg || !p.qty || !p.leverage) return null;
+  const notional = p.avg * p.qty;
+
+  // Sum maint margin + unrealized PnL of OTHER positions
+  let othersMaint = 0;
+  let othersUnreal = 0;
+  positions.forEach((q, j) => {
+    if (j === idx) return;
+    if (!q.avg || !q.qty) return;
+    const qNotional = q.avg * q.qty;
+    othersMaint += qNotional * MMR;
+    const cp = q.currentPrice;
+    if (cp != null) {
+      const pnl = q.side === 'LONG' ? (cp - q.avg) * q.qty : (q.avg - cp) * q.qty;
+      othersUnreal += pnl;
+    }
+  });
+
+  const availableForThis = wallet + othersUnreal - othersMaint;
+  if (availableForThis <= 0) return p.avg;
+  const effLev = notional / availableForThis;
+  if (effLev <= 0) return null;
+  const cushionFrac = (1 - MMR * effLev) / effLev;
+  if (p.side === 'LONG') return Math.max(0, p.avg * (1 - cushionFrac));
+  return p.avg * (1 + cushionFrac);
+}
+
+function getPositionStats(p, idx) {
+  const notional = (p.avg && p.qty) ? p.avg * p.qty : 0;
+  const margin = (notional && p.leverage) ? notional / p.leverage : 0;
+  const cp = p.currentPrice;
+  let pnl = 0, pnlPct = 0;
+  if (cp != null && p.avg && p.qty) {
+    pnl = p.side === 'LONG' ? (cp - p.avg) * p.qty : (p.avg - cp) * p.qty;
+    pnlPct = margin > 0 ? (pnl / margin) * 100 : 0;
+  }
+  const liq = computePortfolioLiq(portfolio.positions, idx, portfolio.walletPf);
+  let liqDistPct = null;
+  if (liq != null && cp != null && cp > 0) {
+    liqDistPct = Math.abs(cp - liq) / cp * 100;
+  } else if (liq != null && p.avg) {
+    liqDistPct = Math.abs(p.avg - liq) / p.avg * 100;
+  }
+  // +30% TP price
+  const moveFrac = 0.30 / p.leverage;
+  const tpPrice = p.avg ? (p.side === 'LONG' ? p.avg * (1 + moveFrac) : p.avg * (1 - moveFrac)) : null;
+  return { notional, margin, pnl, pnlPct, liq, liqDistPct, tpPrice };
+}
+
+function getRiskLevel(liqDistPct) {
+  if (liqDistPct == null) return 'unknown';
+  if (liqDistPct < 15) return 'danger';
+  if (liqDistPct < 30) return 'warn';
+  return 'safe';
+}
+
+// ===== LIVE PRICE FETCHING FOR PORTFOLIO =====
+async function refreshPortfolioPrices() {
+  if (portfolio.positions.length === 0) return;
+  const symbols = [...new Set(portfolio.positions.map(p => p.symbol).filter(s => s))];
+  await Promise.all(symbols.map(async (sym) => {
+    const data = await fetchLivePrice(sym);
+    if (data) {
+      portfolio.positions.filter(p => p.symbol === sym).forEach(p => {
+        p.currentPrice = data.lastPrice;
+      });
+    }
+  }));
+
+  // ===== OTOMATIK BEKLEYEN EKLEME TETİKLEME =====
+  // Fiyat her seferinde güncellenince bekleyen ekleri kontrol et
+  // LONG: fiyat E1/E2/E3 seviyesine inerse → otomatik alındı
+  // SHORT: fiyat E1/E2/E3 seviyesine çıkarsa → otomatik alındı
+  let anyFilled = false;
+  portfolio.positions.forEach(p => {
+    if (!p.pendingEntries || !p.currentPrice) return;
+    p.pendingEntries.forEach(pe => {
+      if (pe.status !== 'waiting') return;
+      const triggered = p.side === 'LONG'
+        ? p.currentPrice <= pe.price
+        : p.currentPrice >= pe.price;
+      if (triggered) {
+        // Ortalamayı yeniden hesapla
+        const oldNotional = p.avg * p.qty;
+        const newQty = pe.amount / pe.price;
+        const newAvg = (oldNotional + pe.amount) / (p.qty + newQty);
+        p.qty = p.qty + newQty;
+        p.avg = newAvg;
+        pe.status = 'filled';
+        pe.filledAt = Date.now();
+        anyFilled = true;
+        toast(`⚡ ${p.symbol} ${pe.label} otomatik alındı @ ${formatPrice(pe.price)} → ort: ${formatPrice(newAvg)}`, 'success');
+      }
+    });
+  });
+
+  if (anyFilled) {
+    persistPortfolio();
+  }
+
+  renderPortfolio();
+  updateWalletOverview();  // Sağ paneldeki canlı kasayı güncelle
+  updateActivePosMini();   // Sağ paneldeki mini listeyi güncelle
+}
+
+let pfRefreshInterval = null;
+function startPortfolioPolling() {
+  stopPortfolioPolling();
+  if (portfolio.positions.length === 0) return;
+  pfRefreshInterval = setInterval(refreshPortfolioPrices, 8000);
+}
+function stopPortfolioPolling() {
+  if (pfRefreshInterval) clearInterval(pfRefreshInterval);
+  pfRefreshInterval = null;
+}
+
+// ===== PORTFOLIO RENDER =====
+// Light update: refresh dashboard + risk map + bars + axis + stat rows in cards,
+// but never re-render the position cards themselves (preserves input focus)
+function updatePortfolioStatsOnly() {
+  // Recompute aggregates
+  let totalNotional = 0, totalMargin = 0, totalPnl = 0;
+  const statsList = portfolio.positions.map((p, i) => {
+    const s = getPositionStats(p, i);
+    totalNotional += s.notional;
+    totalMargin += s.margin;
+    totalPnl += s.pnl;
+    return s;
+  });
+  const usagePct = portfolio.walletPf > 0 ? (totalMargin / portfolio.walletPf) * 100 : 0;
+  const pnlPct = portfolio.walletPf > 0 ? (totalPnl / portfolio.walletPf) * 100 : 0;
+  let riskScore = 0;
+  riskScore += Math.min(usagePct / 100, 1) * 50;
+  const minLiqDist = Math.min(...statsList.map(s => s.liqDistPct ?? 999));
+  if (minLiqDist < 50) riskScore += (1 - minLiqDist/50) * 30;
+  const dangerCount = statsList.filter(s => (s.liqDistPct ?? 999) < 15).length;
+  if (portfolio.positions.length) riskScore += Math.min(dangerCount / portfolio.positions.length, 1) * 20;
+  riskScore = Math.round(Math.min(riskScore, 100));
+
+  document.getElementById('dashNotional').textContent = formatUsd(totalNotional);
+  document.getElementById('dashNotionalSub').textContent = `Margin: ${formatUsd(totalMargin)}`;
+  const dashPnlEl = document.getElementById('dashPnl');
+  dashPnlEl.textContent = formatUsd(totalPnl, true);
+  dashPnlEl.className = 'dash-card-val ' + (totalPnl >= 0 ? 'green' : 'red');
+  document.getElementById('dashPnlPct').textContent = `${pnlPct >= 0 ? '+' : ''}${pnlPct.toFixed(2)}% kasaya göre`;
+  const usageEl = document.getElementById('dashUsage');
+  usageEl.textContent = `${usagePct.toFixed(1)}%`;
+  usageEl.className = 'dash-card-val ' + (usagePct >= 50 ? 'red' : usagePct >= 25 ? 'gold' : 'green');
+  document.getElementById('dashUsageSub').textContent = `${formatUsd(totalMargin)} / ${formatUsd(portfolio.walletPf)}`;
+  const riskEl = document.getElementById('dashRisk');
+  riskEl.textContent = riskScore;
+  riskEl.className = 'dash-card-val ' + (riskScore >= 60 ? 'red' : riskScore >= 30 ? 'gold' : 'green');
+  document.getElementById('dashRiskSub').textContent = riskScore >= 60 ? '⚠ Yüksek risk' : riskScore >= 30 ? 'Orta risk' : 'Sağlıklı';
+
+  // Re-render visualization sections (they don't have inputs, safe to redraw)
+  renderRiskGrid(statsList);
+  renderLiqBars(statsList);
+  renderPriceAxis(statsList);
+
+  // Update only the stat rows inside each card (not the inputs)
+  portfolio.positions.forEach((p, i) => {
+    const card = document.querySelector(`.pos-card[data-id="${p.id}"]`);
+    if (!card) return;
+    const s = statsList[i];
+    const level = getRiskLevel(s.liqDistPct);
+    const pnlClass = s.pnl >= 0 ? 'green' : 'red';
+    card.className = level === 'danger' ? 'pos-card danger' : level === 'warn' ? 'pos-card warn' : 'pos-card';
+    const stats = card.querySelector('.pos-card-stats');
+    if (stats) {
+      stats.innerHTML = `
+        <div class="pos-card-stat-row"><span class="pos-card-stat-lbl">Notional</span><span class="pos-card-stat-val">${formatUsd(s.notional)}</span></div>
+        <div class="pos-card-stat-row"><span class="pos-card-stat-lbl">Margin</span><span class="pos-card-stat-val">${formatUsd(s.margin)}</span></div>
+        <div class="pos-card-stat-row"><span class="pos-card-stat-lbl">Likidasyon</span><span class="pos-card-stat-val red">${s.liq != null ? formatPrice(s.liq) : '—'}</span></div>
+        <div class="pos-card-stat-row"><span class="pos-card-stat-lbl">Liq Mesafe</span><span class="pos-card-stat-val ${level === 'danger' ? 'red' : level === 'warn' ? 'gold' : 'green'}">${s.liqDistPct != null ? s.liqDistPct.toFixed(2)+'%' : '—'}</span></div>
+        <div class="pos-card-stat-row"><span class="pos-card-stat-lbl">+30% TP</span><span class="pos-card-stat-val green">${s.tpPrice != null ? formatPrice(s.tpPrice) : '—'}</span></div>
+        <div class="pos-card-stat-row"><span class="pos-card-stat-lbl">PnL</span><span class="pos-card-stat-val ${pnlClass}">${formatUsd(s.pnl, true)}</span></div>
+      `;
+    }
+  });
+}
+
+function renderPortfolio() {
+  document.getElementById('portfolioCount').textContent = portfolio.positions.length;
+  document.getElementById('pfWallet').textContent = formatUsd(portfolio.walletPf);
+  document.getElementById('pfMargin').textContent = portfolio.marginTypePf;
+  document.getElementById('pfCount').textContent = portfolio.positions.length;
+
+  const empty = document.getElementById('pfEmpty');
+  const content = document.getElementById('pfContent');
+  if (portfolio.positions.length === 0) {
+    empty.style.display = 'flex';
+    empty.style.flexDirection = 'column';
+    empty.style.alignItems = 'center';
+    content.style.display = 'none';
+    return;
+  }
+  empty.style.display = 'none';
+  content.style.display = 'block';
+
+  // Compute aggregate stats
+  let totalNotional = 0, totalMargin = 0, totalPnl = 0;
+  const statsList = portfolio.positions.map((p, i) => {
+    const s = getPositionStats(p, i);
+    totalNotional += s.notional;
+    totalMargin += s.margin;
+    totalPnl += s.pnl;
+    return s;
+  });
+
+  const usagePct = portfolio.walletPf > 0 ? (totalMargin / portfolio.walletPf) * 100 : 0;
+  const pnlPct = portfolio.walletPf > 0 ? (totalPnl / portfolio.walletPf) * 100 : 0;
+
+  // Risk score: 0-100. Higher = riskier
+  // Components:
+  //   - Usage % (margin/wallet) capped at 50% of score
+  //   - Closest liq distance (closer = higher score) 30%
+  //   - Number of positions in danger zone (<15%) 20%
+  let riskScore = 0;
+  riskScore += Math.min(usagePct / 100, 1) * 50;  // up to 50 from usage
+  const minLiqDist = Math.min(...statsList.map(s => s.liqDistPct ?? 999));
+  if (minLiqDist < 50) riskScore += (1 - minLiqDist/50) * 30;
+  const dangerCount = statsList.filter(s => (s.liqDistPct ?? 999) < 15).length;
+  riskScore += Math.min(dangerCount / portfolio.positions.length, 1) * 20;
+  riskScore = Math.round(Math.min(riskScore, 100));
+
+  document.getElementById('dashNotional').textContent = formatUsd(totalNotional);
+  document.getElementById('dashNotionalSub').textContent = `Margin: ${formatUsd(totalMargin)}`;
+  const dashPnlEl = document.getElementById('dashPnl');
+  dashPnlEl.textContent = formatUsd(totalPnl, true);
+  dashPnlEl.className = 'dash-card-val ' + (totalPnl >= 0 ? 'green' : 'red');
+  document.getElementById('dashPnlPct').textContent = `${pnlPct >= 0 ? '+' : ''}${pnlPct.toFixed(2)}% kasaya göre`;
+
+  const usageEl = document.getElementById('dashUsage');
+  usageEl.textContent = `${usagePct.toFixed(1)}%`;
+  usageEl.className = 'dash-card-val ' + (usagePct >= 50 ? 'red' : usagePct >= 25 ? 'gold' : 'green');
+  document.getElementById('dashUsageSub').textContent = `${formatUsd(totalMargin)} / ${formatUsd(portfolio.walletPf)}`;
+
+  const riskEl = document.getElementById('dashRisk');
+  riskEl.textContent = riskScore;
+  riskEl.className = 'dash-card-val ' + (riskScore >= 60 ? 'red' : riskScore >= 30 ? 'gold' : 'green');
+  document.getElementById('dashRiskSub').textContent = riskScore >= 60 ? '⚠ Yüksek risk' : riskScore >= 30 ? 'Orta risk' : 'Sağlıklı';
+
+  renderRiskGrid(statsList);
+  renderLiqBars(statsList);
+  renderPriceAxis(statsList);
+  renderPosCards(statsList);
+}
+
+function renderRiskGrid(statsList) {
+  const container = document.getElementById('riskGrid');
+  container.innerHTML = portfolio.positions.map((p, i) => {
+    const s = statsList[i];
+    const level = getRiskLevel(s.liqDistPct);
+    const dist = s.liqDistPct != null ? `${s.liqDistPct.toFixed(1)}%` : '—';
+    const pnlClass = s.pnl >= 0 ? 'green' : 'red';
+    const sideClass = p.side === 'LONG' ? 'long' : 'short';
+    return `
+      <div class="risk-tile">
+        <div class="risk-tile-bg ${level}"></div>
+        <div class="risk-tile-sym">
+          ${p.symbol || '—'} <span class="risk-tile-side ${sideClass}">${p.side}</span>
+        </div>
+        <div class="risk-tile-score ${level}">${dist}</div>
+        <div class="risk-tile-sub">liq mesafesi · ${p.leverage}x</div>
+        <div class="risk-tile-sub" style="margin-top:2px;">PnL: <span style="color:var(--${pnlClass})">${formatUsd(s.pnl, true)}</span></div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderLiqBars(statsList) {
+  const container = document.getElementById('liqBars');
+  // Max scale: largest distance, capped at 100%
+  const maxDist = 100;
+  container.innerHTML = portfolio.positions.map((p, i) => {
+    const s = statsList[i];
+    const level = getRiskLevel(s.liqDistPct);
+    const fillPct = s.liqDistPct != null ? Math.min(s.liqDistPct, maxDist) : 0;
+    const dist = s.liqDistPct != null ? `${s.liqDistPct.toFixed(1)}%` : '—';
+    return `
+      <div class="liq-bar-row">
+        <div class="liq-bar-sym">${p.symbol || '—'} <span style="color:var(--text-dim); font-size:10px;">(${p.side})</span></div>
+        <div class="liq-bar-track">
+          <div class="liq-bar-fill ${level}" style="width:${fillPct}%"></div>
+        </div>
+        <div class="liq-bar-pct ${level}">${dist}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderPriceAxis(statsList) {
+  const container = document.getElementById('priceAxis');
+  container.innerHTML = portfolio.positions.map((p, i) => {
+    const s = statsList[i];
+    if (!p.avg || !s.liq || !p.currentPrice) {
+      return `<div class="price-axis-row">
+        <div class="price-axis-label">${p.symbol || '—'}</div>
+        <div class="price-axis-wrap"><div class="price-axis-empty">Fiyat verisi bekleniyor…</div></div>
+      </div>`;
+    }
+    // Determine axis range
+    const points = [p.avg, p.currentPrice, s.liq, s.tpPrice].filter(x => x != null);
+    let lo = Math.min(...points);
+    let hi = Math.max(...points);
+    const range = hi - lo;
+    lo -= range * 0.08;
+    hi += range * 0.08;
+    const pct = (val) => ((val - lo) / (hi - lo)) * 100;
+
+    // Danger zone: from liq to avg (for long) or avg to liq (for short)
+    const dangerLo = p.side === 'LONG' ? pct(s.liq) : pct(p.avg);
+    const dangerHi = p.side === 'LONG' ? pct(p.avg) : pct(s.liq);
+    const safeLo = p.side === 'LONG' ? pct(p.avg) : pct(s.tpPrice);
+    const safeHi = p.side === 'LONG' ? pct(s.tpPrice) : pct(p.avg);
+
+    return `
+      <div class="price-axis-row">
+        <div class="price-axis-label">${p.symbol}</div>
+        <div class="price-axis-wrap">
+          <div class="price-axis-track"></div>
+          <div class="price-axis-zone danger" style="left:${dangerLo}%; width:${dangerHi-dangerLo}%;"></div>
+          <div class="price-axis-zone safe" style="left:${safeLo}%; width:${safeHi-safeLo}%;"></div>
+          <div class="price-axis-point liq" style="left:${pct(s.liq)}%;" title="Liq: ${formatPrice(s.liq)}"></div>
+          <div class="price-axis-point entry" style="left:${pct(p.avg)}%;" title="Giriş: ${formatPrice(p.avg)}"></div>
+          <div class="price-axis-point current" style="left:${pct(p.currentPrice)}%;" title="Anlık: ${formatPrice(p.currentPrice)}"></div>
+          <div class="price-axis-point tp" style="left:${pct(s.tpPrice)}%;" title="TP: ${formatPrice(s.tpPrice)}"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderPosCards(statsList) {
+  const container = document.getElementById('posCards');
+  const cardsHtml = portfolio.positions.map((p, i) => {
+    const s = statsList[i];
+    const level = getRiskLevel(s.liqDistPct);
+    const cardCls = level === 'danger' ? 'pos-card danger' : level === 'warn' ? 'pos-card warn' : 'pos-card';
+    const sideClass = p.side === 'LONG' ? 'long' : 'short';
+    const pnlClass = s.pnl >= 0 ? 'green' : 'red';
+
+    // Bekleyen ekler (E1/E2/E3) - OTOMATIK TETİK (manuel tıklama yok)
+    const pendingHtml = (p.pendingEntries && p.pendingEntries.length > 0)
+      ? `<div class="pending-section">
+          <div class="pending-title">⏳ Bekleyen / ✓ Alınan Eklemeler <span style="color:var(--text-faint); font-weight:400; font-size:10px; letter-spacing:0;">— fiyat seviyesi geçince otomatik alınır</span></div>
+          <div class="pending-list">
+            ${p.pendingEntries.map((pe, peIdx) => {
+              const filled = pe.status === 'filled';
+              const trigger = !filled && p.currentPrice && pe.price
+                ? (p.side === 'LONG' ? p.currentPrice <= pe.price : p.currentPrice >= pe.price)
+                : false;
+              const filledAtStr = filled && pe.filledAt
+                ? new Date(pe.filledAt).toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'})
+                : '';
+              return `<div class="pending-row${trigger ? ' near' : ''}${filled ? ' filled' : ''}">
+                <span class="pending-lbl">${pe.label}</span>
+                <span class="pending-price">${formatPrice(pe.price)}</span>
+                <span class="pending-amt">${formatUsd(pe.amount)}</span>
+                <span class="pending-status ${filled ? 'filled' : 'waiting'}" title="${filled ? `Alındı: ${filledAtStr}` : 'Fiyat seviyesi geçilince otomatik alınır'}">${filled ? `✓ Alındı ${filledAtStr}` : trigger ? '⚡ tetik bölgesinde' : '⏳ Bekliyor'}</span>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>`
+      : '';
+
+    return `
+      <div class="${cardCls}" data-id="${p.id}">
+        <div class="pos-card-head">
+          <div class="pos-card-sym">
+            <input type="text" class="pos-card-input" data-pid="${p.id}" data-pf="symbol" value="${p.symbol || ''}" placeholder="COIN" style="width:120px;" />
+            <span class="pos-card-side ${sideClass}" data-pid="${p.id}" data-toggle-side style="cursor:pointer;" title="Yön değiştir">${p.side}</span>
+          </div>
+          <div class="pos-card-actions">
+            <button class="icon-btn" data-edit-pos="${p.id}" title="Setup Planner'da düzenle">✎</button>
+            <button class="icon-btn delete" data-del-pos="${p.id}" title="Sil">×</button>
+          </div>
+        </div>
+        <div class="pos-card-fields">
+          <div class="pos-card-field">
+            <label>Ortalama Giriş</label>
+            <input type="text" inputmode="decimal" class="pos-card-input" data-pid="${p.id}" data-pf="avg" value="${p.avg ?? ''}" placeholder="0.00" />
+          </div>
+          <div class="pos-card-field">
+            <label>Miktar (Coin)</label>
+            <input type="text" inputmode="decimal" class="pos-card-input" data-pid="${p.id}" data-pf="qty" value="${p.qty ?? ''}" placeholder="0" />
+          </div>
+          <div class="pos-card-field">
+            <label>Kaldıraç</label>
+            <input type="text" inputmode="numeric" class="pos-card-input" data-pid="${p.id}" data-pf="leverage" value="${p.leverage}" />
+          </div>
+          <div class="pos-card-field">
+            <label>Anlık Fiyat</label>
+            <input type="text" inputmode="decimal" class="pos-card-input" data-pid="${p.id}" data-pf="currentPrice" value="${p.currentPrice ?? ''}" placeholder="(otomatik)" />
+          </div>
+        </div>
+        <div class="pos-card-stats">
+          <div class="pos-card-stat-row"><span class="pos-card-stat-lbl">Notional</span><span class="pos-card-stat-val">${formatUsd(s.notional)}</span></div>
+          <div class="pos-card-stat-row"><span class="pos-card-stat-lbl">Margin</span><span class="pos-card-stat-val">${formatUsd(s.margin)}</span></div>
+          <div class="pos-card-stat-row"><span class="pos-card-stat-lbl">Likidasyon</span><span class="pos-card-stat-val red">${s.liq != null ? formatPrice(s.liq) : '—'}</span></div>
+          <div class="pos-card-stat-row"><span class="pos-card-stat-lbl">Liq Mesafe</span><span class="pos-card-stat-val ${level === 'danger' ? 'red' : level === 'warn' ? 'gold' : 'green'}">${s.liqDistPct != null ? s.liqDistPct.toFixed(2)+'%' : '—'}</span></div>
+          <div class="pos-card-stat-row"><span class="pos-card-stat-lbl">+30% TP</span><span class="pos-card-stat-val green">${s.tpPrice != null ? formatPrice(s.tpPrice) : '—'}</span></div>
+          <div class="pos-card-stat-row"><span class="pos-card-stat-lbl">PnL</span><span class="pos-card-stat-val ${pnlClass}">${formatUsd(s.pnl, true)}</span></div>
+        </div>
+        ${pendingHtml}
+      </div>
+    `;
+  }).join('');
+  container.innerHTML = cardsHtml;
+
+  // Hook field inputs
+  container.querySelectorAll('input[data-pf]').forEach(inp => {
+    inp.addEventListener('input', (e) => {
+      const id = e.target.dataset.pid;
+      const field = e.target.dataset.pf;
+      const pos = portfolio.positions.find(x => x.id === id);
+      if (!pos) return;
+      const val = e.target.value;
+      if (field === 'symbol') {
+        pos.symbol = val.toUpperCase();
+        // Try to fetch live price for this symbol
+        if (pos.symbol && symbolsLoaded) {
+          const c = allSymbols.find(s => s.symbol === pos.symbol);
+          if (c) {
+            pos.currentPrice = c.lastPrice;
+          }
+        }
+        persistPortfolio();
+        renderPortfolio();  // symbol change can affect everything, full re-render OK
+      } else {
+        pos[field] = parseDecimal(val);
+        persistPortfolio();
+        // Light update: recalculate dashboards + stats but DO NOT re-render input cards
+        updatePortfolioStatsOnly();
+      }
+    });
+    inp.addEventListener('blur', (e) => {
+      const v = e.target.value.trim();
+      if (v && v.includes(',')) e.target.value = v.replace(',', '.');
+    });
+  });
+
+  container.querySelectorAll('[data-toggle-side]').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.dataset.pid;
+      const pos = portfolio.positions.find(x => x.id === id);
+      if (!pos) return;
+      pos.side = pos.side === 'LONG' ? 'SHORT' : 'LONG';
+      persistPortfolio();
+      renderPortfolio();
+    });
+  });
+
+  container.querySelectorAll('[data-edit-pos]').forEach(b => {
+    b.addEventListener('click', (e) => {
+      e.stopPropagation();
+      editPositionInPlanner(b.dataset.editPos);
+    });
+  });
+
+  container.querySelectorAll('[data-del-pos]').forEach(b => {
+    b.addEventListener('click', () => {
+      if (!confirm('Bu pozisyonu sil?')) return;
+      const id = b.dataset.delPos;
+      portfolio.positions = portfolio.positions.filter(x => x.id !== id);
+      persistPortfolio();
+      renderPortfolio();
+      updatePortfolioCount();
+      if (portfolio.positions.length === 0) stopPortfolioPolling();
+    });
+  });
+}
+
+// Portfolio buttons
+document.getElementById('btnAddFirstPos').addEventListener('click', () => {
+  document.querySelector('.tab-nav-item[data-view="planner"]').click();
+});
+document.getElementById('btnPfRefresh').addEventListener('click', refreshPortfolioPrices);
+document.getElementById('btnPfClear').addEventListener('click', () => {
+  if (!confirm('Tüm portföy pozisyonları silinsin mi?')) return;
+  portfolio.positions = [];
+  persistPortfolio();
+  stopPortfolioPolling();
+  renderPortfolio();
+});
+
+// Sync wallet between planner and portfolio
+document.getElementById('walletInput').addEventListener('input', (e) => {
+  portfolio.walletPf = parseFloat(e.target.value) || 0;
+  persistPortfolio();
+  if (document.getElementById('viewPortfolio').classList.contains('active')) renderPortfolio();
+});
+document.getElementById('marginType').addEventListener('change', (e) => {
+  portfolio.marginTypePf = e.target.value;
+  persistPortfolio();
+});
+
+// ===== Boot =====
+(async function init() {
+  loadPortfolio();
+  updatePortfolioCount();
+  // Sync planner wallet with portfolio
+  if (portfolio.walletPf) {
+    document.getElementById('walletInput').value = portfolio.walletPf;
+    state.wallet = portfolio.walletPf;
+  }
+  renderRows();
+  updateWalletOverview();
+  updateActivePosMini();
+  await loadBinanceSymbols();
+  // If portfolio has positions, refresh their prices once
+  if (portfolio.positions.length > 0) {
+    refreshPortfolioPrices();
+    startPortfolioPolling();
+  }
+})();
+</script>
+</body>
+</html>
