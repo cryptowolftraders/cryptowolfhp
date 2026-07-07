@@ -66,6 +66,8 @@
     height: 2px; background: var(--wolf-gold);
   }
   .nav-right { display: flex; align-items: center; gap: 12px; }
+  .hamburger { display: none; background: none; border: 1px solid var(--wolf-border); color: var(--wolf-text); width: 42px; height: 40px; border-radius: 8px; cursor: pointer; font-size: 20px; line-height: 1; align-items: center; justify-content: center; padding: 0; }
+  .hamburger:hover { border-color: var(--wolf-gold); color: var(--wolf-gold); }
   .btn {
     padding: 8px 16px; border-radius: 6px; font-size: 13px;
     font-weight: 500; transition: all 0.15s;
@@ -374,7 +376,22 @@
   }
 
   @media (max-width: 768px) {
-    .nav-links { display: none; }
+    .navbar { position: relative; }
+    .hamburger { display: flex; }
+    .nav-links {
+      display: none;
+      position: absolute; top: 100%; left: 0; right: 0;
+      flex-direction: column; gap: 0;
+      background: var(--wolf-surface, #121826);
+      border-bottom: 1px solid var(--wolf-border);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.55);
+      padding: 6px 0; z-index: 300;
+    }
+    .navbar.nav-open .nav-links { display: flex; }
+    .nav-links .nav-link { padding: 13px 24px; width: 100%; box-sizing: border-box; font-size: 15px; }
+    .nav-links .nav-link.active::after { display: none; }
+    .nav-left { gap: 0; }
+    .nav-right .btn-ghost { display: none; }
     .page, .container, #page-home, #page-dashboard, #page-pricing { max-width: 100%; overflow-x: hidden; }
     .hero { padding: 92px 16px 44px; }
     .hero h1 { font-size: 30px; letter-spacing: -0.5px; }
@@ -450,6 +467,7 @@
   <div class="nav-right">
     <button class="btn btn-ghost">Giriş</button>
     <button class="btn btn-primary" onclick="navigate('dashboard')">Terminale Git</button>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menü" onclick="toggleMobileNav(event)">☰</button>
   </div>
 </nav>
 
@@ -482,7 +500,7 @@
 
   <footer>
     <div class="footer-links">
-      <a>Hakkımızda</a><a href="https://t.me/CryptoWolfHP" target="_blank">İletişim</a><a>SSS</a><a href="https://t.me/CryptoWolfHP" target="_blank">Telegram</a><a>TradingView</a>
+      <a onclick="navigate('pricing')" style="cursor:pointer">Hakkımızda</a><a onclick="navigate('pricing')" style="cursor:pointer">İletişim</a>
     </div>
     <div>© 2026 CryptoWolf HP. Bu siteden alınan bilgiler yatırım tavsiyesi değildir.</div>
     <div style="margin-top: 8px; color: var(--wolf-text-mute);">Türkiye 🇹🇷</div>
@@ -552,10 +570,46 @@
     <div class="container">
       <div class="section-head">
         <div class="section-tag">HAKKINDA</div>
-        <div class="section-title">Erişim & Yasal Uyarı</div>
-        <div class="section-sub">CryptoWolf HP bir eğitim ve teknik analiz aracıdır.</div>
+        <div class="section-title">Hikayemiz</div>
+        <div class="section-sub">CryptoWolf HP'nin arkasındaki yolculuk.</div>
       </div>
+
+      <!-- BİYOGRAFİ -->
+      <div style="max-width:720px;margin:0 auto 20px;background:var(--wolf-surface);border:1px solid var(--wolf-border);border-radius:14px;padding:30px;line-height:1.9;font-size:14px;color:var(--wolf-text-dim)">
+
+        <h3 style="font-size:17px;font-weight:700;color:var(--wolf-gold);margin:0 0 14px;line-height:1.4;">Piyasaların Nabzını Tutmak: Cafede Başlayan Bir Finans Yolculuğu</h3>
+        <p style="margin-bottom:16px;">Her şey 2016 yılında, üniversite son sınıftayken bir kafede proje ödevi yaparken başladı. Masama yanaşan bir Forex pazarlamacısı, finansal piyasaların kapısını aralamama vesile oldu. Sonraki 3-4 yıl boyunca Forex piyasasında tabiri caizse "acemiliğimi attım", temel araçlarla trading'in mantığını kavradım.</p>
+        <p style="margin-bottom:16px;">Takvimler 2021'in o çılgın Nisan/Mayıs aylarını gösterdiğinde ise Ankara'da bir arkadaşımla otururken hayatım değişti. <i>"Forex'ten sıkılmadın mı? Doge diye bir coin var, Elon Musk bir site açmış..."</i> diye başlayan o meşhur Dogecoin çılgınlığıyla kripto para dünyasına adım attım. O günden beri de bu ekosistemin içindeyim.</p>
+
+        <h3 style="font-size:17px;font-weight:700;color:var(--wolf-gold);margin:26px 0 12px;line-height:1.4;">Hazır Kodlardan, Kendi Finansal Sistemime</h3>
+        <p style="margin-bottom:16px;">Kriptoda trade etmeye başladıktan sonra işin mutfağına girmeye karar verdim. TradingView'de yılda 500-600 indikatör incelediğim, strateji kodlarıyla sabahladığım dönemler oldu. Ancak bir süre sonra acı bir gerçeği fark ettim: <b style="color:var(--wolf-text)">Hazır kodlarla ve başkalarının stratejileriyle sürdürülebilir bir başarı yakalamak imkansızdı.</b></p>
+        <p style="margin-bottom:16px;">Bu farkındalıkla kolları sıvadım ve kendi kodlarımı, kendi sistemlerimi yazmaya başladım. Yıllar süren kazançlar, kayıplar ve piyasa döngüleri bana milyarlarca liralık bir tecrübe kazandırdı. Bu yola 10 arkadaş çıkmıştık; bugün arkama baktığımda piyasanın yıpratıcılığına dayanıp sadece 4-5 kişi kaldığımızı görüyorum.</p>
+
+        <h3 style="font-size:17px;font-weight:700;color:var(--wolf-gold);margin:26px 0 12px;line-height:1.4;">Benim Felsefem: Sinyaller Hikaye, Sistem Gerçektir</h3>
+        <p style="margin-bottom:16px;">Yıllar süren bu testlerin, denemelerin ve elemelerin sonunda öğrendiğim en büyük kural şudur: <b style="color:var(--wolf-text)">Kendi sistemini oturtmuş bir trader için Telegram sinyal grupları, X (Twitter) fenomenleri ve "gizemli" tüyolar sadece zaman kaybıdır.</b></p>
+        <p style="margin-bottom:12px;">Bu piyasada kalıcı olmanın sırrı nettir:</p>
+        <ul style="margin:0 0 16px;padding-left:0;list-style:none;">
+          <li style="position:relative;padding-left:22px;margin-bottom:10px;"><span style="position:absolute;left:0;color:var(--wolf-gold);">▸</span>İnandığın bir sistemi eleye eleye, deneye deneye inşa et.</li>
+          <li style="position:relative;padding-left:22px;margin-bottom:10px;"><span style="position:absolute;left:0;color:var(--wolf-gold);">▸</span>Kazanç sağlayan o sistemi bozmadan, disiplinle uygulamaya devam et.</li>
+          <li style="position:relative;padding-left:22px;margin-bottom:0;"><span style="position:absolute;left:0;color:var(--wolf-gold);">▸</span>Piyasa değişir, hacimler değişir, coin sayıları artar; sisteminin parametrelerini piyasanın nabzına göre güncellemeyi bil.</li>
+        </ul>
+        <p style="margin-bottom:0;font-size:15px;color:var(--wolf-text);font-weight:600;border-top:1px solid var(--wolf-border);padding-top:18px;">Ben buradayım çünkü piyasayı tahmin etmiyorum; <span style="color:var(--wolf-gold)">piyasaya göre optimize edilmiş sistemler yönetiyorum.</span></p>
+      </div>
+
+      <!-- İLETİŞİM -->
+      <div style="max-width:720px;margin:0 auto 20px;background:var(--wolf-surface);border:1px solid var(--wolf-border);border-radius:14px;padding:24px 28px;">
+        <div style="font-size:15px;font-weight:700;color:var(--wolf-text);margin-bottom:14px;">İletişim</div>
+        <div style="display:flex;flex-direction:column;gap:12px;font-size:14px;">
+          <a href="https://t.me/CryptoWolfHP" target="_blank" style="color:var(--wolf-gold);text-decoration:none;display:flex;align-items:center;gap:8px;">💬 Telegram Kanalı — t.me/CryptoWolfHP</a>
+          <a href="https://t.me/Crypto_Wolf_Traders" target="_blank" style="color:var(--wolf-gold);text-decoration:none;display:flex;align-items:center;gap:8px;">👥 Telegram Grubu — t.me/Crypto_Wolf_Traders</a>
+          <a href="https://x.com/hknwlf" target="_blank" style="color:var(--wolf-gold);text-decoration:none;display:flex;align-items:center;gap:8px;"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="flex-shrink:0;"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>X (Twitter) — @hknwlf</a>
+          <a href="https://tr.tradingview.com/u/Crypto-Wolf-HP/" target="_blank" style="color:var(--wolf-gold);text-decoration:none;display:flex;align-items:center;gap:8px;">📈 TradingView — Crypto-Wolf-HP</a>
+        </div>
+      </div>
+
+      <!-- YASAL UYARI -->
       <div style="max-width:720px;margin:0 auto;background:var(--wolf-surface);border:1px solid var(--wolf-border);border-radius:14px;padding:28px;line-height:1.75;font-size:14px;color:var(--wolf-text-dim)">
+        <div style="font-size:15px;font-weight:700;color:var(--wolf-text);margin-bottom:16px;">Erişim & Yasal Uyarı</div>
         <p style="margin-bottom:16px;"><b style="color:var(--wolf-text)">Erişim:</b> Bu terminal davet usulüyle, tanıdık kişilerin kullanımına açıktır. Halka açık bir satış veya ücretli üyelik bulunmamaktadır.</p>
         <p style="margin-bottom:16px;"><b style="color:var(--wolf-text)">Amaç:</b> Buradaki tüm tarayıcılar yalnızca teknik veri, grafik ve eğitim amaçlı analiz sunar. Hiçbir araç "al / sat" emri ya da kişiye özel yatırım tavsiyesi niteliği taşımaz.</p>
         <p style="margin-bottom:16px;"><b style="color:var(--wolf-gold)">Yatırım tavsiyesi değildir.</b> Kripto varlık alım-satımı yüksek risk içerir. Verilen tüm kararların sorumluluğu kullanıcıya aittir; geçmiş veriler gelecekteki sonuçların garantisi değildir.</p>
@@ -604,8 +658,22 @@ function navigate(page) {
   document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
   const link = document.querySelector('.nav-link[data-nav="' + page + '"]');
   if (link) link.classList.add('active');
+  const nb = document.querySelector('.navbar');
+  if (nb) nb.classList.remove('nav-open');
   window.scrollTo(0, 0);
 }
+
+function toggleMobileNav(e) {
+  if (e) e.stopPropagation();
+  const nb = document.querySelector('.navbar');
+  if (nb) nb.classList.toggle('nav-open');
+}
+document.addEventListener('click', function(e) {
+  const nb = document.querySelector('.navbar');
+  if (nb && nb.classList.contains('nav-open') && !nb.contains(e.target)) {
+    nb.classList.remove('nav-open');
+  }
+});
 
 function toggleSidebar() {
   const dash = document.getElementById('dashboardEl');
