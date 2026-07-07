@@ -663,6 +663,15 @@ function navigate(page) {
   window.scrollTo(0, 0);
 }
 
+function routeFromHash() {
+  var h = (location.hash || '').replace('#','').toLowerCase();
+  if (h === 'terminal' || h === 'dashboard') navigate('dashboard');
+  else if (h === 'hakkinda' || h === 'pricing' || h === 'about') navigate('pricing');
+  else if (h === 'home' || h === 'anasayfa') navigate('home');
+}
+window.addEventListener('hashchange', routeFromHash);
+window.addEventListener('load', routeFromHash);
+
 function toggleMobileNav(e) {
   if (e) e.stopPropagation();
   const nb = document.querySelector('.navbar');
