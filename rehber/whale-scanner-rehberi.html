@@ -291,6 +291,12 @@
     .navbar{padding:10px 14px;}
     .nav-right .btn{padding:8px 12px;font-size:12px;}
   }
+
+  /* ==== FOOTER — ana site ile aynı ==== */
+  footer{padding:40px 28px 24px;text-align:center;color:var(--text-mute);font-size:12px;border-top:none;background:none;}
+  .footer-links{display:flex;gap:24px;justify-content:center;margin-bottom:16px;flex-wrap:wrap;}
+  .footer-links a{color:var(--text-dim);text-decoration:none;cursor:pointer;}
+  .footer-links a:hover{color:var(--text);}
 </style>
 <style>
   /* Header'i ana site gibi TAM GENISLIK + Giris (ana site ile birebir) */
@@ -378,13 +384,12 @@
   </article>
 </main>
 <footer>
-  <div class="inner">
-    <span class="cinzel" style="color:var(--gold);font-weight:700;">CRYPTOWOLF HP</span>
-    <a href="https://cryptowolfhp.com/">Ana Sayfa</a>
-    <a href="https://cryptowolfhp.com/rehber/">Akademi</a>
-    <a href="https://t.me/CryptoWolfHP">Telegram</a>
-    <span style="margin-left:auto;">© 2026 · Eğitim amaçlıdır, yatırım tavsiyesi değildir.</span>
+  <div class="footer-links">
+    <a href="https://cryptowolfhp.com/#hakkinda">Hakkımızda</a>
+    <a href="https://cryptowolfhp.com/#hakkinda">İletişim</a>
   </div>
+  <div>© 2026 CryptoWolf HP. Eğitim amaçlıdır, yatırım tavsiyesi değildir.</div>
+  <div style="margin-top:8px;color:var(--text-mute);">Türkiye 🇹🇷</div>
 </footer>
 <script>
 function toggleMobileNav(e){if(e)e.stopPropagation();var h=document.querySelector(".navbar");if(h)h.classList.toggle("nav-open");}
