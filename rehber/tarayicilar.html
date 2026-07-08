@@ -197,6 +197,7 @@
   .btn-ghost:hover{color:var(--text);}
   .btn-primary{background:var(--gold);color:#1a1206;border:none;}
   .btn-primary:hover{background:#ffc659;}
+  .navbar button{font-family:inherit;}
   /* Header mavi (teal) odak çizgisi TAMAMEN kapalı — ana site ile aynı */
   .navbar a:focus,.navbar a:focus-visible,.navbar a:active,
   .navbar button:focus,.navbar button:focus-visible,.navbar button:active,
@@ -270,7 +271,7 @@
   </div>
   <div class="nav-right">
     <button class="btn btn-ghost" type="button">Giriş</button>
-    <a class="btn btn-primary" href="https://cryptowolfhp.com/#terminal">Terminale Git</a>
+    <button class="btn btn-primary" type="button" onclick="location.href='https://cryptowolfhp.com/#terminal'">Terminale Git</button>
     <button class="hamburger" id="hamburgerBtn" aria-label="Menü" onclick="toggleMobileNav(event)">☰</button>
   </div>
 </nav>
