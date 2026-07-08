@@ -1247,11 +1247,6 @@ function startLivePrice() {
 // ─────────────────────────────────────────────
 const BINANCE_HOSTS = [
   'https://web-production-2bdde.up.railway.app',
-  'https://fapi1.binance.com',
-  'https://fapi2.binance.com',
-  'https://fapi3.binance.com',
-  'https://fapi4.binance.com',
-  'https://fapi.binance.vision',
 ];
 let workingHost = null;
 let workingHostTs = 0;
@@ -1263,7 +1258,7 @@ async function findWorkingHost() {
   // Tüm hostları paralel dene — hangisi önce cevap verirse onu kullan
   const results = await Promise.allSettled(
     BINANCE_HOSTS.map(host =>
-      fetch(`${host}/fapi/v1/ping`, { signal: AbortSignal.timeout(8000) })
+      fetch(`${host}/fapi/v1/klines?symbol=BTCUSDT&interval=1m&limit=1`, { signal: AbortSignal.timeout(12000) })
         .then(r => r.ok ? host : Promise.reject('not ok'))
     )
   );
@@ -1280,11 +1275,11 @@ async function findWorkingHost() {
   const errBox = document.getElementById('errorBox');
   if (errBox) {
     errBox.innerHTML = `<div class="error-box">
-      ⚠ <b>Binance Futures API'ye erişilemiyor.</b><br><br>
+      ⚠ <b>Sunucuya şu an ulaşılamıyor.</b><br><br>
       <small>
-      Futures (fapi) endpointleri Türkiye'den tamamen bloklu.<br>
-      Çözüm: <b>VPN açın</b> (ücretsiz: Cloudflare WARP, ProtonVPN)<br>
-      VPN açıkken ⟳ TARA butonuna basın.
+      Veri proxy'sine geçici olarak bağlanılamadı.<br>
+      Birkaç saniye bekleyip ⟳ TARA butonuna tekrar basın.<br>
+      Sorun sürerse Railway'de wolf-proxy servisini kontrol edin.
       </small>
     </div>`;
   }
