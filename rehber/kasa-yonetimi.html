@@ -12,17 +12,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#0a0e1a">
-<title>FVG Nedir? Fair Value Gap (Adil Değer Boşluğu) – Wolf Akademi</title>
-<meta name="description" content="FVG (Fair Value Gap / adil değer boşluğu) nedir, nasıl oluşur ve nasıl bulunur? Boğa ve ayı FVG, imbalance mantığı ve fiyatın boşluğu doldurma davranışı.">
-<link rel="canonical" href="https://cryptowolfhp.com/rehber/fvg-nedir.html">
+<title>Kasa Yönetimi & Pozisyon Boyutlandırma (Katman Sistemi) – Wolf Akademi</title>
+<meta name="description" content="Kripto vadeli işlemde kasa yönetimi ve pozisyon boyutlandırma. Wolf katman (layer) sistemi 1+1+2+4+8, 5 katman sınırı, izole marjin kuralları ve martingale riskleri.">
+<link rel="canonical" href="https://cryptowolfhp.com/rehber/kasa-yonetimi.html">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="CryptoWolf HP">
 <meta property="og:locale" content="tr_TR">
-<meta property="og:title" content="FVG Nedir? Fair Value Gap (Adil Değer Boşluğu) – Wolf Akademi">
-<meta property="og:description" content="FVG (Fair Value Gap / adil değer boşluğu) nedir, nasıl oluşur ve nasıl bulunur? Boğa ve ayı FVG, imbalance mantığı ve fiyatın boşluğu doldurma davranışı.">
-<meta property="og:url" content="https://cryptowolfhp.com/rehber/fvg-nedir.html">
-<meta property="og:image" content="https://cryptowolfhp.com/rehber/og/fvg-nedir.png">
+<meta property="og:title" content="Kasa Yönetimi & Pozisyon Boyutlandırma (Katman Sistemi)">
+<meta property="og:description" content="Wolf katman sistemi 1+1+2+4+8, 5 katman sınırı, izole marjin kuralları ve martingale riskleri.">
+<meta property="og:url" content="https://cryptowolfhp.com/rehber/kasa-yonetimi.html">
+<meta property="og:image" content="https://cryptowolfhp.com/rehber/og/kasa-yonetimi.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,80 +33,30 @@
   "@graph": [
     {
       "@type": "Article",
-      "headline": "FVG Nedir?",
-      "description": "FVG (Fair Value Gap / adil değer boşluğu) nedir, nasıl oluşur ve nasıl bulunur? Boğa ve ayı FVG, imbalance mantığı ve fiyatın boşluğu doldurma davranışı.",
+      "headline": "Kasa Yönetimi & Pozisyon Boyutlandırma (Katman Sistemi)",
+      "description": "Kripto vadeli işlemde kasa yönetimi, Wolf katman sistemi 1+1+2+4+8, 5 katman sınırı ve martingale riskleri.",
       "inLanguage": "tr-TR",
-      "datePublished": "2026-07-06",
-      "dateModified": "2026-07-06",
-      "author": {
-        "@type": "Organization",
-        "name": "Wolf Akademi",
-        "url": "https://cryptowolfhp.com"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "CryptoWolf HP",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://cryptowolfhp.com/logo.png"
-        }
-      },
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://cryptowolfhp.com/rehber/fvg-nedir.html"
-      },
-      "image": "https://cryptowolfhp.com/rehber/og/fvg-nedir.png"
+      "datePublished": "2026-07-09",
+      "dateModified": "2026-07-09",
+      "author": { "@type": "Organization", "name": "Wolf Akademi", "url": "https://cryptowolfhp.com" },
+      "publisher": { "@type": "Organization", "name": "CryptoWolf HP", "logo": { "@type": "ImageObject", "url": "https://cryptowolfhp.com/logo.png" } },
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://cryptowolfhp.com/rehber/kasa-yonetimi.html" },
+      "image": "https://cryptowolfhp.com/rehber/og/kasa-yonetimi.png"
     },
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Ana Sayfa",
-          "item": "https://cryptowolfhp.com/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Akademi",
-          "item": "https://cryptowolfhp.com/rehber/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "FVG Nedir?",
-          "item": "https://cryptowolfhp.com/rehber/fvg-nedir.html"
-        }
+        { "@type": "ListItem", "position": 1, "name": "Ana Sayfa", "item": "https://cryptowolfhp.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Akademi", "item": "https://cryptowolfhp.com/rehber/" },
+        { "@type": "ListItem", "position": 3, "name": "Kasa Yönetimi", "item": "https://cryptowolfhp.com/rehber/kasa-yonetimi.html" }
       ]
     },
     {
       "@type": "FAQPage",
       "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "FVG ile order block aynı şey mi?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Hayır. Order block, güçlü hareketten önceki son zıt mumdur; FVG ise o güçlü hareketin bıraktığı boşluktur. Çoğu kez yan yana bulunur ve birlikte kullanılır."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Her FVG doldurulur mu?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Hayır. Boşlukların büyük kısmı geri test edilse de hepsi doldurulmaz. Bu yüzden FVG tek başına değil, trend ve yapı bağlamında değerlendirilir."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Hangi zaman diliminde FVG daha güçlü?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Genelde yüksek zaman dilimlerindeki (4H, günlük) FVG'ler daha güçlüdür; düşük zaman dilimindeki girişler bunlarla hizalandığında daha güvenilir olur."
-          }
-        }
+        { "@type": "Question", "name": "Katman (martingale) sistemi güvenli mi?", "acceptedAnswer": { "@type": "Answer", "text": "Hayır, hiçbir kaldıraçlı sistem güvenli değildir. Katman sistemi zararı ortalayarak toparlanma şansı verir ama fiyat tek yönde devam ederse zararı katlar. Katı katman sınırı, izole marjin ve toplam risk kontrolü olmadan hesabı sıfırlayabilir. Bu yüzden kurallar pazarlık konusu değildir." } },
+        { "@type": "Question", "name": "Neden 5 katman sınırı var?", "acceptedAnswer": { "@type": "Answer", "text": "Çünkü her katman riski büyütür; sınırsız ekleme yaparsan tek bir trend tüm sermayeyi silebilir. 5 katman, toparlanma alanı ile felaket riski arasında bir tavan koyar. Sınıra ulaşıldığında yeni katman değil, zararı kabullenip çıkış düşünülür." } },
+        { "@type": "Question", "name": "İşlem başına ne kadar risk almalıyım?", "acceptedAnswer": { "@type": "Answer", "text": "Genel disiplin, tek işlemde cüzdanın küçük ve sabit bir yüzdesini riske atmaktır. Katman sisteminde bu, tüm katmanların toplam riskinin bu tavanı aşmaması demektir. Kaldıraçtan çok, cüzdana oranla toplam risk önemlidir." } }
       ]
     }
   ]
@@ -355,83 +305,84 @@
   <nav class="crumb" aria-label="breadcrumb">
     <a href="https://cryptowolfhp.com/">Ana Sayfa</a> ›
     <a href="https://cryptowolfhp.com/rehber/">Akademi</a> ›
-    <b>FVG Nedir?</b>
+    <b>Kasa Yönetimi</b>
   </nav>
   <article>
-    <div class="eyebrow"><span class="kicker">Temel Kavram</span></div>
-    <h1>FVG Nedir?</h1>
-    <p class="subtitle">Fair Value Gap — Adil Değer Boşluğu (imbalance)</p>
-    <p class="lead">FVG, fiyatın çok hızlı hareket ettiği için geride bıraktığı bir <strong>dengesizlik (imbalance) bölgesidir</strong>. Üç mumluk bir yapıdan doğar ve piyasa çoğu kez bu boşluğu "doldurmak" için geri döner. Bu yüzden FVG'ler güçlü <strong>giriş bölgesi</strong> ya da <strong>hedef</strong> olarak izlenir.</p>
+    <div class="eyebrow"><span class="kicker">Risk Yönetimi · Wolf Sistemi</span></div>
+    <h1>Kasa Yönetimi & Pozisyon Boyutlandırma</h1>
+    <p class="subtitle">Katman (layer) sistemi ve sermaye koruması</p>
+    <p class="lead">Trading'de hayatta kalmanı belirleyen şey strateji değil, <strong>kasa yönetimidir</strong>. En iyi giriş bile kötü bir risk kontrolüyle hesabı sıfırlayabilir. Bu sayfa, Wolf sisteminin katman mantığını ve — daha önemlisi — o mantığı güvende tutan <strong>kuralları</strong> anlatır.</p>
 
-    <figure class="figure"><svg viewBox="0 0 640 240" role="img" aria-label="Üç mumluk boğa FVG yapısı: 1. mumun tepesi ile 3. mumun dibi arasındaki boşluk">
-      <!-- FVG bandı: 3. mum dibi (y=95) ile 1. mum tepesi (y=150) arası -->
-      <rect x="105" y="95" width="470" height="55" fill="rgba(245,179,66,.15)" stroke="#f5b342" stroke-dasharray="5 4"/>
-      <line x1="105" y1="95" x2="575" y2="95" stroke="#f5b342" stroke-dasharray="5 4" opacity=".6"/>
-      <line x1="105" y1="150" x2="575" y2="150" stroke="#f5b342" stroke-dasharray="5 4" opacity=".6"/>
-      <text x="250" y="127" fill="#f5b342" font-size="15" font-weight="700" text-anchor="middle" font-family="Cinzel,serif" letter-spacing="1">FVG · boşluk</text>
-      <!-- 1. mum -->
-      <line x1="140" y1="150" x2="140" y2="210" stroke="#22c55e" stroke-width="2"/>
-      <rect x="125" y="165" width="30" height="35" fill="#22c55e"/>
-      <text x="140" y="228" fill="#5a6478" font-size="12" text-anchor="middle">1</text>
-      <!-- 2. mum (güçlü itki) -->
-      <line x1="290" y1="48" x2="290" y2="190" stroke="#22c55e" stroke-width="2"/>
-      <rect x="275" y="62" width="30" height="118" fill="#22c55e"/>
-      <text x="290" y="228" fill="#5a6478" font-size="12" text-anchor="middle">2</text>
-      <text x="318" y="58" fill="#22c55e" font-size="12">güçlü itki</text>
-      <!-- 3. mum -->
-      <line x1="440" y1="55" x2="440" y2="98" stroke="#22c55e" stroke-width="2"/>
-      <rect x="425" y="68" width="30" height="27" fill="#22c55e"/>
-      <text x="440" y="228" fill="#5a6478" font-size="12" text-anchor="middle">3</text>
-      <!-- retest oku -->
-      <polyline points="470,72 512,92 526,120 508,148" fill="none" stroke="#2dd4bf" stroke-width="2"/>
-      <path d="M508 148 l10 -3 l-3 10 z" fill="#2dd4bf"/>
-      <text x="536" y="128" fill="#2dd4bf" font-size="11">retest / doldurma</text>
-    </svg><figcaption>Boğa FVG: 1. mumun tepesi ile 3. mumun dibi arasındaki, ortadaki güçlü mumun "atladığı" bölge. Fiyat sık sık buraya geri döner.</figcaption></figure>
+    <div class="callout"><strong>Önce net bir uyarı:</strong> Aşağıda anlatılan katman (martingale türü) yaklaşımı <strong>yüksek risklidir</strong>. Zararı ortalayarak toparlanma şansı verir, ama fiyat tek yönde devam ederse <strong>zararı katlar</strong> ve hesabı hızla eritebilir. Bu sistemin "kârlı" tarafı disiplindir; kuralları çiğnenirse tekniğin kendisi felakete döner. Buradaki her şey eğitim amaçlıdır.</div>
 
-    <h2>Kısaca tanımı</h2>
-    <p>FVG, <strong>üç ardışık mumla</strong> tanımlanır. Ortadaki mum çok güçlü bir hareket (displacement / itki) yaptığında, birinci mumun fitili ile üçüncü mumun fitili arasında dokunulmamış bir fiyat aralığı kalır. Piyasa o kadar hızlı geçmiştir ki o aralıkta yeterli alım-satım gerçekleşmemiştir. İşte bu doldurulmamış aralık "adil değer boşluğu"dur — piyasanın adil fiyatı atladığı, geride bir <strong>dengesizlik</strong> bıraktığı bölgedir.</p>
+    <h2>Wolf katman sistemi: 1 + 1 + 2 + 4 + 8</h2>
+    <p>Fikir şu: pozisyon aleyhine giderse, önceden tanımlı seviyelerde ve <strong>önceden tanımlı büyüklüklerde</strong> teminat ekleyerek ortalama maliyeti düşürürsün. Fiyat küçük bir toparlanma yaptığında pozisyon kâra/başabaşa geçer. Kritik nokta: katmanlar <strong>rastgele değil</strong>, sabit bir merdivendir ve <strong>5. katmanda durur</strong>.</p>
 
-    <h2>Neden fiyat geri döner?</h2>
-    <div class="callout">Piyasa "verimli" fiyatlamayı sever. Hızlı itki, arkada işlem görmemiş bir aralık bırakır ve fiyat çoğu zaman bu boşluğu <strong>test etmek / doldurmak</strong> için geri döner — tıpkı bir grafik gap'inin kapanma eğilimi gibi. Bu geri dönüş, trend yönünde düşük riskli bir giriş fırsatı sunabilir.</div>
+    <figure class="figure"><svg viewBox="0 0 640 260" role="img" aria-label="Wolf katman merdiveni: 1, 1, 2, 4, 8 birim teminat ve 5. katman sınırı">
+      <line x1="40" y1="220" x2="600" y2="220" stroke="#1f2740" stroke-width="1"/>
+      <!-- barlar: 1,1,2,4,8 birim (×16px) -->
+      <g font-size="12" text-anchor="middle">
+        <rect x="70"  y="204" width="70" height="16"  fill="#2dd4bf"/>
+        <rect x="180" y="204" width="70" height="16"  fill="#2dd4bf"/>
+        <rect x="290" y="188" width="70" height="32"  fill="#f5b342"/>
+        <rect x="400" y="156" width="70" height="64"  fill="#f5b342"/>
+        <rect x="510" y="92"  width="70" height="128" fill="#ef4444"/>
+        <text x="105" y="238" fill="#9aa4ba">1. kat</text>
+        <text x="215" y="238" fill="#9aa4ba">2. kat</text>
+        <text x="325" y="238" fill="#9aa4ba">3. kat</text>
+        <text x="435" y="238" fill="#9aa4ba">4. kat</text>
+        <text x="545" y="238" fill="#ef4444" font-weight="700">5. kat · SINIR</text>
+        <text x="105" y="198" fill="#2dd4bf" font-weight="700">1×</text>
+        <text x="215" y="198" fill="#2dd4bf" font-weight="700">1×</text>
+        <text x="325" y="182" fill="#f5b342" font-weight="700">2×</text>
+        <text x="435" y="150" fill="#f5b342" font-weight="700">4×</text>
+        <text x="545" y="86"  fill="#ef4444" font-weight="700">8×</text>
+      </g>
+      <line x1="510" y1="70" x2="600" y2="70" stroke="#ef4444" stroke-dasharray="5 4"/>
+      <text x="596" y="62" fill="#ef4444" font-size="11" text-anchor="end">bu noktadan sonra YENİ KATMAN YOK</text>
+    </svg><figcaption>Teminat merdiveni katlanarak büyür (1+1+2+4+8 = 16 birim). Risk son katmanda en yüksektir — bu yüzden 5. katman kesin sınırdır.</figcaption></figure>
 
-    <h2>Boğa ve ayı FVG</h2>
-    <ul>
-      <li><strong>Boğa FVG:</strong> ortadaki mum güçlü bir <strong>yükseliş</strong> mumudur. Boşluk, 1. mumun tepesi ile 3. mumun dibi arasında kalır. Fiyat düşüşte bu bölgeye geldiğinde destek gibi çalışabilir.</li>
-      <li><strong>Ayı FVG:</strong> ortadaki mum güçlü bir <strong>düşüş</strong> mumudur. Boşluk, 1. mumun dibi ile 3. mumun tepesi arasında kalır. Fiyat yukarı geldiğinde direnç gibi çalışabilir.</li>
-    </ul>
-
-    <h2>Trading'de nasıl kullanılır?</h2>
-    <p>FVG tek başına bir sinyal değil, bir <strong>ilgi bölgesidir</strong>. Wolf yaklaşımında onu tek başına değil, <strong>confluence</strong> (birden fazla teyidin çakışması) ile kullanırız:</p>
+    <h2>Kurallar — pazarlık konusu değil</h2>
+    <p>Sistemin işe yaramasını sağlayan girişler değil, bu kısıtlardır. Biri çiğnenirse sistem çöker:</p>
     <ol class="steps">
-      <li><b>Yönü belirle.</b> Üst zaman diliminde (ör. 4H) trend yönünü tespit et; girişleri bu yönle hizala.</li>
-      <li><b>Boşluğu işaretle.</b> Güçlü itki sonrası oluşan FVG bölgesini grafikte çiz.</li>
-      <li><b>Teyit ara.</b> Aynı bölgede bir <a href="order-block-nedir.html">order block</a> ya da <a href="fibonacci-nedir.html">Fibonacci OTE</a> varsa sinyal güçlenir.</li>
-      <li><b>Girişi planla.</b> Fiyat bölgeye geri döndüğünde (retest) tepki/onay ara, riskini önceden tanımla.</li>
+      <li><b>Her pozisyon izole marjin.</b> Katmanlı bir pozisyon çapraz modda tüm cüzdanı riske atar. İzole, hasarı o pozisyona hapseder.</li>
+      <li><b>Katı 5 katman sınırı.</b> 5. katmandan sonra ekleme yok. Fiyat hâlâ aleyhineyse, yeni katman değil — zararı kabullenip çıkış planı devreye girer.</li>
+      <li><b>Mum başına tek giriş.</b> Aynı mumda üst üste katman ekleme; panik ortalamasını engeller.</li>
+      <li><b>Aynı anda en fazla 3 pozisyon.</b> Çok sayıda katmanlı pozisyon toplam riski görünmez şekilde büyütür.</li>
+      <li><b>Short'larda ekstra dikkat.</b> Yukarı kırılımlar teorik olarak sınırsızdır; short katmanlarında risk asimetriktir.</li>
     </ol>
 
     <div class="logic">
-      <div class="box entry"><div class="l">GİRİŞ</div><p>Fiyat FVG'ye geri döndüğünde, trend yönünde ve tercihen bir teyit (OB / OTE) ile birlikte.</p></div>
-      <div class="box stop"><div class="l">STOP</div><p>Boşluğun dış tarafına — boğa FVG'de altına, ayı FVG'de üstüne. Boşluk tümüyle geçersiz kılınırsa çık.</p></div>
-      <div class="box tp"><div class="l">HEDEF</div><p>Bir sonraki likidite / yapı seviyesi. Risk/ödül oranını girişten önce hesapla.</p></div>
+      <div class="box entry"><div class="l">İZOLE MARJİN</div><p>Hasarı tek pozisyona hapseder. Çapraz = tüm cüzdan riski.</p></div>
+      <div class="box stop"><div class="l">5 KATMAN TAVANI</div><p>Sınırsız ortalama = kesin felaket. Tavan, hayatta kalmanın şartı.</p></div>
+      <div class="box tp"><div class="l">TOPLAM RİSK</div><p>Tüm katmanların toplamı cüzdanının küçük bir yüzdesini aşmasın.</p></div>
     </div>
 
+    <h2>Pozisyon boyutlandırma</h2>
+    <p>Asıl soru "kaç kat kaldıraç?" değil, <strong>"bu işlem yanlış giderse cüzdanımın yüzde kaçını kaybederim?"</strong> olmalı. Katman sisteminde bu, <strong>beş katmanın tamamı dolduğunda</strong> bile toplam kaybın önceden belirlediğin tavanı aşmaması demektir. Boyutlandırmayı en kötü senaryoya (5 katman + stop) göre yap; en iyi senaryoya göre değil.</p>
+
+    <div class="callout"><strong>Gerçekçi ol:</strong> Katman sistemi kazanma oranını yüksek gösterebilir çünkü çoğu işlem küçük toparlanmayla kapanır. Ama nadir görülen güçlü trend, birikmiş tüm bu küçük kazançları tek seferde silebilir. Sistemin sınavı iyi günlerde değil, <strong>sınıra dayandığın o tek kötü işlemde</strong> kurallarına sadık kalabilmendir.</div>
+
     <h2>Sık sorulan sorular</h2>
-    <div class="faq"><details><summary>FVG ile order block aynı şey mi?</summary><p>Hayır. Order block, güçlü hareketten önceki son zıt mumdur; FVG ise o güçlü hareketin bıraktığı boşluktur. Çoğu kez yan yana bulunur ve birlikte kullanılır.</p></details>
-      <details><summary>Her FVG doldurulur mu?</summary><p>Hayır. Boşlukların büyük kısmı geri test edilse de hepsi doldurulmaz. Bu yüzden FVG tek başına değil, trend ve yapı bağlamında değerlendirilir.</p></details>
-      <details><summary>Hangi zaman diliminde FVG daha güçlü?</summary><p>Genelde yüksek zaman dilimlerindeki (4H, günlük) FVG'ler daha güçlüdür; düşük zaman dilimindeki girişler bunlarla hizalandığında daha güvenilir olur.</p></details></div>
+    <div class="faq">
+      <details><summary>Katman (martingale) sistemi güvenli mi?</summary><p>Hayır, hiçbir kaldıraçlı sistem güvenli değildir. Katman sistemi zararı ortalayarak toparlanma şansı verir ama fiyat tek yönde devam ederse zararı katlar. Katı katman sınırı, izole marjin ve toplam risk kontrolü olmadan hesabı sıfırlayabilir. Bu yüzden kurallar pazarlık konusu değildir.</p></details>
+      <details><summary>Neden 5 katman sınırı var?</summary><p>Çünkü her katman riski büyütür; sınırsız ekleme yaparsan tek bir trend tüm sermayeyi silebilir. 5 katman, toparlanma alanı ile felaket riski arasında bir tavan koyar. Sınıra ulaşıldığında yeni katman değil, zararı kabullenip çıkış düşünülür.</p></details>
+      <details><summary>İşlem başına ne kadar risk almalıyım?</summary><p>Genel disiplin, tek işlemde cüzdanın küçük ve sabit bir yüzdesini riske atmaktır. Katman sisteminde bu, tüm katmanların toplam riskinin bu tavanı aşmaması demektir. Kaldıraçtan çok, cüzdana oranla toplam risk önemlidir.</p></details>
+    </div>
 
     <h2>İlgili rehberler & araçlar</h2>
-    <div class="related"><a href="order-block-nedir.html">Order Block Nedir?<span>FVG ile en iyi ortak</span></a>
-      <a href="fibonacci-nedir.html">Fibonacci Nedir?<span>OTE ile çakışma</span></a>
-      <a href="mtf-dashboard-rehberi.html">MTF Dashboard Rehberi<span>FVG confluence kullanan tarayıcı</span></a>
-      <a href="ob-oracle-rehberi.html">OB Oracle Rehberi<span>OB + FVG otomatik tespit</span></a></div>
+    <div class="related">
+      <a href="likidasyon-nedir.html">Likidasyon Nedir?<span>Katman sınırı aşılırsa sonuç</span></a>
+      <a href="risk-odul-orani.html">Risk / Ödül Oranı<span>İşlem başına risk tavanı</span></a>
+      <a href="setup-planner-rehberi.html">Setup Planner Rehberi<span>Pozisyon planlama aracı</span></a>
+    </div>
 
     <div class="author">
       <div class="ava" role="img" aria-label="CryptoWolf HP logosu"></div>
       <div><div class="name">Wolf Akademi</div>
-      <div class="bio">CryptoWolf HP eğitim ekibi · vadeli işlem analiz araçları ve piyasa yapısı üzerine içerik.</div></div>
+      <div class="bio">CryptoWolf HP eğitim ekibi · risk yönetimi, kasa disiplini ve pozisyon planlama üzerine içerik.</div></div>
     </div>
-    <p class="disclaimer">⚠️ Bu içerik yalnızca eğitim ve bilgilendirme amaçlıdır; yatırım tavsiyesi değildir. Kripto vadeli işlemler yüksek risk taşır. Kararlarından yalnızca sen sorumlusun.</p>
+    <p class="disclaimer">⚠️ Bu içerik yalnızca eğitim ve bilgilendirme amaçlıdır; yatırım tavsiyesi değildir. Anlatılan katman/martingale yaklaşımı yüksek risklidir ve sermayenin tamamının kaybıyla sonuçlanabilir. Geçmiş performans gelecek getiriyi garanti etmez. Kararlarından yalnızca sen sorumlusun.</p>
   </article>
 </main>
 <footer>

@@ -12,17 +12,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#0a0e1a">
-<title>FVG Nedir? Fair Value Gap (Adil Değer Boşluğu) – Wolf Akademi</title>
-<meta name="description" content="FVG (Fair Value Gap / adil değer boşluğu) nedir, nasıl oluşur ve nasıl bulunur? Boğa ve ayı FVG, imbalance mantığı ve fiyatın boşluğu doldurma davranışı.">
-<link rel="canonical" href="https://cryptowolfhp.com/rehber/fvg-nedir.html">
+<title>Funding Rate (Fonlama Oranı) Nedir? Pozitif & Negatif – Wolf Akademi</title>
+<meta name="description" content="Funding rate (fonlama oranı) nedir, nasıl çalışır? Pozitif ve negatif fonlama, long/short dengesi, squeeze sinyali ve pozisyon maliyeti. Vadeli işlem fonlama rehberi.">
+<link rel="canonical" href="https://cryptowolfhp.com/rehber/funding-rate-nedir.html">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="CryptoWolf HP">
 <meta property="og:locale" content="tr_TR">
-<meta property="og:title" content="FVG Nedir? Fair Value Gap (Adil Değer Boşluğu) – Wolf Akademi">
-<meta property="og:description" content="FVG (Fair Value Gap / adil değer boşluğu) nedir, nasıl oluşur ve nasıl bulunur? Boğa ve ayı FVG, imbalance mantığı ve fiyatın boşluğu doldurma davranışı.">
-<meta property="og:url" content="https://cryptowolfhp.com/rehber/fvg-nedir.html">
-<meta property="og:image" content="https://cryptowolfhp.com/rehber/og/fvg-nedir.png">
+<meta property="og:title" content="Funding Rate (Fonlama Oranı) Nedir?">
+<meta property="og:description" content="Pozitif/negatif fonlama, long-short dengesi, squeeze sinyali ve pozisyon maliyeti.">
+<meta property="og:url" content="https://cryptowolfhp.com/rehber/funding-rate-nedir.html">
+<meta property="og:image" content="https://cryptowolfhp.com/rehber/og/funding-rate-nedir.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,80 +33,30 @@
   "@graph": [
     {
       "@type": "Article",
-      "headline": "FVG Nedir?",
-      "description": "FVG (Fair Value Gap / adil değer boşluğu) nedir, nasıl oluşur ve nasıl bulunur? Boğa ve ayı FVG, imbalance mantığı ve fiyatın boşluğu doldurma davranışı.",
+      "headline": "Funding Rate (Fonlama Oranı) Nedir?",
+      "description": "Funding rate nedir, nasıl çalışır? Pozitif/negatif fonlama, long/short dengesi, squeeze sinyali ve pozisyon maliyeti.",
       "inLanguage": "tr-TR",
-      "datePublished": "2026-07-06",
-      "dateModified": "2026-07-06",
-      "author": {
-        "@type": "Organization",
-        "name": "Wolf Akademi",
-        "url": "https://cryptowolfhp.com"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "CryptoWolf HP",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://cryptowolfhp.com/logo.png"
-        }
-      },
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://cryptowolfhp.com/rehber/fvg-nedir.html"
-      },
-      "image": "https://cryptowolfhp.com/rehber/og/fvg-nedir.png"
+      "datePublished": "2026-07-09",
+      "dateModified": "2026-07-09",
+      "author": { "@type": "Organization", "name": "Wolf Akademi", "url": "https://cryptowolfhp.com" },
+      "publisher": { "@type": "Organization", "name": "CryptoWolf HP", "logo": { "@type": "ImageObject", "url": "https://cryptowolfhp.com/logo.png" } },
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://cryptowolfhp.com/rehber/funding-rate-nedir.html" },
+      "image": "https://cryptowolfhp.com/rehber/og/funding-rate-nedir.png"
     },
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Ana Sayfa",
-          "item": "https://cryptowolfhp.com/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Akademi",
-          "item": "https://cryptowolfhp.com/rehber/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "FVG Nedir?",
-          "item": "https://cryptowolfhp.com/rehber/fvg-nedir.html"
-        }
+        { "@type": "ListItem", "position": 1, "name": "Ana Sayfa", "item": "https://cryptowolfhp.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Akademi", "item": "https://cryptowolfhp.com/rehber/" },
+        { "@type": "ListItem", "position": 3, "name": "Funding Rate Nedir?", "item": "https://cryptowolfhp.com/rehber/funding-rate-nedir.html" }
       ]
     },
     {
       "@type": "FAQPage",
       "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "FVG ile order block aynı şey mi?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Hayır. Order block, güçlü hareketten önceki son zıt mumdur; FVG ise o güçlü hareketin bıraktığı boşluktur. Çoğu kez yan yana bulunur ve birlikte kullanılır."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Her FVG doldurulur mu?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Hayır. Boşlukların büyük kısmı geri test edilse de hepsi doldurulmaz. Bu yüzden FVG tek başına değil, trend ve yapı bağlamında değerlendirilir."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Hangi zaman diliminde FVG daha güçlü?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Genelde yüksek zaman dilimlerindeki (4H, günlük) FVG'ler daha güçlüdür; düşük zaman dilimindeki girişler bunlarla hizalandığında daha güvenilir olur."
-          }
-        }
+        { "@type": "Question", "name": "Pozitif fonlama ne anlama gelir?", "acceptedAnswer": { "@type": "Answer", "text": "Pozitif fonlamada long pozisyonlar short pozisyonlara ödeme yapar. Bu genelde piyasada long baskısının fazla olduğunu gösterir; aşırı yüksek pozitif fonlama, kalabalık long'lar nedeniyle düşüş/squeeze riskine işaret edebilir." } },
+        { "@type": "Question", "name": "Fonlama oranı ne sıklıkla ödenir?", "acceptedAnswer": { "@type": "Answer", "text": "Çoğu borsada fonlama genellikle her 8 saatte bir el değiştirir, ancak bu süre ve oran borsaya ve piyasaya göre değişebilir. Ödeme yalnızca fonlama anında açık olan pozisyonlar için geçerlidir." } },
+        { "@type": "Question", "name": "Fonlama oranı yön tahmini için kullanılır mı?", "acceptedAnswer": { "@type": "Answer", "text": "Tek başına güvenilir bir yön sinyali değildir, ama duyarlılık göstergesidir. Aşırı uçtaki fonlama, kalabalık bir işlem ve olası tersine dönüş (squeeze) uyarısı olarak diğer teyitlerle birlikte kullanılır." } }
       ]
     }
   ]
@@ -355,81 +305,79 @@
   <nav class="crumb" aria-label="breadcrumb">
     <a href="https://cryptowolfhp.com/">Ana Sayfa</a> ›
     <a href="https://cryptowolfhp.com/rehber/">Akademi</a> ›
-    <b>FVG Nedir?</b>
+    <b>Funding Rate Nedir?</b>
   </nav>
   <article>
-    <div class="eyebrow"><span class="kicker">Temel Kavram</span></div>
-    <h1>FVG Nedir?</h1>
-    <p class="subtitle">Fair Value Gap — Adil Değer Boşluğu (imbalance)</p>
-    <p class="lead">FVG, fiyatın çok hızlı hareket ettiği için geride bıraktığı bir <strong>dengesizlik (imbalance) bölgesidir</strong>. Üç mumluk bir yapıdan doğar ve piyasa çoğu kez bu boşluğu "doldurmak" için geri döner. Bu yüzden FVG'ler güçlü <strong>giriş bölgesi</strong> ya da <strong>hedef</strong> olarak izlenir.</p>
+    <div class="eyebrow"><span class="kicker">Vadeli İşlem · Duyarlılık</span></div>
+    <h1>Funding Rate (Fonlama Oranı) Nedir?</h1>
+    <p class="subtitle">Perpetual sözleşmeyi spota bağlayan periyodik ödeme</p>
+    <p class="lead">Funding rate, vadeli (perpetual) sözleşme fiyatını spot fiyata yakın tutmak için <strong>long ve short taraflar arasında el değiştiren periyodik bir ödemedir</strong>. Kimin kime ödediği, o an piyasada hangi tarafın daha kalabalık olduğunu — yani duyarlılığı — gösterir.</p>
 
-    <figure class="figure"><svg viewBox="0 0 640 240" role="img" aria-label="Üç mumluk boğa FVG yapısı: 1. mumun tepesi ile 3. mumun dibi arasındaki boşluk">
-      <!-- FVG bandı: 3. mum dibi (y=95) ile 1. mum tepesi (y=150) arası -->
-      <rect x="105" y="95" width="470" height="55" fill="rgba(245,179,66,.15)" stroke="#f5b342" stroke-dasharray="5 4"/>
-      <line x1="105" y1="95" x2="575" y2="95" stroke="#f5b342" stroke-dasharray="5 4" opacity=".6"/>
-      <line x1="105" y1="150" x2="575" y2="150" stroke="#f5b342" stroke-dasharray="5 4" opacity=".6"/>
-      <text x="250" y="127" fill="#f5b342" font-size="15" font-weight="700" text-anchor="middle" font-family="Cinzel,serif" letter-spacing="1">FVG · boşluk</text>
-      <!-- 1. mum -->
-      <line x1="140" y1="150" x2="140" y2="210" stroke="#22c55e" stroke-width="2"/>
-      <rect x="125" y="165" width="30" height="35" fill="#22c55e"/>
-      <text x="140" y="228" fill="#5a6478" font-size="12" text-anchor="middle">1</text>
-      <!-- 2. mum (güçlü itki) -->
-      <line x1="290" y1="48" x2="290" y2="190" stroke="#22c55e" stroke-width="2"/>
-      <rect x="275" y="62" width="30" height="118" fill="#22c55e"/>
-      <text x="290" y="228" fill="#5a6478" font-size="12" text-anchor="middle">2</text>
-      <text x="318" y="58" fill="#22c55e" font-size="12">güçlü itki</text>
-      <!-- 3. mum -->
-      <line x1="440" y1="55" x2="440" y2="98" stroke="#22c55e" stroke-width="2"/>
-      <rect x="425" y="68" width="30" height="27" fill="#22c55e"/>
-      <text x="440" y="228" fill="#5a6478" font-size="12" text-anchor="middle">3</text>
-      <!-- retest oku -->
-      <polyline points="470,72 512,92 526,120 508,148" fill="none" stroke="#2dd4bf" stroke-width="2"/>
-      <path d="M508 148 l10 -3 l-3 10 z" fill="#2dd4bf"/>
-      <text x="536" y="128" fill="#2dd4bf" font-size="11">retest / doldurma</text>
-    </svg><figcaption>Boğa FVG: 1. mumun tepesi ile 3. mumun dibi arasındaki, ortadaki güçlü mumun "atladığı" bölge. Fiyat sık sık buraya geri döner.</figcaption></figure>
+    <figure class="figure"><svg viewBox="0 0 640 250" role="img" aria-label="Pozitif fonlamada long short'a, negatif fonlamada short long'a öder">
+      <!-- POZİTİF satırı -->
+      <text x="30" y="66" fill="#f5b342" font-size="13" font-weight="700" font-family="Cinzel,serif">POZİTİF (+)</text>
+      <rect x="180" y="42" width="120" height="46" rx="9" fill="rgba(34,197,94,.12)" stroke="#22c55e"/>
+      <text x="240" y="70" fill="#22c55e" font-size="14" font-weight="700" text-anchor="middle">LONG</text>
+      <line x1="308" y1="65" x2="378" y2="65" stroke="#f5b342" stroke-width="2.5"/>
+      <path d="M378 65 l-9 -5 l0 10 z" fill="#f5b342"/>
+      <text x="343" y="56" fill="#f5b342" font-size="10" text-anchor="middle">öder</text>
+      <rect x="388" y="42" width="120" height="46" rx="9" fill="rgba(239,68,68,.12)" stroke="#ef4444"/>
+      <text x="448" y="70" fill="#ef4444" font-size="14" font-weight="700" text-anchor="middle">SHORT</text>
 
-    <h2>Kısaca tanımı</h2>
-    <p>FVG, <strong>üç ardışık mumla</strong> tanımlanır. Ortadaki mum çok güçlü bir hareket (displacement / itki) yaptığında, birinci mumun fitili ile üçüncü mumun fitili arasında dokunulmamış bir fiyat aralığı kalır. Piyasa o kadar hızlı geçmiştir ki o aralıkta yeterli alım-satım gerçekleşmemiştir. İşte bu doldurulmamış aralık "adil değer boşluğu"dur — piyasanın adil fiyatı atladığı, geride bir <strong>dengesizlik</strong> bıraktığı bölgedir.</p>
+      <!-- NEGATİF satırı -->
+      <text x="30" y="176" fill="#2dd4bf" font-size="13" font-weight="700" font-family="Cinzel,serif">NEGATİF (−)</text>
+      <rect x="180" y="152" width="120" height="46" rx="9" fill="rgba(239,68,68,.12)" stroke="#ef4444"/>
+      <text x="240" y="180" fill="#ef4444" font-size="14" font-weight="700" text-anchor="middle">SHORT</text>
+      <line x1="308" y1="175" x2="378" y2="175" stroke="#f5b342" stroke-width="2.5"/>
+      <path d="M378 175 l-9 -5 l0 10 z" fill="#f5b342"/>
+      <text x="343" y="166" fill="#f5b342" font-size="10" text-anchor="middle">öder</text>
+      <rect x="388" y="152" width="120" height="46" rx="9" fill="rgba(34,197,94,.12)" stroke="#22c55e"/>
+      <text x="448" y="180" fill="#22c55e" font-size="14" font-weight="700" text-anchor="middle">LONG</text>
 
-    <h2>Neden fiyat geri döner?</h2>
-    <div class="callout">Piyasa "verimli" fiyatlamayı sever. Hızlı itki, arkada işlem görmemiş bir aralık bırakır ve fiyat çoğu zaman bu boşluğu <strong>test etmek / doldurmak</strong> için geri döner — tıpkı bir grafik gap'inin kapanma eğilimi gibi. Bu geri dönüş, trend yönünde düşük riskli bir giriş fırsatı sunabilir.</div>
+      <text x="320" y="232" fill="#5a6478" font-size="11" text-anchor="middle">Fonlama genelde ~8 saatte bir el değiştirir; oran talep dengesini yansıtır.</text>
+    </svg><figcaption>Pozitif fonlamada long tarafı short'a öder (long kalabalık); negatif fonlamada short tarafı long'a öder (short kalabalık).</figcaption></figure>
 
-    <h2>Boğa ve ayı FVG</h2>
-    <ul>
-      <li><strong>Boğa FVG:</strong> ortadaki mum güçlü bir <strong>yükseliş</strong> mumudur. Boşluk, 1. mumun tepesi ile 3. mumun dibi arasında kalır. Fiyat düşüşte bu bölgeye geldiğinde destek gibi çalışabilir.</li>
-      <li><strong>Ayı FVG:</strong> ortadaki mum güçlü bir <strong>düşüş</strong> mumudur. Boşluk, 1. mumun dibi ile 3. mumun tepesi arasında kalır. Fiyat yukarı geldiğinde direnç gibi çalışabilir.</li>
-    </ul>
+    <h2>Neden var?</h2>
+    <p>Perpetual sözleşmelerin vade sonu yoktur; bu yüzden fiyatın spottan kopmaması için bir denge mekanizmasına ihtiyaç duyulur. Fonlama tam da bunu yapar: vadeli fiyat spotun üstüne çıkınca (long'lar agresif) pozitif fonlama long'ları cezalandırır ve fiyatı aşağı çeker. Altına inince (short'lar agresif) negatif fonlama tersini yapar. Böylece iki fiyat birbirine <strong>çapalı</strong> kalır.</p>
 
-    <h2>Trading'de nasıl kullanılır?</h2>
-    <p>FVG tek başına bir sinyal değil, bir <strong>ilgi bölgesidir</strong>. Wolf yaklaşımında onu tek başına değil, <strong>confluence</strong> (birden fazla teyidin çakışması) ile kullanırız:</p>
-    <ol class="steps">
-      <li><b>Yönü belirle.</b> Üst zaman diliminde (ör. 4H) trend yönünü tespit et; girişleri bu yönle hizala.</li>
-      <li><b>Boşluğu işaretle.</b> Güçlü itki sonrası oluşan FVG bölgesini grafikte çiz.</li>
-      <li><b>Teyit ara.</b> Aynı bölgede bir <a href="order-block-nedir.html">order block</a> ya da <a href="fibonacci-nedir.html">Fibonacci OTE</a> varsa sinyal güçlenir.</li>
-      <li><b>Girişi planla.</b> Fiyat bölgeye geri döndüğünde (retest) tepki/onay ara, riskini önceden tanımla.</li>
-    </ol>
-
+    <h2>Pozitif, negatif, nötr</h2>
     <div class="logic">
-      <div class="box entry"><div class="l">GİRİŞ</div><p>Fiyat FVG'ye geri döndüğünde, trend yönünde ve tercihen bir teyit (OB / OTE) ile birlikte.</p></div>
-      <div class="box stop"><div class="l">STOP</div><p>Boşluğun dış tarafına — boğa FVG'de altına, ayı FVG'de üstüne. Boşluk tümüyle geçersiz kılınırsa çık.</p></div>
-      <div class="box tp"><div class="l">HEDEF</div><p>Bir sonraki likidite / yapı seviyesi. Risk/ödül oranını girişten önce hesapla.</p></div>
+      <div class="box tp"><div class="l">POZİTİF (+)</div><p>Long → short öder. Long baskısı fazla. Aşırı yüksekse düşüş/squeeze riski.</p></div>
+      <div class="box stop"><div class="l">NEGATİF (−)</div><p>Short → long öder. Short baskısı fazla. Aşırı düşükse yükseliş/short squeeze riski.</p></div>
+      <div class="box entry"><div class="l">NÖTR (~0)</div><p>Taraflar dengede. Belirgin bir kalabalık yön yok.</p></div>
     </div>
 
+    <h2>Fonlama sana neyi anlatır?</h2>
+    <p>Fonlama bir <strong>duyarlılık göstergesidir</strong>. Aşırı uçtaki bir oran, bir tarafın çok kalabalık olduğunu söyler — ve kalabalık işlemler kırılgandır. Aşırı pozitif fonlama, tüm long'ların aynı kapıya yığıldığı, küçük bir düşüşün zincirleme <a href="likidasyon-nedir.html">likidasyonları</a> tetikleyebileceği ("long squeeze") bir zemin anlamına gelebilir. Tersine, aşırı negatif fonlama short squeeze zemini hazırlar.</p>
+
+    <h2>İşlemde nasıl kullanılır?</h2>
+    <ol class="steps">
+      <li><b>Maliyet olarak.</b> Pozisyonunu fonlama anında açık tutuyorsan, oran senin lehine ya da aleyhine çalışır — uzun süreli pozisyonlarda gözet.</li>
+      <li><b>Duyarlılık teyidi olarak.</b> Fonlamayı tek başına değil, açık pozisyon (OI) ve fiyat yapısıyla birlikte oku.</li>
+      <li><b>Squeeze uyarısı olarak.</b> Aşırı uç fonlama + kalabalık pozisyon = tersine dönüş riski. Karşı yönde tuzağa dikkat.</li>
+      <li><b>Wolf tarayıcısıyla.</b> Funding + OI taraması, tükeniş ve squeeze zeminlerini otomatik işaretler.</li>
+    </ol>
+
+    <div class="callout"><strong>Kalabalık = kırılgan:</strong> Aşırı fonlama "herkes aynı yönde" demektir. Piyasa en çok, en kalabalık tarafı cezalandırır. Bu yüzden aşırı pozitif fonlamada agresif long, aşırı negatifte agresif short çoğu zaman en riskli anlardır.</div>
+
     <h2>Sık sorulan sorular</h2>
-    <div class="faq"><details><summary>FVG ile order block aynı şey mi?</summary><p>Hayır. Order block, güçlü hareketten önceki son zıt mumdur; FVG ise o güçlü hareketin bıraktığı boşluktur. Çoğu kez yan yana bulunur ve birlikte kullanılır.</p></details>
-      <details><summary>Her FVG doldurulur mu?</summary><p>Hayır. Boşlukların büyük kısmı geri test edilse de hepsi doldurulmaz. Bu yüzden FVG tek başına değil, trend ve yapı bağlamında değerlendirilir.</p></details>
-      <details><summary>Hangi zaman diliminde FVG daha güçlü?</summary><p>Genelde yüksek zaman dilimlerindeki (4H, günlük) FVG'ler daha güçlüdür; düşük zaman dilimindeki girişler bunlarla hizalandığında daha güvenilir olur.</p></details></div>
+    <div class="faq">
+      <details><summary>Pozitif fonlama ne anlama gelir?</summary><p>Pozitif fonlamada long pozisyonlar short pozisyonlara ödeme yapar. Bu genelde piyasada long baskısının fazla olduğunu gösterir; aşırı yüksek pozitif fonlama, kalabalık long'lar nedeniyle düşüş/squeeze riskine işaret edebilir.</p></details>
+      <details><summary>Fonlama oranı ne sıklıkla ödenir?</summary><p>Çoğu borsada fonlama genellikle her 8 saatte bir el değiştirir, ancak bu süre ve oran borsaya ve piyasaya göre değişebilir. Ödeme yalnızca fonlama anında açık olan pozisyonlar için geçerlidir.</p></details>
+      <details><summary>Fonlama oranı yön tahmini için kullanılır mı?</summary><p>Tek başına güvenilir bir yön sinyali değildir, ama duyarlılık göstergesidir. Aşırı uçtaki fonlama, kalabalık bir işlem ve olası tersine dönüş (squeeze) uyarısı olarak diğer teyitlerle birlikte kullanılır.</p></details>
+    </div>
 
     <h2>İlgili rehberler & araçlar</h2>
-    <div class="related"><a href="order-block-nedir.html">Order Block Nedir?<span>FVG ile en iyi ortak</span></a>
-      <a href="fibonacci-nedir.html">Fibonacci Nedir?<span>OTE ile çakışma</span></a>
-      <a href="mtf-dashboard-rehberi.html">MTF Dashboard Rehberi<span>FVG confluence kullanan tarayıcı</span></a>
-      <a href="ob-oracle-rehberi.html">OB Oracle Rehberi<span>OB + FVG otomatik tespit</span></a></div>
+    <div class="related">
+      <a href="whale-scanner-rehberi.html">Whale Scanner Rehberi<span>Funding + OI & likidasyon haritası</span></a>
+      <a href="beta-radar-rehberi.html">Beta Radar Rehberi<span>Volatilite & risk profili</span></a>
+      <a href="likidasyon-nedir.html">Likidasyon Nedir?<span>Squeeze'in mekanizması</span></a>
+    </div>
 
     <div class="author">
       <div class="ava" role="img" aria-label="CryptoWolf HP logosu"></div>
       <div><div class="name">Wolf Akademi</div>
-      <div class="bio">CryptoWolf HP eğitim ekibi · vadeli işlem analiz araçları ve piyasa yapısı üzerine içerik.</div></div>
+      <div class="bio">CryptoWolf HP eğitim ekibi · vadeli işlem duyarlılık göstergeleri ve piyasa yapısı üzerine içerik.</div></div>
     </div>
     <p class="disclaimer">⚠️ Bu içerik yalnızca eğitim ve bilgilendirme amaçlıdır; yatırım tavsiyesi değildir. Kripto vadeli işlemler yüksek risk taşır. Kararlarından yalnızca sen sorumlusun.</p>
   </article>

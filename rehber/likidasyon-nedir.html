@@ -12,17 +12,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#0a0e1a">
-<title>FVG Nedir? Fair Value Gap (Adil Değer Boşluğu) – Wolf Akademi</title>
-<meta name="description" content="FVG (Fair Value Gap / adil değer boşluğu) nedir, nasıl oluşur ve nasıl bulunur? Boğa ve ayı FVG, imbalance mantığı ve fiyatın boşluğu doldurma davranışı.">
-<link rel="canonical" href="https://cryptowolfhp.com/rehber/fvg-nedir.html">
+<title>Likidasyon Nedir? Nasıl Hesaplanır? (Hesaplama Aracı) – Wolf Akademi</title>
+<meta name="description" content="Likidasyon (zorunlu tasfiye) nedir, vadeli işlemlerde likidasyon fiyatı nasıl hesaplanır? Long/short formülü, ücretsiz likidasyon hesaplama aracı ve korunma yolları.">
+<link rel="canonical" href="https://cryptowolfhp.com/rehber/likidasyon-nedir.html">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="CryptoWolf HP">
 <meta property="og:locale" content="tr_TR">
-<meta property="og:title" content="FVG Nedir? Fair Value Gap (Adil Değer Boşluğu) – Wolf Akademi">
-<meta property="og:description" content="FVG (Fair Value Gap / adil değer boşluğu) nedir, nasıl oluşur ve nasıl bulunur? Boğa ve ayı FVG, imbalance mantığı ve fiyatın boşluğu doldurma davranışı.">
-<meta property="og:url" content="https://cryptowolfhp.com/rehber/fvg-nedir.html">
-<meta property="og:image" content="https://cryptowolfhp.com/rehber/og/fvg-nedir.png">
+<meta property="og:title" content="Likidasyon Nedir? Nasıl Hesaplanır? (Hesaplama Aracı)">
+<meta property="og:description" content="Likidasyon fiyatı nasıl hesaplanır? Long/short formülü + ücretsiz hesaplama aracı + korunma yolları.">
+<meta property="og:url" content="https://cryptowolfhp.com/rehber/likidasyon-nedir.html">
+<meta property="og:image" content="https://cryptowolfhp.com/rehber/og/likidasyon-nedir.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,80 +33,30 @@
   "@graph": [
     {
       "@type": "Article",
-      "headline": "FVG Nedir?",
-      "description": "FVG (Fair Value Gap / adil değer boşluğu) nedir, nasıl oluşur ve nasıl bulunur? Boğa ve ayı FVG, imbalance mantığı ve fiyatın boşluğu doldurma davranışı.",
+      "headline": "Likidasyon Nedir? Nasıl Hesaplanır?",
+      "description": "Likidasyon (zorunlu tasfiye) nedir, vadeli işlemlerde likidasyon fiyatı nasıl hesaplanır? Long/short formülü, hesaplama aracı ve korunma yolları.",
       "inLanguage": "tr-TR",
-      "datePublished": "2026-07-06",
-      "dateModified": "2026-07-06",
-      "author": {
-        "@type": "Organization",
-        "name": "Wolf Akademi",
-        "url": "https://cryptowolfhp.com"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "CryptoWolf HP",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://cryptowolfhp.com/logo.png"
-        }
-      },
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://cryptowolfhp.com/rehber/fvg-nedir.html"
-      },
-      "image": "https://cryptowolfhp.com/rehber/og/fvg-nedir.png"
+      "datePublished": "2026-07-09",
+      "dateModified": "2026-07-09",
+      "author": { "@type": "Organization", "name": "Wolf Akademi", "url": "https://cryptowolfhp.com" },
+      "publisher": { "@type": "Organization", "name": "CryptoWolf HP", "logo": { "@type": "ImageObject", "url": "https://cryptowolfhp.com/logo.png" } },
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://cryptowolfhp.com/rehber/likidasyon-nedir.html" },
+      "image": "https://cryptowolfhp.com/rehber/og/likidasyon-nedir.png"
     },
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Ana Sayfa",
-          "item": "https://cryptowolfhp.com/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Akademi",
-          "item": "https://cryptowolfhp.com/rehber/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "FVG Nedir?",
-          "item": "https://cryptowolfhp.com/rehber/fvg-nedir.html"
-        }
+        { "@type": "ListItem", "position": 1, "name": "Ana Sayfa", "item": "https://cryptowolfhp.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Akademi", "item": "https://cryptowolfhp.com/rehber/" },
+        { "@type": "ListItem", "position": 3, "name": "Likidasyon Nedir?", "item": "https://cryptowolfhp.com/rehber/likidasyon-nedir.html" }
       ]
     },
     {
       "@type": "FAQPage",
       "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "FVG ile order block aynı şey mi?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Hayır. Order block, güçlü hareketten önceki son zıt mumdur; FVG ise o güçlü hareketin bıraktığı boşluktur. Çoğu kez yan yana bulunur ve birlikte kullanılır."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Her FVG doldurulur mu?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Hayır. Boşlukların büyük kısmı geri test edilse de hepsi doldurulmaz. Bu yüzden FVG tek başına değil, trend ve yapı bağlamında değerlendirilir."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Hangi zaman diliminde FVG daha güçlü?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Genelde yüksek zaman dilimlerindeki (4H, günlük) FVG'ler daha güçlüdür; düşük zaman dilimindeki girişler bunlarla hizalandığında daha güvenilir olur."
-          }
-        }
+        { "@type": "Question", "name": "Likidasyon olunca tüm param gider mi?", "acceptedAnswer": { "@type": "Answer", "text": "İzole marjinde yalnızca o pozisyona ayırdığın teminat kaybolur. Çapraz (cross) marjinde ise tüm hesap bakiyen risk altındadır; bu yüzden çapraz modda tek bir pozisyon tüm cüzdanı etkileyebilir." } },
+        { "@type": "Question", "name": "Likidasyon fiyatı neye göre belirlenir?", "acceptedAnswer": { "@type": "Answer", "text": "Giriş fiyatı, kaldıraç oranı, marjin türü (izole/çapraz) ve borsanın sürdürme marjı oranına göre belirlenir. Kaldıraç yükseldikçe likidasyon fiyatı giriş fiyatına yaklaşır." } },
+        { "@type": "Question", "name": "Likidasyondan nasıl korunurum?", "acceptedAnswer": { "@type": "Answer", "text": "Düşük kaldıraç kullan, her işlemde stop-loss belirle, teminatın yalnızca küçük bir kısmını riske at ve mümkünse izole marjin tercih et. Pozisyonlarını düzenli takip et." } }
       ]
     }
   ]
@@ -329,6 +279,27 @@
     .head-nav a{padding:13px 24px;width:100%;box-sizing:border-box;font-size:15px;}
   }
 </style>
+<style>
+  .calc{margin:22px 0 8px;background:linear-gradient(160deg,var(--surface),var(--bg2));border:1px solid var(--border2);border-radius:16px;padding:20px;}
+  .calc h3{margin:0 0 14px;color:var(--text);font-size:1.1rem;}
+  .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .calc label{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--text-dim);font-weight:600;}
+  .calc input{background:var(--bg);border:1px solid var(--border);border-radius:9px;color:var(--text);
+     font-size:16px;padding:11px 13px;font-family:inherit;outline:none;transition:border-color .15s;-webkit-appearance:none;}
+  .calc input:focus{border-color:var(--teal);}
+  .calc-side{grid-column:1 / -1;display:flex;gap:10px;}
+  .calc-side button{flex:1;padding:11px;border-radius:9px;border:1px solid var(--border);background:var(--bg);
+     color:var(--text-dim);font-weight:800;letter-spacing:1px;font-size:14px;cursor:pointer;font-family:inherit;transition:.15s;}
+  .calc-side button.active[data-side="long"]{background:rgba(34,197,94,.15);color:var(--green);border-color:rgba(34,197,94,.5);}
+  .calc-side button.active[data-side="short"]{background:rgba(239,68,68,.15);color:var(--red);border-color:rgba(239,68,68,.5);}
+  .calc-out{grid-column:1 / -1;margin-top:4px;background:var(--bg);border:1px dashed var(--border2);border-radius:11px;padding:16px;text-align:center;}
+  .calc-out .liq{font-size:1.9rem;font-weight:800;color:var(--gold);font-family:"Cinzel",Georgia,serif;line-height:1.1;}
+  .calc-out .liq.long{color:var(--green);} .calc-out .liq.short{color:var(--red);}
+  .calc-out .sub{font-size:13px;color:var(--text-dim);margin-top:8px;}
+  .calc-out .warn{font-size:12px;color:var(--text-mute);margin-top:6px;}
+  .calc .adv{grid-column:1 / -1;}
+  @media (max-width:640px){.calc-grid{grid-template-columns:1fr;}}
+</style>
 </head>
 <body>
 <a class="skip" href="#icerik">İçeriğe geç</a>
@@ -355,83 +326,83 @@
   <nav class="crumb" aria-label="breadcrumb">
     <a href="https://cryptowolfhp.com/">Ana Sayfa</a> ›
     <a href="https://cryptowolfhp.com/rehber/">Akademi</a> ›
-    <b>FVG Nedir?</b>
+    <b>Likidasyon Nedir?</b>
   </nav>
   <article>
-    <div class="eyebrow"><span class="kicker">Temel Kavram</span></div>
-    <h1>FVG Nedir?</h1>
-    <p class="subtitle">Fair Value Gap — Adil Değer Boşluğu (imbalance)</p>
-    <p class="lead">FVG, fiyatın çok hızlı hareket ettiği için geride bıraktığı bir <strong>dengesizlik (imbalance) bölgesidir</strong>. Üç mumluk bir yapıdan doğar ve piyasa çoğu kez bu boşluğu "doldurmak" için geri döner. Bu yüzden FVG'ler güçlü <strong>giriş bölgesi</strong> ya da <strong>hedef</strong> olarak izlenir.</p>
+    <div class="eyebrow"><span class="kicker">Risk & Vadeli İşlem</span></div>
+    <h1>Likidasyon Nedir?</h1>
+    <p class="subtitle">Zorunlu tasfiye, likidasyon fiyatı ve nasıl hesaplanır</p>
+    <p class="lead">Likidasyon, kaldıraçlı bir pozisyonun zararı teminatını eritecek seviyeye ulaştığında borsanın pozisyonu <strong>otomatik olarak kapatmasıdır</strong>. Amacı, hesabının negatife düşmesini engellemektir — ama pratikte o pozisyona ayırdığın teminatı kaybetmen anlamına gelir.</p>
 
-    <figure class="figure"><svg viewBox="0 0 640 240" role="img" aria-label="Üç mumluk boğa FVG yapısı: 1. mumun tepesi ile 3. mumun dibi arasındaki boşluk">
-      <!-- FVG bandı: 3. mum dibi (y=95) ile 1. mum tepesi (y=150) arası -->
-      <rect x="105" y="95" width="470" height="55" fill="rgba(245,179,66,.15)" stroke="#f5b342" stroke-dasharray="5 4"/>
-      <line x1="105" y1="95" x2="575" y2="95" stroke="#f5b342" stroke-dasharray="5 4" opacity=".6"/>
-      <line x1="105" y1="150" x2="575" y2="150" stroke="#f5b342" stroke-dasharray="5 4" opacity=".6"/>
-      <text x="250" y="127" fill="#f5b342" font-size="15" font-weight="700" text-anchor="middle" font-family="Cinzel,serif" letter-spacing="1">FVG · boşluk</text>
-      <!-- 1. mum -->
-      <line x1="140" y1="150" x2="140" y2="210" stroke="#22c55e" stroke-width="2"/>
-      <rect x="125" y="165" width="30" height="35" fill="#22c55e"/>
-      <text x="140" y="228" fill="#5a6478" font-size="12" text-anchor="middle">1</text>
-      <!-- 2. mum (güçlü itki) -->
-      <line x1="290" y1="48" x2="290" y2="190" stroke="#22c55e" stroke-width="2"/>
-      <rect x="275" y="62" width="30" height="118" fill="#22c55e"/>
-      <text x="290" y="228" fill="#5a6478" font-size="12" text-anchor="middle">2</text>
-      <text x="318" y="58" fill="#22c55e" font-size="12">güçlü itki</text>
-      <!-- 3. mum -->
-      <line x1="440" y1="55" x2="440" y2="98" stroke="#22c55e" stroke-width="2"/>
-      <rect x="425" y="68" width="30" height="27" fill="#22c55e"/>
-      <text x="440" y="228" fill="#5a6478" font-size="12" text-anchor="middle">3</text>
-      <!-- retest oku -->
-      <polyline points="470,72 512,92 526,120 508,148" fill="none" stroke="#2dd4bf" stroke-width="2"/>
-      <path d="M508 148 l10 -3 l-3 10 z" fill="#2dd4bf"/>
-      <text x="536" y="128" fill="#2dd4bf" font-size="11">retest / doldurma</text>
-    </svg><figcaption>Boğa FVG: 1. mumun tepesi ile 3. mumun dibi arasındaki, ortadaki güçlü mumun "atladığı" bölge. Fiyat sık sık buraya geri döner.</figcaption></figure>
+    <h2>Kısaca: neden olur?</h2>
+    <p>Kaldıraç, küçük bir teminatla büyük bir pozisyon açmanı sağlar. Örneğin 10x kaldıraçta 100 USDT teminatla 1.000 USDT'lik işlem açarsın. Fiyat aleyhine hareket ettiğinde zarar da 10 kat hızlı büyür. Zarar, hesabındaki <strong>sürdürme marjının</strong> altına indiği anda borsa pozisyonu kapatır. İşte bu noktaya <strong>likidasyon fiyatı</strong> denir. Kaldıraç ne kadar yüksekse, likidasyon fiyatı giriş fiyatına o kadar yakındır.</p>
 
-    <h2>Kısaca tanımı</h2>
-    <p>FVG, <strong>üç ardışık mumla</strong> tanımlanır. Ortadaki mum çok güçlü bir hareket (displacement / itki) yaptığında, birinci mumun fitili ile üçüncü mumun fitili arasında dokunulmamış bir fiyat aralığı kalır. Piyasa o kadar hızlı geçmiştir ki o aralıkta yeterli alım-satım gerçekleşmemiştir. İşte bu doldurulmamış aralık "adil değer boşluğu"dur — piyasanın adil fiyatı atladığı, geride bir <strong>dengesizlik</strong> bıraktığı bölgedir.</p>
+    <h2>Likidasyon Hesaplama Aracı</h2>
+    <p>Giriş fiyatı, kaldıraç ve yönü gir; tahmini likidasyon fiyatını ve fiyatın yüzde kaç ters hareketinde likide olacağını gör.</p>
+    <div class="calc">
+      <h3>⚡ Tahmini Likidasyon Fiyatı</h3>
+      <div class="calc-grid">
+        <label>Giriş fiyatı (USDT)
+          <input id="cEntry" type="number" inputmode="decimal" placeholder="ör. 60000" value="60000">
+        </label>
+        <label>Kaldıraç (x)
+          <input id="cLev" type="number" inputmode="numeric" placeholder="ör. 10" value="10" min="1" max="125">
+        </label>
+        <div class="calc-side">
+          <button type="button" data-side="long" class="active">LONG</button>
+          <button type="button" data-side="short">SHORT</button>
+        </div>
+        <label class="adv">Sürdürme marjı % <span style="color:var(--text-mute);font-weight:400;">(borsaya göre değişir, tahmini)</span>
+          <input id="cMmr" type="number" inputmode="decimal" step="0.1" value="0.5">
+        </label>
+        <div class="calc-out" id="cOut"></div>
+      </div>
+    </div>
+    <p class="disclaimer">⚠️ Bu araç <strong>izole marjin</strong> için basitleştirilmiş bir tahmindir; işlem komisyonu ve fonlama ücretlerini içermez. Gerçek likidasyon fiyatı, borsanın pozisyon büyüklüğüne göre değişen sürdürme marjı kademelerine bağlı olarak farklı olabilir. Kesin değer için borsanın kendi hesaplayıcısını kullan.</p>
 
-    <h2>Neden fiyat geri döner?</h2>
-    <div class="callout">Piyasa "verimli" fiyatlamayı sever. Hızlı itki, arkada işlem görmemiş bir aralık bırakır ve fiyat çoğu zaman bu boşluğu <strong>test etmek / doldurmak</strong> için geri döner — tıpkı bir grafik gap'inin kapanma eğilimi gibi. Bu geri dönüş, trend yönünde düşük riskli bir giriş fırsatı sunabilir.</div>
+    <h2>Likidasyon fiyatı nasıl hesaplanır?</h2>
+    <p>Basitleştirilmiş formülde, önce <strong>başlangıç marjı oranı</strong> bulunur: 1 ÷ kaldıraç. Ardından sürdürme marjı oranı çıkarılır ve giriş fiyatına uygulanır:</p>
+    <div class="logic">
+      <div class="box entry"><div class="l">BAŞLANGIÇ MARJI</div><p>IMR = 1 / kaldıraç. Örn. 10x → %10.</p></div>
+      <div class="box tp"><div class="l">LONG LİKİDASYON</div><p>Giriş × [1 − (IMR − MMR)]. Fiyat <b>düşerken</b> tetiklenir.</p></div>
+      <div class="box stop"><div class="l">SHORT LİKİDASYON</div><p>Giriş × [1 + (IMR − MMR)]. Fiyat <b>yükselirken</b> tetiklenir.</p></div>
+    </div>
+    <div class="callout"><strong>Pratik kural:</strong> 10x kaldıraçta fiyat ~%10 ters giderse, 20x'te ~%5, 50x'te sadece ~%2 ters harekette likide olursun (sürdürme marjı öncesi kaba oran). Kaldıraç arttıkça hata payın erir.</div>
 
-    <h2>Boğa ve ayı FVG</h2>
+    <h2>İzole mi, çapraz (cross) mı?</h2>
     <ul>
-      <li><strong>Boğa FVG:</strong> ortadaki mum güçlü bir <strong>yükseliş</strong> mumudur. Boşluk, 1. mumun tepesi ile 3. mumun dibi arasında kalır. Fiyat düşüşte bu bölgeye geldiğinde destek gibi çalışabilir.</li>
-      <li><strong>Ayı FVG:</strong> ortadaki mum güçlü bir <strong>düşüş</strong> mumudur. Boşluk, 1. mumun dibi ile 3. mumun tepesi arasında kalır. Fiyat yukarı geldiğinde direnç gibi çalışabilir.</li>
+      <li><strong>İzole marjin:</strong> her pozisyona ayrı teminat ayrılır. Likide olursan yalnızca o teminatı kaybedersin — hasar sınırlıdır.</li>
+      <li><strong>Çapraz (cross) marjin:</strong> tüm hesap bakiyen teminat gibi davranır. Likidasyon mesafesi uzar ama tek bir kötü pozisyon <strong>tüm cüzdanı</strong> riske atabilir (cross bulaşması).</li>
     </ul>
 
-    <h2>Trading'de nasıl kullanılır?</h2>
-    <p>FVG tek başına bir sinyal değil, bir <strong>ilgi bölgesidir</strong>. Wolf yaklaşımında onu tek başına değil, <strong>confluence</strong> (birden fazla teyidin çakışması) ile kullanırız:</p>
+    <h2>Likidasyondan nasıl korunursun?</h2>
     <ol class="steps">
-      <li><b>Yönü belirle.</b> Üst zaman diliminde (ör. 4H) trend yönünü tespit et; girişleri bu yönle hizala.</li>
-      <li><b>Boşluğu işaretle.</b> Güçlü itki sonrası oluşan FVG bölgesini grafikte çiz.</li>
-      <li><b>Teyit ara.</b> Aynı bölgede bir <a href="order-block-nedir.html">order block</a> ya da <a href="fibonacci-nedir.html">Fibonacci OTE</a> varsa sinyal güçlenir.</li>
-      <li><b>Girişi planla.</b> Fiyat bölgeye geri döndüğünde (retest) tepki/onay ara, riskini önceden tanımla.</li>
+      <li><b>Düşük kaldıraç kullan.</b> Profesyoneller çoğunlukla 3x–10x aralığında kalır; yüksek kaldıraç likidasyon fiyatını giriş fiyatına yapıştırır.</li>
+      <li><b>Her işlemde stop-loss koy.</b> Likidasyona bırakmadan, planladığın zararda kendi çık.</li>
+      <li><b>Teminatın küçük bir kısmını riske at.</b> Tek işlemde cüzdanının küçük bir yüzdesi — kasa yönetimi likidasyonun ilk savunmasıdır.</li>
+      <li><b>Pozisyonu takip et.</b> Marjin oranı düştüğünde teminat ekle ya da pozisyonu küçült; çapraz modda ekstra dikkatli ol.</li>
     </ol>
 
-    <div class="logic">
-      <div class="box entry"><div class="l">GİRİŞ</div><p>Fiyat FVG'ye geri döndüğünde, trend yönünde ve tercihen bir teyit (OB / OTE) ile birlikte.</p></div>
-      <div class="box stop"><div class="l">STOP</div><p>Boşluğun dış tarafına — boğa FVG'de altına, ayı FVG'de üstüne. Boşluk tümüyle geçersiz kılınırsa çık.</p></div>
-      <div class="box tp"><div class="l">HEDEF</div><p>Bir sonraki likidite / yapı seviyesi. Risk/ödül oranını girişten önce hesapla.</p></div>
+    <h2>Sık sorulan sorular</h2>
+    <div class="faq">
+      <details><summary>Likidasyon olunca tüm param gider mi?</summary><p>İzole marjinde yalnızca o pozisyona ayırdığın teminat kaybolur. Çapraz (cross) marjinde ise tüm hesap bakiyen risk altındadır; bu yüzden çapraz modda tek bir pozisyon tüm cüzdanı etkileyebilir.</p></details>
+      <details><summary>Likidasyon fiyatı neye göre belirlenir?</summary><p>Giriş fiyatı, kaldıraç oranı, marjin türü (izole/çapraz) ve borsanın sürdürme marjı oranına göre belirlenir. Kaldıraç yükseldikçe likidasyon fiyatı giriş fiyatına yaklaşır.</p></details>
+      <details><summary>Likidasyondan nasıl korunurum?</summary><p>Düşük kaldıraç kullan, her işlemde stop-loss belirle, teminatın yalnızca küçük bir kısmını riske at ve mümkünse izole marjin tercih et. Pozisyonlarını düzenli takip et.</p></details>
     </div>
 
-    <h2>Sık sorulan sorular</h2>
-    <div class="faq"><details><summary>FVG ile order block aynı şey mi?</summary><p>Hayır. Order block, güçlü hareketten önceki son zıt mumdur; FVG ise o güçlü hareketin bıraktığı boşluktur. Çoğu kez yan yana bulunur ve birlikte kullanılır.</p></details>
-      <details><summary>Her FVG doldurulur mu?</summary><p>Hayır. Boşlukların büyük kısmı geri test edilse de hepsi doldurulmaz. Bu yüzden FVG tek başına değil, trend ve yapı bağlamında değerlendirilir.</p></details>
-      <details><summary>Hangi zaman diliminde FVG daha güçlü?</summary><p>Genelde yüksek zaman dilimlerindeki (4H, günlük) FVG'ler daha güçlüdür; düşük zaman dilimindeki girişler bunlarla hizalandığında daha güvenilir olur.</p></details></div>
-
     <h2>İlgili rehberler & araçlar</h2>
-    <div class="related"><a href="order-block-nedir.html">Order Block Nedir?<span>FVG ile en iyi ortak</span></a>
-      <a href="fibonacci-nedir.html">Fibonacci Nedir?<span>OTE ile çakışma</span></a>
-      <a href="mtf-dashboard-rehberi.html">MTF Dashboard Rehberi<span>FVG confluence kullanan tarayıcı</span></a>
-      <a href="ob-oracle-rehberi.html">OB Oracle Rehberi<span>OB + FVG otomatik tespit</span></a></div>
+    <div class="related">
+      <a href="setup-planner-rehberi.html">Setup Planner Rehberi<span>Risk/ödül ve pozisyon planı</span></a>
+      <a href="whale-scanner-rehberi.html">Whale Scanner Rehberi<span>Likidasyon haritası & akıllı para</span></a>
+      <a href="fvg-nedir.html">FVG Nedir?<span>Giriş bölgesi tespiti</span></a>
+    </div>
 
     <div class="author">
       <div class="ava" role="img" aria-label="CryptoWolf HP logosu"></div>
       <div><div class="name">Wolf Akademi</div>
-      <div class="bio">CryptoWolf HP eğitim ekibi · vadeli işlem analiz araçları ve piyasa yapısı üzerine içerik.</div></div>
+      <div class="bio">CryptoWolf HP eğitim ekibi · vadeli işlem analiz araçları ve risk yönetimi üzerine içerik.</div></div>
     </div>
-    <p class="disclaimer">⚠️ Bu içerik yalnızca eğitim ve bilgilendirme amaçlıdır; yatırım tavsiyesi değildir. Kripto vadeli işlemler yüksek risk taşır. Kararlarından yalnızca sen sorumlusun.</p>
+    <p class="disclaimer">⚠️ Bu içerik yalnızca eğitim ve bilgilendirme amaçlıdır; yatırım tavsiyesi değildir. Kripto vadeli işlemler yüksek risk taşır ve sermayenin tamamını kaybedebilirsin. Kararlarından yalnızca sen sorumlusun.</p>
   </article>
 </main>
 <footer>
@@ -446,6 +417,40 @@
 function toggleMobileNav(e){if(e)e.stopPropagation();var h=document.querySelector(".navbar");if(h)h.classList.toggle("nav-open");}
 function toggleRehberNav(e){toggleMobileNav(e);}
 document.addEventListener("click",function(e){var h=document.querySelector(".navbar");if(h&&h.classList.contains("nav-open")&&!h.contains(e.target))h.classList.remove("nav-open");});
+</script>
+<script>
+(function(){
+  var side="long";
+  var entry=document.getElementById("cEntry"),
+      lev=document.getElementById("cLev"),
+      mmr=document.getElementById("cMmr"),
+      out=document.getElementById("cOut"),
+      btns=document.querySelectorAll(".calc-side button");
+  function fmt(n){
+    if(!isFinite(n)) return "—";
+    var d = n>=100?2:(n>=1?4:6);
+    return n.toLocaleString("tr-TR",{minimumFractionDigits:d,maximumFractionDigits:d});
+  }
+  function calc(){
+    var e=parseFloat(entry.value), L=parseFloat(lev.value), m=parseFloat(mmr.value)/100;
+    if(!(e>0)||!(L>=1)){ out.innerHTML='<div class="sub">Giriş fiyatı ve kaldıraç gir.</div>'; return; }
+    if(!(m>=0)) m=0;
+    var imr=1/L, diff=imr-m;
+    var liq = side==="long" ? e*(1-diff) : e*(1+diff);
+    if(liq<0) liq=0;
+    var pct=Math.abs(diff)*100;
+    out.innerHTML =
+      '<div class="liq '+side+'">'+fmt(liq)+' <span style="font-size:.5em;color:var(--text-mute);">USDT</span></div>'+
+      '<div class="sub">Giriş fiyatından <b>~%'+pct.toFixed(2)+'</b> '+(side==="long"?"düşüş":"yükseliş")+' likidasyona götürür.</div>'+
+      '<div class="warn">İzole · tahmini · komisyon/fonlama hariç</div>';
+  }
+  btns.forEach(function(b){ b.addEventListener("click",function(){
+    side=b.getAttribute("data-side");
+    btns.forEach(function(x){x.classList.remove("active");}); b.classList.add("active"); calc();
+  });});
+  [entry,lev,mmr].forEach(function(el){ el.addEventListener("input",calc); });
+  calc();
+})();
 </script>
 </body>
 </html>

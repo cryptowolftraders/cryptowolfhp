@@ -12,17 +12,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#0a0e1a">
-<title>FVG Nedir? Fair Value Gap (Adil Değer Boşluğu) – Wolf Akademi</title>
-<meta name="description" content="FVG (Fair Value Gap / adil değer boşluğu) nedir, nasıl oluşur ve nasıl bulunur? Boğa ve ayı FVG, imbalance mantığı ve fiyatın boşluğu doldurma davranışı.">
-<link rel="canonical" href="https://cryptowolfhp.com/rehber/fvg-nedir.html">
+<title>İzole vs Çapraz Marjin Nedir? Farkları & Hangisi? – Wolf Akademi</title>
+<meta name="description" content="İzole (isolated) ve çapraz (cross) marjin nedir, farkları ne? Vadeli işlemde marjin modu seçimi, likidasyon etkisi, avantaj ve dezavantajlar. Hangisi daha güvenli?">
+<link rel="canonical" href="https://cryptowolfhp.com/rehber/izole-capraz-marjin.html">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="CryptoWolf HP">
 <meta property="og:locale" content="tr_TR">
-<meta property="og:title" content="FVG Nedir? Fair Value Gap (Adil Değer Boşluğu) – Wolf Akademi">
-<meta property="og:description" content="FVG (Fair Value Gap / adil değer boşluğu) nedir, nasıl oluşur ve nasıl bulunur? Boğa ve ayı FVG, imbalance mantığı ve fiyatın boşluğu doldurma davranışı.">
-<meta property="og:url" content="https://cryptowolfhp.com/rehber/fvg-nedir.html">
-<meta property="og:image" content="https://cryptowolfhp.com/rehber/og/fvg-nedir.png">
+<meta property="og:title" content="İzole vs Çapraz Marjin Nedir?">
+<meta property="og:description" content="İzole ve çapraz marjin farkları, likidasyon etkisi, avantaj/dezavantaj ve hangisini seçmeli.">
+<meta property="og:url" content="https://cryptowolfhp.com/rehber/izole-capraz-marjin.html">
+<meta property="og:image" content="https://cryptowolfhp.com/rehber/og/izole-capraz-marjin.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,80 +33,30 @@
   "@graph": [
     {
       "@type": "Article",
-      "headline": "FVG Nedir?",
-      "description": "FVG (Fair Value Gap / adil değer boşluğu) nedir, nasıl oluşur ve nasıl bulunur? Boğa ve ayı FVG, imbalance mantığı ve fiyatın boşluğu doldurma davranışı.",
+      "headline": "İzole vs Çapraz Marjin Nedir?",
+      "description": "İzole ve çapraz marjin nedir, farkları ne? Marjin modu seçimi, likidasyon etkisi ve avantaj/dezavantajlar.",
       "inLanguage": "tr-TR",
-      "datePublished": "2026-07-06",
-      "dateModified": "2026-07-06",
-      "author": {
-        "@type": "Organization",
-        "name": "Wolf Akademi",
-        "url": "https://cryptowolfhp.com"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "CryptoWolf HP",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://cryptowolfhp.com/logo.png"
-        }
-      },
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://cryptowolfhp.com/rehber/fvg-nedir.html"
-      },
-      "image": "https://cryptowolfhp.com/rehber/og/fvg-nedir.png"
+      "datePublished": "2026-07-09",
+      "dateModified": "2026-07-09",
+      "author": { "@type": "Organization", "name": "Wolf Akademi", "url": "https://cryptowolfhp.com" },
+      "publisher": { "@type": "Organization", "name": "CryptoWolf HP", "logo": { "@type": "ImageObject", "url": "https://cryptowolfhp.com/logo.png" } },
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://cryptowolfhp.com/rehber/izole-capraz-marjin.html" },
+      "image": "https://cryptowolfhp.com/rehber/og/izole-capraz-marjin.png"
     },
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Ana Sayfa",
-          "item": "https://cryptowolfhp.com/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Akademi",
-          "item": "https://cryptowolfhp.com/rehber/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "FVG Nedir?",
-          "item": "https://cryptowolfhp.com/rehber/fvg-nedir.html"
-        }
+        { "@type": "ListItem", "position": 1, "name": "Ana Sayfa", "item": "https://cryptowolfhp.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Akademi", "item": "https://cryptowolfhp.com/rehber/" },
+        { "@type": "ListItem", "position": 3, "name": "İzole vs Çapraz Marjin", "item": "https://cryptowolfhp.com/rehber/izole-capraz-marjin.html" }
       ]
     },
     {
       "@type": "FAQPage",
       "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "FVG ile order block aynı şey mi?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Hayır. Order block, güçlü hareketten önceki son zıt mumdur; FVG ise o güçlü hareketin bıraktığı boşluktur. Çoğu kez yan yana bulunur ve birlikte kullanılır."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Her FVG doldurulur mu?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Hayır. Boşlukların büyük kısmı geri test edilse de hepsi doldurulmaz. Bu yüzden FVG tek başına değil, trend ve yapı bağlamında değerlendirilir."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Hangi zaman diliminde FVG daha güçlü?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Genelde yüksek zaman dilimlerindeki (4H, günlük) FVG'ler daha güçlüdür; düşük zaman dilimindeki girişler bunlarla hizalandığında daha güvenilir olur."
-          }
-        }
+        { "@type": "Question", "name": "İzole mi çapraz marjin mi daha güvenli?", "acceptedAnswer": { "@type": "Answer", "text": "Risk kontrolü açısından izole marjin genelde daha güvenli kabul edilir, çünkü zarar yalnızca o pozisyona ayrılan teminatla sınırlıdır. Çapraz marjinde ise tüm hesap bakiyen teminat gibi davrandığı için tek bir kötü pozisyon tüm cüzdanı riske atabilir." } },
+        { "@type": "Question", "name": "Çapraz marjinin avantajı ne?", "acceptedAnswer": { "@type": "Answer", "text": "Çapraz marjinde likidasyon mesafesi daha uzundur; hesabındaki tüm bakiye tampon görevi görür, bu yüzden pozisyon kısa vadeli dalgalanmalarda daha geç likide olur. Ancak bu, tüm bakiyeyi riske atma pahasına gelir." } },
+        { "@type": "Question", "name": "Katman/martingale sisteminde hangisi kullanılır?", "acceptedAnswer": { "@type": "Answer", "text": "Katman ekleyen sistemlerde genelde izole marjin tercih edilir; böylece katmanlı bir pozisyon ters gitse bile hasar o pozisyona hapsedilir ve tüm cüzdana yayılmaz." } }
       ]
     }
   ]
@@ -355,81 +305,85 @@
   <nav class="crumb" aria-label="breadcrumb">
     <a href="https://cryptowolfhp.com/">Ana Sayfa</a> ›
     <a href="https://cryptowolfhp.com/rehber/">Akademi</a> ›
-    <b>FVG Nedir?</b>
+    <b>İzole vs Çapraz Marjin</b>
   </nav>
   <article>
-    <div class="eyebrow"><span class="kicker">Temel Kavram</span></div>
-    <h1>FVG Nedir?</h1>
-    <p class="subtitle">Fair Value Gap — Adil Değer Boşluğu (imbalance)</p>
-    <p class="lead">FVG, fiyatın çok hızlı hareket ettiği için geride bıraktığı bir <strong>dengesizlik (imbalance) bölgesidir</strong>. Üç mumluk bir yapıdan doğar ve piyasa çoğu kez bu boşluğu "doldurmak" için geri döner. Bu yüzden FVG'ler güçlü <strong>giriş bölgesi</strong> ya da <strong>hedef</strong> olarak izlenir.</p>
+    <div class="eyebrow"><span class="kicker">Risk & Vadeli İşlem</span></div>
+    <h1>İzole vs Çapraz Marjin Nedir?</h1>
+    <p class="subtitle">İki marjin modu — hasarı hapsetmek mi, tampon büyütmek mi?</p>
+    <p class="lead">Vadeli işlemde pozisyon açarken iki marjin modundan birini seçersin. <strong>İzole (isolated)</strong> marjin, riski yalnızca o pozisyona ayırdığın teminatla sınırlar. <strong>Çapraz (cross)</strong> marjin ise tüm hesap bakiyeni teminat gibi kullanır. Bu seçim, tek bir kötü işlemin sadece o pozisyonu mu yoksa <strong>tüm cüzdanını mı</strong> riske atacağını belirler.</p>
 
-    <figure class="figure"><svg viewBox="0 0 640 240" role="img" aria-label="Üç mumluk boğa FVG yapısı: 1. mumun tepesi ile 3. mumun dibi arasındaki boşluk">
-      <!-- FVG bandı: 3. mum dibi (y=95) ile 1. mum tepesi (y=150) arası -->
-      <rect x="105" y="95" width="470" height="55" fill="rgba(245,179,66,.15)" stroke="#f5b342" stroke-dasharray="5 4"/>
-      <line x1="105" y1="95" x2="575" y2="95" stroke="#f5b342" stroke-dasharray="5 4" opacity=".6"/>
-      <line x1="105" y1="150" x2="575" y2="150" stroke="#f5b342" stroke-dasharray="5 4" opacity=".6"/>
-      <text x="250" y="127" fill="#f5b342" font-size="15" font-weight="700" text-anchor="middle" font-family="Cinzel,serif" letter-spacing="1">FVG · boşluk</text>
-      <!-- 1. mum -->
-      <line x1="140" y1="150" x2="140" y2="210" stroke="#22c55e" stroke-width="2"/>
-      <rect x="125" y="165" width="30" height="35" fill="#22c55e"/>
-      <text x="140" y="228" fill="#5a6478" font-size="12" text-anchor="middle">1</text>
-      <!-- 2. mum (güçlü itki) -->
-      <line x1="290" y1="48" x2="290" y2="190" stroke="#22c55e" stroke-width="2"/>
-      <rect x="275" y="62" width="30" height="118" fill="#22c55e"/>
-      <text x="290" y="228" fill="#5a6478" font-size="12" text-anchor="middle">2</text>
-      <text x="318" y="58" fill="#22c55e" font-size="12">güçlü itki</text>
-      <!-- 3. mum -->
-      <line x1="440" y1="55" x2="440" y2="98" stroke="#22c55e" stroke-width="2"/>
-      <rect x="425" y="68" width="30" height="27" fill="#22c55e"/>
-      <text x="440" y="228" fill="#5a6478" font-size="12" text-anchor="middle">3</text>
-      <!-- retest oku -->
-      <polyline points="470,72 512,92 526,120 508,148" fill="none" stroke="#2dd4bf" stroke-width="2"/>
-      <path d="M508 148 l10 -3 l-3 10 z" fill="#2dd4bf"/>
-      <text x="536" y="128" fill="#2dd4bf" font-size="11">retest / doldurma</text>
-    </svg><figcaption>Boğa FVG: 1. mumun tepesi ile 3. mumun dibi arasındaki, ortadaki güçlü mumun "atladığı" bölge. Fiyat sık sık buraya geri döner.</figcaption></figure>
+    <figure class="figure"><svg viewBox="0 0 640 270" role="img" aria-label="İzole marjinde her pozisyon ayrı, çapraz marjinde tüm cüzdan ortak">
+      <!-- İZOLE -->
+      <rect x="18" y="40" width="278" height="200" rx="10" fill="rgba(45,212,191,.05)" stroke="var(--border2)"/>
+      <text x="34" y="32" fill="#2dd4bf" font-size="13" font-weight="700" font-family="Cinzel,serif">İZOLE</text>
+      <g font-size="11" text-anchor="middle">
+        <rect x="42" y="58" width="230" height="38" rx="8" fill="rgba(34,197,94,.10)" stroke="#22c55e"/>
+        <text x="157" y="81" fill="#22c55e">Pozisyon A · kendi teminatı</text>
+        <rect x="42" y="104" width="230" height="38" rx="8" fill="rgba(239,68,68,.14)" stroke="#ef4444"/>
+        <text x="157" y="127" fill="#ef4444" font-weight="700">Pozisyon B · LİKİDE ✕</text>
+        <rect x="42" y="150" width="230" height="38" rx="8" fill="rgba(34,197,94,.10)" stroke="#22c55e"/>
+        <text x="157" y="173" fill="#22c55e">Pozisyon C · etkilenmez</text>
+      </g>
+      <text x="157" y="216" fill="#5a6478" font-size="10.5" text-anchor="middle">Her pozisyon ayrı duvar — hasar yayılmaz</text>
 
-    <h2>Kısaca tanımı</h2>
-    <p>FVG, <strong>üç ardışık mumla</strong> tanımlanır. Ortadaki mum çok güçlü bir hareket (displacement / itki) yaptığında, birinci mumun fitili ile üçüncü mumun fitili arasında dokunulmamış bir fiyat aralığı kalır. Piyasa o kadar hızlı geçmiştir ki o aralıkta yeterli alım-satım gerçekleşmemiştir. İşte bu doldurulmamış aralık "adil değer boşluğu"dur — piyasanın adil fiyatı atladığı, geride bir <strong>dengesizlik</strong> bıraktığı bölgedir.</p>
+      <!-- ÇAPRAZ -->
+      <rect x="344" y="40" width="278" height="200" rx="10" fill="rgba(245,179,66,.05)" stroke="var(--border2)"/>
+      <text x="360" y="32" fill="#f5b342" font-size="13" font-weight="700" font-family="Cinzel,serif">ÇAPRAZ</text>
+      <rect x="368" y="56" width="230" height="40" rx="8" fill="rgba(239,68,68,.10)" stroke="#ef4444"/>
+      <text x="483" y="81" fill="#e8edf5" font-size="11" text-anchor="middle" font-weight="700">TÜM CÜZDAN (ortak teminat)</text>
+      <g stroke="#5a6478" stroke-width="1.2">
+        <line x1="415" y1="96" x2="415" y2="128"/><line x1="483" y1="96" x2="483" y2="128"/><line x1="551" y1="96" x2="551" y2="128"/>
+      </g>
+      <g font-size="11" text-anchor="middle">
+        <rect x="386" y="128" width="58" height="34" rx="7" fill="var(--surface)" stroke="#2dd4bf"/><text x="415" y="150" fill="#e8edf5">A</text>
+        <rect x="454" y="128" width="58" height="34" rx="7" fill="rgba(239,68,68,.16)" stroke="#ef4444"/><text x="483" y="150" fill="#ef4444" font-weight="700">B ✕</text>
+        <rect x="522" y="128" width="58" height="34" rx="7" fill="var(--surface)" stroke="#2dd4bf"/><text x="551" y="150" fill="#e8edf5">C</text>
+      </g>
+      <text x="483" y="192" fill="#ef4444" font-size="10.5" text-anchor="middle">B kötüyse havuz erir → A ve C de risk altında</text>
+      <text x="483" y="216" fill="#5a6478" font-size="10.5" text-anchor="middle">Tek ortak havuz — bulaşma riski</text>
+    </svg><figcaption>İzolede bir pozisyonun likidasyonu diğerlerine dokunmaz. Çaprazda tüm pozisyonlar aynı bakiyeyi paylaşır; biri erirse hepsi etkilenir.</figcaption></figure>
 
-    <h2>Neden fiyat geri döner?</h2>
-    <div class="callout">Piyasa "verimli" fiyatlamayı sever. Hızlı itki, arkada işlem görmemiş bir aralık bırakır ve fiyat çoğu zaman bu boşluğu <strong>test etmek / doldurmak</strong> için geri döner — tıpkı bir grafik gap'inin kapanma eğilimi gibi. Bu geri dönüş, trend yönünde düşük riskli bir giriş fırsatı sunabilir.</div>
+    <h2>İzole marjin</h2>
+    <p>Her pozisyona <strong>ayrı ve sabit</strong> bir teminat ayırırsın. Fiyat aleyhine giderse yalnızca o teminat riske girer; likide olsan bile kaybın o pozisyonla sınırlıdır — cüzdanının geri kalanı güvende kalır. Dezavantajı: teminat sabit olduğu için likidasyon mesafesi daha dardır, pozisyon daha çabuk likide olabilir.</p>
 
-    <h2>Boğa ve ayı FVG</h2>
-    <ul>
-      <li><strong>Boğa FVG:</strong> ortadaki mum güçlü bir <strong>yükseliş</strong> mumudur. Boşluk, 1. mumun tepesi ile 3. mumun dibi arasında kalır. Fiyat düşüşte bu bölgeye geldiğinde destek gibi çalışabilir.</li>
-      <li><strong>Ayı FVG:</strong> ortadaki mum güçlü bir <strong>düşüş</strong> mumudur. Boşluk, 1. mumun dibi ile 3. mumun tepesi arasında kalır. Fiyat yukarı geldiğinde direnç gibi çalışabilir.</li>
-    </ul>
-
-    <h2>Trading'de nasıl kullanılır?</h2>
-    <p>FVG tek başına bir sinyal değil, bir <strong>ilgi bölgesidir</strong>. Wolf yaklaşımında onu tek başına değil, <strong>confluence</strong> (birden fazla teyidin çakışması) ile kullanırız:</p>
-    <ol class="steps">
-      <li><b>Yönü belirle.</b> Üst zaman diliminde (ör. 4H) trend yönünü tespit et; girişleri bu yönle hizala.</li>
-      <li><b>Boşluğu işaretle.</b> Güçlü itki sonrası oluşan FVG bölgesini grafikte çiz.</li>
-      <li><b>Teyit ara.</b> Aynı bölgede bir <a href="order-block-nedir.html">order block</a> ya da <a href="fibonacci-nedir.html">Fibonacci OTE</a> varsa sinyal güçlenir.</li>
-      <li><b>Girişi planla.</b> Fiyat bölgeye geri döndüğünde (retest) tepki/onay ara, riskini önceden tanımla.</li>
-    </ol>
+    <h2>Çapraz (cross) marjin</h2>
+    <p>Hesabındaki <strong>tüm bakiye</strong> teminat gibi davranır. Bu, likidasyon mesafesini uzatır — pozisyon kısa vadeli dalgalanmalara daha dayanıklıdır. Ama bedeli ağırdır: tek bir kötü pozisyon tüm cüzdanı çekip <a href="likidasyon-nedir.html">likidasyona</a> sürükleyebilir. Buna <strong>cross bulaşması</strong> denir.</p>
 
     <div class="logic">
-      <div class="box entry"><div class="l">GİRİŞ</div><p>Fiyat FVG'ye geri döndüğünde, trend yönünde ve tercihen bir teyit (OB / OTE) ile birlikte.</p></div>
-      <div class="box stop"><div class="l">STOP</div><p>Boşluğun dış tarafına — boğa FVG'de altına, ayı FVG'de üstüne. Boşluk tümüyle geçersiz kılınırsa çık.</p></div>
-      <div class="box tp"><div class="l">HEDEF</div><p>Bir sonraki likidite / yapı seviyesi. Risk/ödül oranını girişten önce hesapla.</p></div>
+      <div class="box entry"><div class="l">İZOLE</div><p>Risk = tek pozisyonun teminatı. Hasar hapsedilir. Likidasyon mesafesi dar.</p></div>
+      <div class="box stop"><div class="l">ÇAPRAZ</div><p>Risk = tüm cüzdan. Likidasyon mesafesi geniş ama bulaşma riski yüksek.</p></div>
+      <div class="box tp"><div class="l">HANGİSİ?</div><p>Risk kontrolü önceliğinse ve katman ekliyorsan izole; deneyimli, dikkatli takip ediyorsan çapraz.</p></div>
     </div>
 
+    <h2>Nasıl seçersin?</h2>
+    <ol class="steps">
+      <li><b>Risk kontrolü önceliğinse izole seç.</b> Özellikle yeni başlıyorsan, hasarı hapsetmek en güvenli yoldur.</li>
+      <li><b>Katman/martingale kullanıyorsan izole.</b> Katmanlı pozisyonun ters gitmesi tüm cüzdanı silmesin (bkz. <a href="kasa-yonetimi.html">kasa yönetimi</a>).</li>
+      <li><b>Çapraz kullanıyorsan pozisyonu az tut.</b> Ortak havuz, aynı anda çok pozisyonla birleşince görünmez risk yaratır.</li>
+      <li><b>Her koşulda stop kullan.</b> Marjin modu ne olursa olsun, likidasyonu değil kendi stop'unu ilk savunma yap.</li>
+    </ol>
+
+    <div class="callout"><strong>Kritik uyarı:</strong> Çapraz marjin "daha geç likide oluyorum" diye güvenli hissettirir — ama likide olduğunda çoğu zaman <strong>tüm bakiyeni</strong> götürür. İzolede kaybın önceden bellidir; çaprazda tavan cüzdanının tamamıdır. Bu farkı hafife alma.</div>
+
     <h2>Sık sorulan sorular</h2>
-    <div class="faq"><details><summary>FVG ile order block aynı şey mi?</summary><p>Hayır. Order block, güçlü hareketten önceki son zıt mumdur; FVG ise o güçlü hareketin bıraktığı boşluktur. Çoğu kez yan yana bulunur ve birlikte kullanılır.</p></details>
-      <details><summary>Her FVG doldurulur mu?</summary><p>Hayır. Boşlukların büyük kısmı geri test edilse de hepsi doldurulmaz. Bu yüzden FVG tek başına değil, trend ve yapı bağlamında değerlendirilir.</p></details>
-      <details><summary>Hangi zaman diliminde FVG daha güçlü?</summary><p>Genelde yüksek zaman dilimlerindeki (4H, günlük) FVG'ler daha güçlüdür; düşük zaman dilimindeki girişler bunlarla hizalandığında daha güvenilir olur.</p></details></div>
+    <div class="faq">
+      <details><summary>İzole mi çapraz marjin mi daha güvenli?</summary><p>Risk kontrolü açısından izole marjin genelde daha güvenli kabul edilir, çünkü zarar yalnızca o pozisyona ayrılan teminatla sınırlıdır. Çapraz marjinde ise tüm hesap bakiyen teminat gibi davrandığı için tek bir kötü pozisyon tüm cüzdanı riske atabilir.</p></details>
+      <details><summary>Çapraz marjinin avantajı ne?</summary><p>Çapraz marjinde likidasyon mesafesi daha uzundur; hesabındaki tüm bakiye tampon görevi görür, bu yüzden pozisyon kısa vadeli dalgalanmalarda daha geç likide olur. Ancak bu, tüm bakiyeyi riske atma pahasına gelir.</p></details>
+      <details><summary>Katman/martingale sisteminde hangisi kullanılır?</summary><p>Katman ekleyen sistemlerde genelde izole marjin tercih edilir; böylece katmanlı bir pozisyon ters gitse bile hasar o pozisyona hapsedilir ve tüm cüzdana yayılmaz.</p></details>
+    </div>
 
     <h2>İlgili rehberler & araçlar</h2>
-    <div class="related"><a href="order-block-nedir.html">Order Block Nedir?<span>FVG ile en iyi ortak</span></a>
-      <a href="fibonacci-nedir.html">Fibonacci Nedir?<span>OTE ile çakışma</span></a>
-      <a href="mtf-dashboard-rehberi.html">MTF Dashboard Rehberi<span>FVG confluence kullanan tarayıcı</span></a>
-      <a href="ob-oracle-rehberi.html">OB Oracle Rehberi<span>OB + FVG otomatik tespit</span></a></div>
+    <div class="related">
+      <a href="likidasyon-nedir.html">Likidasyon Nedir?<span>Marjin modunun likidasyona etkisi</span></a>
+      <a href="kasa-yonetimi.html">Kasa Yönetimi<span>İzole marjin neden şart</span></a>
+      <a href="risk-odul-orani.html">Risk / Ödül Oranı<span>İşlem başına risk tavanı</span></a>
+    </div>
 
     <div class="author">
       <div class="ava" role="img" aria-label="CryptoWolf HP logosu"></div>
       <div><div class="name">Wolf Akademi</div>
-      <div class="bio">CryptoWolf HP eğitim ekibi · vadeli işlem analiz araçları ve piyasa yapısı üzerine içerik.</div></div>
+      <div class="bio">CryptoWolf HP eğitim ekibi · marjin, risk yönetimi ve kasa disiplini üzerine içerik.</div></div>
     </div>
     <p class="disclaimer">⚠️ Bu içerik yalnızca eğitim ve bilgilendirme amaçlıdır; yatırım tavsiyesi değildir. Kripto vadeli işlemler yüksek risk taşır. Kararlarından yalnızca sen sorumlusun.</p>
   </article>

@@ -12,17 +12,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#0a0e1a">
-<title>FVG Nedir? Fair Value Gap (Adil Değer Boşluğu) – Wolf Akademi</title>
-<meta name="description" content="FVG (Fair Value Gap / adil değer boşluğu) nedir, nasıl oluşur ve nasıl bulunur? Boğa ve ayı FVG, imbalance mantığı ve fiyatın boşluğu doldurma davranışı.">
-<link rel="canonical" href="https://cryptowolfhp.com/rehber/fvg-nedir.html">
+<title>Stop-Loss & Take-Profit Nedir? Nasıl Konulur? – Wolf Akademi</title>
+<meta name="description" content="Stop-loss (zarar durdur) ve take-profit (kâr al) nedir, nereye konulur? Otomatik çıkış emirleri, yerleştirme mantığı ve en yaygın hatalar. Vadeli işlem risk yönetimi.">
+<link rel="canonical" href="https://cryptowolfhp.com/rehber/stop-loss-take-profit.html">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="CryptoWolf HP">
 <meta property="og:locale" content="tr_TR">
-<meta property="og:title" content="FVG Nedir? Fair Value Gap (Adil Değer Boşluğu) – Wolf Akademi">
-<meta property="og:description" content="FVG (Fair Value Gap / adil değer boşluğu) nedir, nasıl oluşur ve nasıl bulunur? Boğa ve ayı FVG, imbalance mantığı ve fiyatın boşluğu doldurma davranışı.">
-<meta property="og:url" content="https://cryptowolfhp.com/rehber/fvg-nedir.html">
-<meta property="og:image" content="https://cryptowolfhp.com/rehber/og/fvg-nedir.png">
+<meta property="og:title" content="Stop-Loss & Take-Profit Nedir?">
+<meta property="og:description" content="Zarar durdur ve kâr al emirleri nedir, nereye konulur? Yerleştirme mantığı ve en yaygın hatalar.">
+<meta property="og:url" content="https://cryptowolfhp.com/rehber/stop-loss-take-profit.html">
+<meta property="og:image" content="https://cryptowolfhp.com/rehber/og/stop-loss-take-profit.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,80 +33,30 @@
   "@graph": [
     {
       "@type": "Article",
-      "headline": "FVG Nedir?",
-      "description": "FVG (Fair Value Gap / adil değer boşluğu) nedir, nasıl oluşur ve nasıl bulunur? Boğa ve ayı FVG, imbalance mantığı ve fiyatın boşluğu doldurma davranışı.",
+      "headline": "Stop-Loss & Take-Profit Nedir?",
+      "description": "Stop-loss ve take-profit nedir, nereye konulur? Otomatik çıkış emirleri, yerleştirme mantığı ve en yaygın hatalar.",
       "inLanguage": "tr-TR",
-      "datePublished": "2026-07-06",
-      "dateModified": "2026-07-06",
-      "author": {
-        "@type": "Organization",
-        "name": "Wolf Akademi",
-        "url": "https://cryptowolfhp.com"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "CryptoWolf HP",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://cryptowolfhp.com/logo.png"
-        }
-      },
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://cryptowolfhp.com/rehber/fvg-nedir.html"
-      },
-      "image": "https://cryptowolfhp.com/rehber/og/fvg-nedir.png"
+      "datePublished": "2026-07-09",
+      "dateModified": "2026-07-09",
+      "author": { "@type": "Organization", "name": "Wolf Akademi", "url": "https://cryptowolfhp.com" },
+      "publisher": { "@type": "Organization", "name": "CryptoWolf HP", "logo": { "@type": "ImageObject", "url": "https://cryptowolfhp.com/logo.png" } },
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://cryptowolfhp.com/rehber/stop-loss-take-profit.html" },
+      "image": "https://cryptowolfhp.com/rehber/og/stop-loss-take-profit.png"
     },
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Ana Sayfa",
-          "item": "https://cryptowolfhp.com/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Akademi",
-          "item": "https://cryptowolfhp.com/rehber/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "FVG Nedir?",
-          "item": "https://cryptowolfhp.com/rehber/fvg-nedir.html"
-        }
+        { "@type": "ListItem", "position": 1, "name": "Ana Sayfa", "item": "https://cryptowolfhp.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Akademi", "item": "https://cryptowolfhp.com/rehber/" },
+        { "@type": "ListItem", "position": 3, "name": "Stop-Loss & Take-Profit", "item": "https://cryptowolfhp.com/rehber/stop-loss-take-profit.html" }
       ]
     },
     {
       "@type": "FAQPage",
       "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "FVG ile order block aynı şey mi?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Hayır. Order block, güçlü hareketten önceki son zıt mumdur; FVG ise o güçlü hareketin bıraktığı boşluktur. Çoğu kez yan yana bulunur ve birlikte kullanılır."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Her FVG doldurulur mu?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Hayır. Boşlukların büyük kısmı geri test edilse de hepsi doldurulmaz. Bu yüzden FVG tek başına değil, trend ve yapı bağlamında değerlendirilir."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Hangi zaman diliminde FVG daha güçlü?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Genelde yüksek zaman dilimlerindeki (4H, günlük) FVG'ler daha güçlüdür; düşük zaman dilimindeki girişler bunlarla hizalandığında daha güvenilir olur."
-          }
-        }
+        { "@type": "Question", "name": "Stop-loss nereye konulmalı?", "acceptedAnswer": { "@type": "Answer", "text": "Stop-loss, işlem fikrinin geçersiz olduğu noktanın hemen ötesine konur; örneğin yapının, order block'un veya son dip/tepenin dışına. Rastgele bir yüzdeye değil, grafikteki mantıklı bir seviyeye dayanmalıdır." } },
+        { "@type": "Question", "name": "Take-profit nasıl belirlenir?", "acceptedAnswer": { "@type": "Answer", "text": "Take-profit, bir sonraki mantıklı yapı/likidite seviyesine konur. Girişten önce belirlenir ve risk/ödül oranının en az 1:2 olmasını sağlayacak şekilde seçilir." } },
+        { "@type": "Question", "name": "Stop-loss'u kaydırmak (geri çekmek) mantıklı mı?", "acceptedAnswer": { "@type": "Answer", "text": "Zararı büyütecek şekilde stop'u geri çekmek en yaygın ve en pahalı hatalardan biridir. Stop, planı korumak için vardır; onu kaydırmak disiplini bozar ve küçük bir zararı likidasyona dönüştürebilir. Stop yalnızca kârı korumak için lehe (breakeven'a) çekilebilir." } }
       ]
     }
   ]
@@ -355,81 +305,78 @@
   <nav class="crumb" aria-label="breadcrumb">
     <a href="https://cryptowolfhp.com/">Ana Sayfa</a> ›
     <a href="https://cryptowolfhp.com/rehber/">Akademi</a> ›
-    <b>FVG Nedir?</b>
+    <b>Stop-Loss & Take-Profit</b>
   </nav>
   <article>
-    <div class="eyebrow"><span class="kicker">Temel Kavram</span></div>
-    <h1>FVG Nedir?</h1>
-    <p class="subtitle">Fair Value Gap — Adil Değer Boşluğu (imbalance)</p>
-    <p class="lead">FVG, fiyatın çok hızlı hareket ettiği için geride bıraktığı bir <strong>dengesizlik (imbalance) bölgesidir</strong>. Üç mumluk bir yapıdan doğar ve piyasa çoğu kez bu boşluğu "doldurmak" için geri döner. Bu yüzden FVG'ler güçlü <strong>giriş bölgesi</strong> ya da <strong>hedef</strong> olarak izlenir.</p>
+    <div class="eyebrow"><span class="kicker">Risk Yönetimi</span></div>
+    <h1>Stop-Loss & Take-Profit Nedir?</h1>
+    <p class="subtitle">Otomatik çıkış emirleri — zararı sınırla, kârı kilitle</p>
+    <p class="lead">Stop-loss (zarar durdur) ve take-profit (kâr al), önceden belirlediğin fiyat seviyelerinde pozisyonu <strong>otomatik kapatan emirlerdir</strong>. Stop-loss kaybını tanımlı bir noktada keser; take-profit kazancı hedefe ulaşınca kilitler. İkisi birlikte, işlemi duygularından kurtarıp bir <strong>plana</strong> bağlar.</p>
 
-    <figure class="figure"><svg viewBox="0 0 640 240" role="img" aria-label="Üç mumluk boğa FVG yapısı: 1. mumun tepesi ile 3. mumun dibi arasındaki boşluk">
-      <!-- FVG bandı: 3. mum dibi (y=95) ile 1. mum tepesi (y=150) arası -->
-      <rect x="105" y="95" width="470" height="55" fill="rgba(245,179,66,.15)" stroke="#f5b342" stroke-dasharray="5 4"/>
-      <line x1="105" y1="95" x2="575" y2="95" stroke="#f5b342" stroke-dasharray="5 4" opacity=".6"/>
-      <line x1="105" y1="150" x2="575" y2="150" stroke="#f5b342" stroke-dasharray="5 4" opacity=".6"/>
-      <text x="250" y="127" fill="#f5b342" font-size="15" font-weight="700" text-anchor="middle" font-family="Cinzel,serif" letter-spacing="1">FVG · boşluk</text>
-      <!-- 1. mum -->
-      <line x1="140" y1="150" x2="140" y2="210" stroke="#22c55e" stroke-width="2"/>
-      <rect x="125" y="165" width="30" height="35" fill="#22c55e"/>
-      <text x="140" y="228" fill="#5a6478" font-size="12" text-anchor="middle">1</text>
-      <!-- 2. mum (güçlü itki) -->
-      <line x1="290" y1="48" x2="290" y2="190" stroke="#22c55e" stroke-width="2"/>
-      <rect x="275" y="62" width="30" height="118" fill="#22c55e"/>
-      <text x="290" y="228" fill="#5a6478" font-size="12" text-anchor="middle">2</text>
-      <text x="318" y="58" fill="#22c55e" font-size="12">güçlü itki</text>
-      <!-- 3. mum -->
-      <line x1="440" y1="55" x2="440" y2="98" stroke="#22c55e" stroke-width="2"/>
-      <rect x="425" y="68" width="30" height="27" fill="#22c55e"/>
-      <text x="440" y="228" fill="#5a6478" font-size="12" text-anchor="middle">3</text>
-      <!-- retest oku -->
-      <polyline points="470,72 512,92 526,120 508,148" fill="none" stroke="#2dd4bf" stroke-width="2"/>
-      <path d="M508 148 l10 -3 l-3 10 z" fill="#2dd4bf"/>
-      <text x="536" y="128" fill="#2dd4bf" font-size="11">retest / doldurma</text>
-    </svg><figcaption>Boğa FVG: 1. mumun tepesi ile 3. mumun dibi arasındaki, ortadaki güçlü mumun "atladığı" bölge. Fiyat sık sık buraya geri döner.</figcaption></figure>
+    <figure class="figure"><svg viewBox="0 0 640 260" role="img" aria-label="Giriş, stop-loss altta, take-profit üstte ve fiyatın hedefe ulaşması">
+      <!-- bölgeler -->
+      <rect x="120" y="55" width="400" height="95" fill="rgba(34,197,94,.10)"/>
+      <rect x="120" y="150" width="400" height="55" fill="rgba(239,68,68,.12)"/>
+      <!-- çizgiler -->
+      <line x1="120" y1="55" x2="560" y2="55" stroke="#22c55e" stroke-width="2"/>
+      <line x1="120" y1="150" x2="560" y2="150" stroke="#2dd4bf" stroke-width="2.5"/>
+      <line x1="120" y1="205" x2="560" y2="205" stroke="#ef4444" stroke-width="2"/>
+      <!-- etiketler -->
+      <text x="128" y="48" fill="#22c55e" font-size="12" font-weight="700">TAKE PROFIT · kâr kilitlenir ✓</text>
+      <text x="128" y="143" fill="#2dd4bf" font-size="12" font-weight="700">GİRİŞ</text>
+      <text x="128" y="222" fill="#ef4444" font-size="12" font-weight="700">STOP LOSS · zarar sınırlanır ✕</text>
+      <!-- fiyat yolu: stop'a yaklaşır, dokunmaz, hedefe gider -->
+      <polyline points="130,150 175,178 220,168 280,150 340,110 410,78 500,58"
+        fill="none" stroke="#f5b342" stroke-width="2.5"/>
+      <circle cx="190" cy="182" r="6" fill="none" stroke="#ef4444" stroke-width="2"/>
+      <text x="196" y="200" fill="#5a6478" font-size="10">stop'a değmedi</text>
+      <circle cx="500" cy="58" r="7" fill="#22c55e"/>
+      <path d="M496 58 l3 4 l6 -8" fill="none" stroke="#04211d" stroke-width="2"/>
+    </svg><figcaption>Fiyat önce stop'a yaklaşır ama dokunmaz, sonra hedefe ulaşır ve take-profit tetiklenir. İki emir de girişten önce tanımlıdır.</figcaption></figure>
 
-    <h2>Kısaca tanımı</h2>
-    <p>FVG, <strong>üç ardışık mumla</strong> tanımlanır. Ortadaki mum çok güçlü bir hareket (displacement / itki) yaptığında, birinci mumun fitili ile üçüncü mumun fitili arasında dokunulmamış bir fiyat aralığı kalır. Piyasa o kadar hızlı geçmiştir ki o aralıkta yeterli alım-satım gerçekleşmemiştir. İşte bu doldurulmamış aralık "adil değer boşluğu"dur — piyasanın adil fiyatı atladığı, geride bir <strong>dengesizlik</strong> bıraktığı bölgedir.</p>
+    <h2>Stop-Loss (zarar durdur)</h2>
+    <p>Stop-loss, işlem fikrinin <strong>yanlış çıktığı</strong> fiyata konan otomatik satış emridir. Amacı likidasyona bırakmadan, önceden kabul ettiğin küçük bir zararda çıkmaktır. Stop olmadan işlem açmak, kaybı piyasanın ve <a href="likidasyon-nedir.html">likidasyonun</a> insafına bırakmaktır — profesyonel yaklaşımın tam tersi.</p>
 
-    <h2>Neden fiyat geri döner?</h2>
-    <div class="callout">Piyasa "verimli" fiyatlamayı sever. Hızlı itki, arkada işlem görmemiş bir aralık bırakır ve fiyat çoğu zaman bu boşluğu <strong>test etmek / doldurmak</strong> için geri döner — tıpkı bir grafik gap'inin kapanma eğilimi gibi. Bu geri dönüş, trend yönünde düşük riskli bir giriş fırsatı sunabilir.</div>
-
-    <h2>Boğa ve ayı FVG</h2>
-    <ul>
-      <li><strong>Boğa FVG:</strong> ortadaki mum güçlü bir <strong>yükseliş</strong> mumudur. Boşluk, 1. mumun tepesi ile 3. mumun dibi arasında kalır. Fiyat düşüşte bu bölgeye geldiğinde destek gibi çalışabilir.</li>
-      <li><strong>Ayı FVG:</strong> ortadaki mum güçlü bir <strong>düşüş</strong> mumudur. Boşluk, 1. mumun dibi ile 3. mumun tepesi arasında kalır. Fiyat yukarı geldiğinde direnç gibi çalışabilir.</li>
-    </ul>
-
-    <h2>Trading'de nasıl kullanılır?</h2>
-    <p>FVG tek başına bir sinyal değil, bir <strong>ilgi bölgesidir</strong>. Wolf yaklaşımında onu tek başına değil, <strong>confluence</strong> (birden fazla teyidin çakışması) ile kullanırız:</p>
-    <ol class="steps">
-      <li><b>Yönü belirle.</b> Üst zaman diliminde (ör. 4H) trend yönünü tespit et; girişleri bu yönle hizala.</li>
-      <li><b>Boşluğu işaretle.</b> Güçlü itki sonrası oluşan FVG bölgesini grafikte çiz.</li>
-      <li><b>Teyit ara.</b> Aynı bölgede bir <a href="order-block-nedir.html">order block</a> ya da <a href="fibonacci-nedir.html">Fibonacci OTE</a> varsa sinyal güçlenir.</li>
-      <li><b>Girişi planla.</b> Fiyat bölgeye geri döndüğünde (retest) tepki/onay ara, riskini önceden tanımla.</li>
-    </ol>
+    <h2>Take-Profit (kâr al)</h2>
+    <p>Take-profit, hedefine ulaşınca pozisyonu kapatıp kazancı kilitleyen emirdir. "Biraz daha çıkar mı?" açgözlülüğünü engeller; planladığın seviyede kârı realize eder. Girişten önce belirlenir, sonradan hayale göre değil.</p>
 
     <div class="logic">
-      <div class="box entry"><div class="l">GİRİŞ</div><p>Fiyat FVG'ye geri döndüğünde, trend yönünde ve tercihen bir teyit (OB / OTE) ile birlikte.</p></div>
-      <div class="box stop"><div class="l">STOP</div><p>Boşluğun dış tarafına — boğa FVG'de altına, ayı FVG'de üstüne. Boşluk tümüyle geçersiz kılınırsa çık.</p></div>
-      <div class="box tp"><div class="l">HEDEF</div><p>Bir sonraki likidite / yapı seviyesi. Risk/ödül oranını girişten önce hesapla.</p></div>
+      <div class="box stop"><div class="l">STOP-LOSS</div><p>Fikir yanlışsa çıkış. Yapının/OB'nin dışına. Zararı önceden tanımlar.</p></div>
+      <div class="box tp"><div class="l">TAKE-PROFIT</div><p>Hedefe ulaşınca çıkış. Mantıklı yapı/likidite seviyesine. Kârı kilitler.</p></div>
+      <div class="box entry"><div class="l">BİRLİKTE</div><p>İkisi girişten önce → <a href="risk-odul-orani.html">R:R</a> hesaplanır, işlem plana bağlanır.</p></div>
     </div>
 
+    <h2>Nereye konulur?</h2>
+    <p>Her ikisi de <strong>grafikteki mantıklı seviyelere</strong> dayanmalı, rastgele yüzdelere değil. Stop, işlemi geçersiz kılacak yapının dışına (son dip/tepe, order block, FVG'nin ötesi). Take-profit, bir sonraki likidite ya da yapı seviyesine. İkisini yerleştirdikten sonra <a href="risk-odul-orani.html">risk/ödül oranını</a> kontrol et — 1:2'nin altındaysa işlem çoğu zaman değmez.</p>
+
+    <h2>Adım adım</h2>
+    <ol class="steps">
+      <li><b>Önce stop'u belirle.</b> Girişten önce, fikrin yanlış çıkarsa nerede çıkacağını yaz.</li>
+      <li><b>Hedefi seç.</b> Bir sonraki gerçek yapı/likidite seviyesi — hayal değil.</li>
+      <li><b>R:R'yi kontrol et.</b> Ödül, riskin en az 2 katı mı? Değilse geç.</li>
+      <li><b>Emirleri gir ve dokunma.</b> Stop'u zarara doğru kaydırma; yalnızca kârı korumak için breakeven'a çekebilirsin.</li>
+    </ol>
+
+    <div class="callout"><strong>En pahalı hata:</strong> Fiyat stop'a yaklaşınca "birazdan döner" deyip stop'u geri çekmek. Bu, küçük ve planlı bir zararı kontrolsüz bir felakete — çoğu zaman likidasyona — dönüştürür. Stop kutsaldır: planı korur. Onu yalnızca lehine (kârı kilitlemek için) hareket ettir, asla aleyhine.</div>
+
     <h2>Sık sorulan sorular</h2>
-    <div class="faq"><details><summary>FVG ile order block aynı şey mi?</summary><p>Hayır. Order block, güçlü hareketten önceki son zıt mumdur; FVG ise o güçlü hareketin bıraktığı boşluktur. Çoğu kez yan yana bulunur ve birlikte kullanılır.</p></details>
-      <details><summary>Her FVG doldurulur mu?</summary><p>Hayır. Boşlukların büyük kısmı geri test edilse de hepsi doldurulmaz. Bu yüzden FVG tek başına değil, trend ve yapı bağlamında değerlendirilir.</p></details>
-      <details><summary>Hangi zaman diliminde FVG daha güçlü?</summary><p>Genelde yüksek zaman dilimlerindeki (4H, günlük) FVG'ler daha güçlüdür; düşük zaman dilimindeki girişler bunlarla hizalandığında daha güvenilir olur.</p></details></div>
+    <div class="faq">
+      <details><summary>Stop-loss nereye konulmalı?</summary><p>Stop-loss, işlem fikrinin geçersiz olduğu noktanın hemen ötesine konur; örneğin yapının, order block'un veya son dip/tepenin dışına. Rastgele bir yüzdeye değil, grafikteki mantıklı bir seviyeye dayanmalıdır.</p></details>
+      <details><summary>Take-profit nasıl belirlenir?</summary><p>Take-profit, bir sonraki mantıklı yapı/likidite seviyesine konur. Girişten önce belirlenir ve risk/ödül oranının en az 1:2 olmasını sağlayacak şekilde seçilir.</p></details>
+      <details><summary>Stop-loss'u kaydırmak (geri çekmek) mantıklı mı?</summary><p>Zararı büyütecek şekilde stop'u geri çekmek en yaygın ve en pahalı hatalardan biridir. Stop, planı korumak için vardır; onu kaydırmak disiplini bozar ve küçük bir zararı likidasyona dönüştürebilir. Stop yalnızca kârı korumak için lehe (breakeven'a) çekilebilir.</p></details>
+    </div>
 
     <h2>İlgili rehberler & araçlar</h2>
-    <div class="related"><a href="order-block-nedir.html">Order Block Nedir?<span>FVG ile en iyi ortak</span></a>
-      <a href="fibonacci-nedir.html">Fibonacci Nedir?<span>OTE ile çakışma</span></a>
-      <a href="mtf-dashboard-rehberi.html">MTF Dashboard Rehberi<span>FVG confluence kullanan tarayıcı</span></a>
-      <a href="ob-oracle-rehberi.html">OB Oracle Rehberi<span>OB + FVG otomatik tespit</span></a></div>
+    <div class="related">
+      <a href="risk-odul-orani.html">Risk / Ödül Oranı<span>SL/TP mesafeleriyle hesaplanır</span></a>
+      <a href="setup-planner-rehberi.html">Setup Planner Rehberi<span>Giriş-stop-hedef planlayıcı</span></a>
+      <a href="likidasyon-nedir.html">Likidasyon Nedir?<span>Stop'suz işlemin sonu</span></a>
+    </div>
 
     <div class="author">
       <div class="ava" role="img" aria-label="CryptoWolf HP logosu"></div>
       <div><div class="name">Wolf Akademi</div>
-      <div class="bio">CryptoWolf HP eğitim ekibi · vadeli işlem analiz araçları ve piyasa yapısı üzerine içerik.</div></div>
+      <div class="bio">CryptoWolf HP eğitim ekibi · risk yönetimi ve işlem disiplini üzerine içerik.</div></div>
     </div>
     <p class="disclaimer">⚠️ Bu içerik yalnızca eğitim ve bilgilendirme amaçlıdır; yatırım tavsiyesi değildir. Kripto vadeli işlemler yüksek risk taşır. Kararlarından yalnızca sen sorumlusun.</p>
   </article>

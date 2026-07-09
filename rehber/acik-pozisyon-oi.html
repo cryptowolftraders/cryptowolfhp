@@ -12,17 +12,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#0a0e1a">
-<title>FVG Nedir? Fair Value Gap (Adil Değer Boşluğu) – Wolf Akademi</title>
-<meta name="description" content="FVG (Fair Value Gap / adil değer boşluğu) nedir, nasıl oluşur ve nasıl bulunur? Boğa ve ayı FVG, imbalance mantığı ve fiyatın boşluğu doldurma davranışı.">
-<link rel="canonical" href="https://cryptowolfhp.com/rehber/fvg-nedir.html">
+<title>Açık Pozisyon (Open Interest / OI) Nedir? – Wolf Akademi</title>
+<meta name="description" content="Açık pozisyon (open interest, OI) nedir, hacimden farkı ne? Fiyat + OI birlikte okuma (4 kombinasyon), trend gücü ve zayıflık sinyalleri. Vadeli işlem OI rehberi.">
+<link rel="canonical" href="https://cryptowolfhp.com/rehber/acik-pozisyon-oi.html">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="CryptoWolf HP">
 <meta property="og:locale" content="tr_TR">
-<meta property="og:title" content="FVG Nedir? Fair Value Gap (Adil Değer Boşluğu) – Wolf Akademi">
-<meta property="og:description" content="FVG (Fair Value Gap / adil değer boşluğu) nedir, nasıl oluşur ve nasıl bulunur? Boğa ve ayı FVG, imbalance mantığı ve fiyatın boşluğu doldurma davranışı.">
-<meta property="og:url" content="https://cryptowolfhp.com/rehber/fvg-nedir.html">
-<meta property="og:image" content="https://cryptowolfhp.com/rehber/og/fvg-nedir.png">
+<meta property="og:title" content="Açık Pozisyon (Open Interest / OI) Nedir?">
+<meta property="og:description" content="Fiyat + OI birlikte okuma (4 kombinasyon), trend gücü ve zayıflık sinyalleri.">
+<meta property="og:url" content="https://cryptowolfhp.com/rehber/acik-pozisyon-oi.html">
+<meta property="og:image" content="https://cryptowolfhp.com/rehber/og/acik-pozisyon-oi.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,80 +33,30 @@
   "@graph": [
     {
       "@type": "Article",
-      "headline": "FVG Nedir?",
-      "description": "FVG (Fair Value Gap / adil değer boşluğu) nedir, nasıl oluşur ve nasıl bulunur? Boğa ve ayı FVG, imbalance mantığı ve fiyatın boşluğu doldurma davranışı.",
+      "headline": "Açık Pozisyon (Open Interest / OI) Nedir?",
+      "description": "Açık pozisyon (open interest) nedir, hacimden farkı ne? Fiyat + OI birlikte okuma ve trend gücü sinyalleri.",
       "inLanguage": "tr-TR",
-      "datePublished": "2026-07-06",
-      "dateModified": "2026-07-06",
-      "author": {
-        "@type": "Organization",
-        "name": "Wolf Akademi",
-        "url": "https://cryptowolfhp.com"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "CryptoWolf HP",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://cryptowolfhp.com/logo.png"
-        }
-      },
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://cryptowolfhp.com/rehber/fvg-nedir.html"
-      },
-      "image": "https://cryptowolfhp.com/rehber/og/fvg-nedir.png"
+      "datePublished": "2026-07-09",
+      "dateModified": "2026-07-09",
+      "author": { "@type": "Organization", "name": "Wolf Akademi", "url": "https://cryptowolfhp.com" },
+      "publisher": { "@type": "Organization", "name": "CryptoWolf HP", "logo": { "@type": "ImageObject", "url": "https://cryptowolfhp.com/logo.png" } },
+      "mainEntityOfPage": { "@type": "WebPage", "@id": "https://cryptowolfhp.com/rehber/acik-pozisyon-oi.html" },
+      "image": "https://cryptowolfhp.com/rehber/og/acik-pozisyon-oi.png"
     },
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Ana Sayfa",
-          "item": "https://cryptowolfhp.com/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Akademi",
-          "item": "https://cryptowolfhp.com/rehber/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "FVG Nedir?",
-          "item": "https://cryptowolfhp.com/rehber/fvg-nedir.html"
-        }
+        { "@type": "ListItem", "position": 1, "name": "Ana Sayfa", "item": "https://cryptowolfhp.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Akademi", "item": "https://cryptowolfhp.com/rehber/" },
+        { "@type": "ListItem", "position": 3, "name": "Açık Pozisyon (OI)", "item": "https://cryptowolfhp.com/rehber/acik-pozisyon-oi.html" }
       ]
     },
     {
       "@type": "FAQPage",
       "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "FVG ile order block aynı şey mi?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Hayır. Order block, güçlü hareketten önceki son zıt mumdur; FVG ise o güçlü hareketin bıraktığı boşluktur. Çoğu kez yan yana bulunur ve birlikte kullanılır."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Her FVG doldurulur mu?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Hayır. Boşlukların büyük kısmı geri test edilse de hepsi doldurulmaz. Bu yüzden FVG tek başına değil, trend ve yapı bağlamında değerlendirilir."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Hangi zaman diliminde FVG daha güçlü?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Genelde yüksek zaman dilimlerindeki (4H, günlük) FVG'ler daha güçlüdür; düşük zaman dilimindeki girişler bunlarla hizalandığında daha güvenilir olur."
-          }
-        }
+        { "@type": "Question", "name": "Açık pozisyon ile hacim arasındaki fark ne?", "acceptedAnswer": { "@type": "Answer", "text": "Hacim, belirli bir sürede el değiştiren kontrat sayısıdır (aktivite). Açık pozisyon (OI) ise o an açık duran, henüz kapatılmamış toplam kontrat sayısıdır (kaç paranın oyunda kaldığı). Hacim akışı, OI ise birikimi ölçer." } },
+        { "@type": "Question", "name": "Fiyat yükselirken OI artıyorsa ne anlama gelir?", "acceptedAnswer": { "@type": "Answer", "text": "Fiyat yükselirken OI de artıyorsa, piyasaya yeni long para giriyor demektir; bu genelde yükselişin güçlü ve desteklenen bir trend olduğuna işaret eder." } },
+        { "@type": "Question", "name": "OI tek başına yön verir mi?", "acceptedAnswer": { "@type": "Answer", "text": "Hayır. OI mutlaka fiyat hareketiyle birlikte okunur; ayrıca fonlama oranı ile birleştirildiğinde trendin gücü ve olası tükeniş/squeeze zemini daha net görülür." } }
       ]
     }
   ]
@@ -355,81 +305,86 @@
   <nav class="crumb" aria-label="breadcrumb">
     <a href="https://cryptowolfhp.com/">Ana Sayfa</a> ›
     <a href="https://cryptowolfhp.com/rehber/">Akademi</a> ›
-    <b>FVG Nedir?</b>
+    <b>Açık Pozisyon (OI)</b>
   </nav>
   <article>
-    <div class="eyebrow"><span class="kicker">Temel Kavram</span></div>
-    <h1>FVG Nedir?</h1>
-    <p class="subtitle">Fair Value Gap — Adil Değer Boşluğu (imbalance)</p>
-    <p class="lead">FVG, fiyatın çok hızlı hareket ettiği için geride bıraktığı bir <strong>dengesizlik (imbalance) bölgesidir</strong>. Üç mumluk bir yapıdan doğar ve piyasa çoğu kez bu boşluğu "doldurmak" için geri döner. Bu yüzden FVG'ler güçlü <strong>giriş bölgesi</strong> ya da <strong>hedef</strong> olarak izlenir.</p>
+    <div class="eyebrow"><span class="kicker">Vadeli İşlem · Piyasa Verisi</span></div>
+    <h1>Açık Pozisyon (Open Interest / OI) Nedir?</h1>
+    <p class="subtitle">Piyasada açık duran toplam kontrat — "oyunda kaç para var?"</p>
+    <p class="lead">Açık pozisyon (open interest, OI), o an <strong>açık duran ve henüz kapatılmamış toplam kontrat sayısıdır</strong>. Kabaca "piyasada ne kadar para oyunda?" sorusunun cevabıdır. Tek başına yön vermez ama <strong>fiyatla birlikte okunduğunda</strong> trendin gücünü ya da zayıflığını ele verir.</p>
 
-    <figure class="figure"><svg viewBox="0 0 640 240" role="img" aria-label="Üç mumluk boğa FVG yapısı: 1. mumun tepesi ile 3. mumun dibi arasındaki boşluk">
-      <!-- FVG bandı: 3. mum dibi (y=95) ile 1. mum tepesi (y=150) arası -->
-      <rect x="105" y="95" width="470" height="55" fill="rgba(245,179,66,.15)" stroke="#f5b342" stroke-dasharray="5 4"/>
-      <line x1="105" y1="95" x2="575" y2="95" stroke="#f5b342" stroke-dasharray="5 4" opacity=".6"/>
-      <line x1="105" y1="150" x2="575" y2="150" stroke="#f5b342" stroke-dasharray="5 4" opacity=".6"/>
-      <text x="250" y="127" fill="#f5b342" font-size="15" font-weight="700" text-anchor="middle" font-family="Cinzel,serif" letter-spacing="1">FVG · boşluk</text>
-      <!-- 1. mum -->
-      <line x1="140" y1="150" x2="140" y2="210" stroke="#22c55e" stroke-width="2"/>
-      <rect x="125" y="165" width="30" height="35" fill="#22c55e"/>
-      <text x="140" y="228" fill="#5a6478" font-size="12" text-anchor="middle">1</text>
-      <!-- 2. mum (güçlü itki) -->
-      <line x1="290" y1="48" x2="290" y2="190" stroke="#22c55e" stroke-width="2"/>
-      <rect x="275" y="62" width="30" height="118" fill="#22c55e"/>
-      <text x="290" y="228" fill="#5a6478" font-size="12" text-anchor="middle">2</text>
-      <text x="318" y="58" fill="#22c55e" font-size="12">güçlü itki</text>
-      <!-- 3. mum -->
-      <line x1="440" y1="55" x2="440" y2="98" stroke="#22c55e" stroke-width="2"/>
-      <rect x="425" y="68" width="30" height="27" fill="#22c55e"/>
-      <text x="440" y="228" fill="#5a6478" font-size="12" text-anchor="middle">3</text>
-      <!-- retest oku -->
-      <polyline points="470,72 512,92 526,120 508,148" fill="none" stroke="#2dd4bf" stroke-width="2"/>
-      <path d="M508 148 l10 -3 l-3 10 z" fill="#2dd4bf"/>
-      <text x="536" y="128" fill="#2dd4bf" font-size="11">retest / doldurma</text>
-    </svg><figcaption>Boğa FVG: 1. mumun tepesi ile 3. mumun dibi arasındaki, ortadaki güçlü mumun "atladığı" bölge. Fiyat sık sık buraya geri döner.</figcaption></figure>
+    <h2>OI ile hacim aynı şey değil</h2>
+    <p><strong>Hacim</strong>, belirli bir sürede el değiştiren kontrat sayısıdır — aktiviteyi ölçer. <strong>OI</strong> ise o an açık kalan pozisyonların toplamıdır — birikimi ölçer. Yüksek hacim çok işlem yapıldığını, artan OI ise piyasaya <strong>yeni para girdiğini</strong> gösterir. İkisi farklı sorulara cevap verir.</p>
 
-    <h2>Kısaca tanımı</h2>
-    <p>FVG, <strong>üç ardışık mumla</strong> tanımlanır. Ortadaki mum çok güçlü bir hareket (displacement / itki) yaptığında, birinci mumun fitili ile üçüncü mumun fitili arasında dokunulmamış bir fiyat aralığı kalır. Piyasa o kadar hızlı geçmiştir ki o aralıkta yeterli alım-satım gerçekleşmemiştir. İşte bu doldurulmamış aralık "adil değer boşluğu"dur — piyasanın adil fiyatı atladığı, geride bir <strong>dengesizlik</strong> bıraktığı bölgedir.</p>
+    <h2>Fiyat + OI: 4 kombinasyon</h2>
+    <p>Asıl güç, ikisini birlikte okumakta. Bu matris, vadeli işlemcinin ezbere bilmesi gereken haritadır:</p>
 
-    <h2>Neden fiyat geri döner?</h2>
-    <div class="callout">Piyasa "verimli" fiyatlamayı sever. Hızlı itki, arkada işlem görmemiş bir aralık bırakır ve fiyat çoğu zaman bu boşluğu <strong>test etmek / doldurmak</strong> için geri döner — tıpkı bir grafik gap'inin kapanma eğilimi gibi. Bu geri dönüş, trend yönünde düşük riskli bir giriş fırsatı sunabilir.</div>
+    <figure class="figure"><svg viewBox="0 0 640 300" role="img" aria-label="Fiyat ve açık pozisyonun dört kombinasyonu ve anlamları">
+      <!-- sütun başlıkları -->
+      <text x="255" y="52" fill="#e8edf5" font-size="13" font-weight="700" text-anchor="middle" font-family="Cinzel,serif">OI ↑ (artıyor)</text>
+      <text x="475" y="52" fill="#e8edf5" font-size="13" font-weight="700" text-anchor="middle" font-family="Cinzel,serif">OI ↓ (azalıyor)</text>
+      <!-- satır başlıkları -->
+      <text x="70" y="115" fill="#22c55e" font-size="13" font-weight="700" text-anchor="middle" font-family="Cinzel,serif">Fiyat ↑</text>
+      <text x="70" y="215" fill="#ef4444" font-size="13" font-weight="700" text-anchor="middle" font-family="Cinzel,serif">Fiyat ↓</text>
+      <!-- hücreler -->
+      <g font-size="12">
+        <rect x="145" y="66" width="220" height="88" rx="10" fill="rgba(34,197,94,.14)" stroke="#22c55e"/>
+        <text x="255" y="100" fill="#22c55e" font-size="12.5" font-weight="700" text-anchor="middle">Yeni LONG parası</text>
+        <text x="255" y="122" fill="#9aa4ba" text-anchor="middle">Trend GÜÇLÜ</text>
+        <text x="255" y="140" fill="#5a6478" text-anchor="middle" font-size="10.5">sağlam yükseliş</text>
 
-    <h2>Boğa ve ayı FVG</h2>
+        <rect x="375" y="66" width="220" height="88" rx="10" fill="rgba(245,179,66,.12)" stroke="#f5b342"/>
+        <text x="485" y="100" fill="#f5b342" font-size="12.5" font-weight="700" text-anchor="middle">Short kapanışı</text>
+        <text x="485" y="122" fill="#9aa4ba" text-anchor="middle">ZAYIF yükseliş</text>
+        <text x="485" y="140" fill="#5a6478" text-anchor="middle" font-size="10.5">short covering, geçici</text>
+
+        <rect x="145" y="166" width="220" height="88" rx="10" fill="rgba(239,68,68,.14)" stroke="#ef4444"/>
+        <text x="255" y="200" fill="#ef4444" font-size="12.5" font-weight="700" text-anchor="middle">Yeni SHORT parası</text>
+        <text x="255" y="222" fill="#9aa4ba" text-anchor="middle">Düşüş GÜÇLÜ</text>
+        <text x="255" y="240" fill="#5a6478" text-anchor="middle" font-size="10.5">sağlam düşüş</text>
+
+        <rect x="375" y="166" width="220" height="88" rx="10" fill="rgba(245,179,66,.12)" stroke="#f5b342"/>
+        <text x="485" y="200" fill="#f5b342" font-size="12.5" font-weight="700" text-anchor="middle">Long kapanışı</text>
+        <text x="485" y="222" fill="#9aa4ba" text-anchor="middle">Düşüş ZAYIFLIYOR</text>
+        <text x="485" y="240" fill="#5a6478" text-anchor="middle" font-size="10.5">long exit / tükeniş</text>
+      </g>
+    </svg><figcaption>Fiyat ve OI aynı yönde ise (↑↑ / ↓↑) yeni para giriyor, trend güçlü. Fiyat hareket ederken OI azalıyorsa mevcut pozisyonlar kapanıyor, hareket zayıf.</figcaption></figure>
+
+    <h2>OI sana neyi anlatır?</h2>
     <ul>
-      <li><strong>Boğa FVG:</strong> ortadaki mum güçlü bir <strong>yükseliş</strong> mumudur. Boşluk, 1. mumun tepesi ile 3. mumun dibi arasında kalır. Fiyat düşüşte bu bölgeye geldiğinde destek gibi çalışabilir.</li>
-      <li><strong>Ayı FVG:</strong> ortadaki mum güçlü bir <strong>düşüş</strong> mumudur. Boşluk, 1. mumun dibi ile 3. mumun tepesi arasında kalır. Fiyat yukarı geldiğinde direnç gibi çalışabilir.</li>
+      <li><strong>Trend gücü:</strong> Artan OI, harekete yeni para eşlik ediyor demektir — trend desteklenir.</li>
+      <li><strong>Zayıflık/tükeniş:</strong> Fiyat yükselirken OI düşüyorsa, hareketi kapanan pozisyonlar taşıyor — yakıt bitiyor olabilir.</li>
+      <li><strong>Squeeze zemini:</strong> Aşırı yüksek OI + aşırı <a href="funding-rate-nedir.html">fonlama</a>, kalabalık ve kırılgan bir piyasa; ani likidasyon dalgası riski.</li>
     </ul>
 
-    <h2>Trading'de nasıl kullanılır?</h2>
-    <p>FVG tek başına bir sinyal değil, bir <strong>ilgi bölgesidir</strong>. Wolf yaklaşımında onu tek başına değil, <strong>confluence</strong> (birden fazla teyidin çakışması) ile kullanırız:</p>
+    <h2>İşlemde nasıl kullanılır?</h2>
     <ol class="steps">
-      <li><b>Yönü belirle.</b> Üst zaman diliminde (ör. 4H) trend yönünü tespit et; girişleri bu yönle hizala.</li>
-      <li><b>Boşluğu işaretle.</b> Güçlü itki sonrası oluşan FVG bölgesini grafikte çiz.</li>
-      <li><b>Teyit ara.</b> Aynı bölgede bir <a href="order-block-nedir.html">order block</a> ya da <a href="fibonacci-nedir.html">Fibonacci OTE</a> varsa sinyal güçlenir.</li>
-      <li><b>Girişi planla.</b> Fiyat bölgeye geri döndüğünde (retest) tepki/onay ara, riskini önceden tanımla.</li>
+      <li><b>Asla tek başına okuma.</b> OI'yi her zaman fiyat yönüyle eşleştir — matristeki hücreyi bul.</li>
+      <li><b>Fonlama ile birleştir.</b> OI + funding, trendin sağlam mı yoksa kalabalık-kırılgan mı olduğunu ayırt eder.</li>
+      <li><b>Aşırı seviyelerde dikkat.</b> Rekor OI, büyük bir hareketin (her iki yöne) yakıtının biriktiğine işaret olabilir.</li>
+      <li><b>Wolf tarayıcısıyla.</b> Funding + OI taraması bu kombinasyonları otomatik puanlar.</li>
     </ol>
 
-    <div class="logic">
-      <div class="box entry"><div class="l">GİRİŞ</div><p>Fiyat FVG'ye geri döndüğünde, trend yönünde ve tercihen bir teyit (OB / OTE) ile birlikte.</p></div>
-      <div class="box stop"><div class="l">STOP</div><p>Boşluğun dış tarafına — boğa FVG'de altına, ayı FVG'de üstüne. Boşluk tümüyle geçersiz kılınırsa çık.</p></div>
-      <div class="box tp"><div class="l">HEDEF</div><p>Bir sonraki likidite / yapı seviyesi. Risk/ödül oranını girişten önce hesapla.</p></div>
-    </div>
+    <div class="callout"><strong>Altın üçlü:</strong> Fiyat + OI + fonlama birlikte okunduğunda çoğu piyasa hikâyesi netleşir. Fiyat ne yaptı, arkasına yeni para mı geldi yoksa eski pozisyonlar mı kapandı, ve kalabalık hangi tarafta? Bu üç soruyu yanıtla, gürültünün çoğu kaybolur.</div>
 
     <h2>Sık sorulan sorular</h2>
-    <div class="faq"><details><summary>FVG ile order block aynı şey mi?</summary><p>Hayır. Order block, güçlü hareketten önceki son zıt mumdur; FVG ise o güçlü hareketin bıraktığı boşluktur. Çoğu kez yan yana bulunur ve birlikte kullanılır.</p></details>
-      <details><summary>Her FVG doldurulur mu?</summary><p>Hayır. Boşlukların büyük kısmı geri test edilse de hepsi doldurulmaz. Bu yüzden FVG tek başına değil, trend ve yapı bağlamında değerlendirilir.</p></details>
-      <details><summary>Hangi zaman diliminde FVG daha güçlü?</summary><p>Genelde yüksek zaman dilimlerindeki (4H, günlük) FVG'ler daha güçlüdür; düşük zaman dilimindeki girişler bunlarla hizalandığında daha güvenilir olur.</p></details></div>
+    <div class="faq">
+      <details><summary>Açık pozisyon ile hacim arasındaki fark ne?</summary><p>Hacim, belirli bir sürede el değiştiren kontrat sayısıdır (aktivite). Açık pozisyon (OI) ise o an açık duran, henüz kapatılmamış toplam kontrat sayısıdır (kaç paranın oyunda kaldığı). Hacim akışı, OI ise birikimi ölçer.</p></details>
+      <details><summary>Fiyat yükselirken OI artıyorsa ne anlama gelir?</summary><p>Fiyat yükselirken OI de artıyorsa, piyasaya yeni long para giriyor demektir; bu genelde yükselişin güçlü ve desteklenen bir trend olduğuna işaret eder.</p></details>
+      <details><summary>OI tek başına yön verir mi?</summary><p>Hayır. OI mutlaka fiyat hareketiyle birlikte okunur; ayrıca fonlama oranı ile birleştirildiğinde trendin gücü ve olası tükeniş/squeeze zemini daha net görülür.</p></details>
+    </div>
 
     <h2>İlgili rehberler & araçlar</h2>
-    <div class="related"><a href="order-block-nedir.html">Order Block Nedir?<span>FVG ile en iyi ortak</span></a>
-      <a href="fibonacci-nedir.html">Fibonacci Nedir?<span>OTE ile çakışma</span></a>
-      <a href="mtf-dashboard-rehberi.html">MTF Dashboard Rehberi<span>FVG confluence kullanan tarayıcı</span></a>
-      <a href="ob-oracle-rehberi.html">OB Oracle Rehberi<span>OB + FVG otomatik tespit</span></a></div>
+    <div class="related">
+      <a href="whale-scanner-rehberi.html">Whale Scanner Rehberi<span>OI + funding & akıllı para</span></a>
+      <a href="funding-rate-nedir.html">Funding Rate Nedir?<span>OI ile birlikte okunur</span></a>
+      <a href="beta-radar-rehberi.html">Beta Radar Rehberi<span>Volatilite & risk profili</span></a>
+    </div>
 
     <div class="author">
       <div class="ava" role="img" aria-label="CryptoWolf HP logosu"></div>
       <div><div class="name">Wolf Akademi</div>
-      <div class="bio">CryptoWolf HP eğitim ekibi · vadeli işlem analiz araçları ve piyasa yapısı üzerine içerik.</div></div>
+      <div class="bio">CryptoWolf HP eğitim ekibi · vadeli işlem piyasa verisi ve yapı analizi üzerine içerik.</div></div>
     </div>
     <p class="disclaimer">⚠️ Bu içerik yalnızca eğitim ve bilgilendirme amaçlıdır; yatırım tavsiyesi değildir. Kripto vadeli işlemler yüksek risk taşır. Kararlarından yalnızca sen sorumlusun.</p>
   </article>
