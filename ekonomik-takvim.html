@@ -28,8 +28,9 @@
 <style>
   /* bu sayfa için takvim geniş dursun */
   main.cal-wide{max-width:960px;}
-  .cal-card{margin:22px 0 8px;background:linear-gradient(160deg,var(--surface),var(--bg2));
-     border:1px solid var(--border2);border-radius:16px;padding:14px;}
+  .cal-card{margin:22px 0 8px;background:var(--bg);
+     border:1px solid var(--border2);border-radius:16px;padding:10px;overflow:hidden;}
+  .cal-card .tradingview-widget-container__widget{border-radius:10px;overflow:hidden;background:var(--bg);}
   .cal-card .tradingview-widget-container{min-height:640px;}
   .cal-note{font-size:12.5px;color:var(--text-mute);margin-top:10px;text-align:center;}
 </style>
@@ -290,7 +291,7 @@
         <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
         {
         "colorTheme": "dark",
-        "isTransparent": true,
+        "isTransparent": false,
         "locale": "tr",
         "countryFilter": "tr,us,eu,gb,jp,cn,de",
         "importanceFilter": "0,1",
