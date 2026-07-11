@@ -351,11 +351,48 @@
       <li><strong>📉 SHORT SİNYALİ:</strong> 3dk EMA 13, EMA 60'ın altına indi — tepeden short fırsatı.</li>
     </ul>
 
+    <h2>Coine tıkla: fibo katman planı</h2>
+    <p>Listedeki bir coine tıkladığında o coinin canlı 3 dakikalık mum grafiği açılır. Plan <strong>yalnızca EMA 13/60 kesişimi (short sinyali) oluştuğunda</strong> çizilir; coin hâlâ pompalanıyorsa (kesişim yoksa) sadece mumlar ve "kesişim bekleniyor" notu görünür — böylece anlamsız seviye üretilmez.</p>
+    <p>Plan, <strong>son tepeden sinyal fiyatına</strong> çekilen Fibonacci ile kurulur:</p>
+    <ul>
+      <li><strong>Giriş:</strong> Kesişimin oluştuğu fiyat — ilk short.</li>
+      <li><strong>Ekleme 1 · 0.786:</strong> Fiyat aleyhine tepeye tırmanırsa ilk ekleme (OTE bölgesi).</li>
+      <li><strong>Ekleme 2 · 0.889:</strong> Tepeye daha yakın ikinci ekleme.</li>
+      <li><strong>Stop:</strong> Son tepenin %0.5 üstü. Tepe kırılırsa dönüş tezi geçersizdir; çıkılır.</li>
+    </ul>
+    <p>Panelde ayrıca <strong>tam yüklü (1+1+1) pozisyon stopa giderse 10x kaldıraçta yaklaşık ROE zararı</strong> gösterilir. Son tepe sinyalden <strong>%15'ten uzaksa</strong> uyarı çıkar: eklemeler likidasyonun üstünde kalabileceği için yalnızca ilk girişle gitmen önerilir.</p>
+
+    <figure class="figure"><svg viewBox="0 0 640 250" role="img" aria-label="Son tepeden sinyale çekilen Fibonacci ile giriş, 0.786 ve 0.889 ekleme seviyeleri ve son tepenin üstündeki stop.">
+      <line x1="40" y1="210" x2="470" y2="210" stroke="#5a6478" opacity=".4"/>
+      <rect x="40" y="60" width="430" height="12" fill="#f5b342" opacity=".14"/>
+      <line x1="40" y1="46" x2="470" y2="46" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="5 4"/><text x="478" y="49" fill="#ef4444" font-size="11">STOP · son tepe +%0.5</text>
+      <line x1="40" y1="60" x2="470" y2="60" stroke="#f5b342" stroke-width="1.3" stroke-dasharray="4 4"/><text x="478" y="62" fill="#f5b342" font-size="11">Ekleme 2 · 0.889</text>
+      <line x1="40" y1="72" x2="470" y2="72" stroke="#f5b342" stroke-width="1.3" stroke-dasharray="4 4"/><text x="478" y="83" fill="#f5b342" font-size="11">Ekleme 1 · 0.786</text>
+      <line x1="40" y1="120" x2="470" y2="120" stroke="#2dd4bf" stroke-width="1.6"/><text x="478" y="123" fill="#2dd4bf" font-size="11">Giriş · 0 (kesişim)</text>
+      <polyline fill="none" stroke="#22c55e" stroke-width="2.5" points="40,190 130,168 210,120 270,72 300,52"/>
+      <polyline fill="none" stroke="#ef4444" stroke-width="2.5" points="300,52 340,88 372,120 430,150 500,168 560,176"/>
+      <circle cx="300" cy="52" r="4" fill="#e5e7eb"/><text x="300" y="42" fill="#aeb9d0" font-size="11" text-anchor="middle">SON TEPE</text>
+      <circle cx="372" cy="120" r="5" fill="none" stroke="#2dd4bf" stroke-width="2"/>
+      <line x1="28" y1="52" x2="28" y2="120" stroke="#8b98b4" stroke-width="1.2"/>
+      <text x="18" y="86" fill="#8b98b4" font-size="9" text-anchor="middle" transform="rotate(-90 18 86)">FİBO</text>
+    </svg><figcaption>Fibonacci son tepeden sinyale çekilir: 0.786 ve 0.889 ekleme seviyeleri, stop ise son tepenin %0.5 üstündedir.</figcaption></figure>
+
+    <div class="callout">Bir coin short sinyali verdikten sonra <strong>4 saat</strong> listede kalır, ardından otomatik düşer — liste eski sinyallerle dolmaz.</div>
+
+    <h2>Otomatik filtreler</h2>
+    <p>Radar, pratikte işleme uygun olmayan coinleri listeye hiç almaz:</p>
+    <ul>
+      <li><strong>Delist / duraklatılmış:</strong> Borsada aktif olmayan kontratlar elenir.</li>
+      <li><strong>Yeni listelenenler:</strong> 3 günden yeni (geçmişsiz, aşırı oynak) coinler elenir.</li>
+      <li><strong>Cılız hacim:</strong> 24 saatlik hacmi düşük, likit olmayan coinler elenir.</li>
+    </ul>
+
     <h2>Adım adım kullanım</h2>
     <ol class="steps">
       <li>Radarı aç; otomatik taramaya başlar ve pompalanan coinleri listeler.</li>
       <li>4H eşiğini (varsayılan %20) ve EMA değerlerini (13/60) dilersen ayarla.</li>
       <li>Bir coin "🎯 PUMP" durumuna geçtiğinde onu izlemeye al.</li>
+      <li>Coine tıkla: fibo katman planı, ekleme seviyeleri ve stop grafik üzerinde çıkar.</li>
       <li>"📉 SHORT SİNYALİ" çıktığında girişini kendi risk planına göre değerlendir.</li>
     </ol>
 
@@ -367,12 +404,18 @@
       <details><summary>Neden short sinyali üretir?</summary><p>Sert pompalanan coinlerde tepe sonrası geri çekilme beklenir. Radar, 3 dakikalık grafikte EMA 13'ün EMA 60'ın altına inmesini (crossunder) bekler ve bunu tepeden short fırsatı olarak işaretler.</p></details>
       <details><summary>Sinyal repaint yapar mı?</summary><p>Hayır. Kesişim yalnızca kapanmış 3 dakikalık mumda değerlendirilir; oluşmakta olan mumda sinyal üretilmez.</p></details>
       <details><summary>Neden 3 dakikalık zaman dilimi?</summary><p>Pump sonrası dönüş hızlı olur. 3 dakikalık EMA 13/60 kesişimi, tepeyi geç kalmadan yakalamak için hız ile gürültü arasında denge kurar.</p></details>
+      <details><summary>Coine tıklayınca ne görüyorum?</summary><p>O coinin canlı 3 dakikalık mum grafiği açılır. Kesişim (short sinyali) oluştuysa üzerine fibo katman planı (giriş, 0.786 ve 0.889 eklemeleri, stop) ve tam yüklü stop ROE'su çizilir. Kesişim yoksa yalnızca mumlar ve "kesişim bekleniyor" notu görünür.</p></details>
+      <details><summary>Stop nereye konur?</summary><p>Son tepenin %0.5 üstüne. Fiyat o tepeyi kırıp üstünde kalırsa "tepeden dönüş" tezi geçersiz olur; pozisyondan çıkılır.</p></details>
+      <details><summary>Sinyal listede ne kadar kalır?</summary><p>Kesişimden 4 saat sonra coin listeden otomatik düşer. Böylece ekran eski sinyallerle dolmaz.</p></details>
+      <details><summary>Neden bazı pompalanan coinler görünmüyor?</summary><p>Delist sürecindeki/duraklatılmış, 3 günden yeni listelenmiş veya cılız hacimli (likit olmayan) coinler otomatik elenir — pratikte işleme uygun olmadıkları için.</p></details>
     </div>
 
     <h2>İlgili rehberler & araçlar</h2>
     <div class="related">
+      <a href="fibonacci-nedir.html">Fibonacci Nedir?<span>0.786 / 0.889 seviyeleri</span></a>
+      <a href="stop-loss-take-profit.html">Stop-Loss & Take-Profit<span>Çıkış planı</span></a>
       <a href="mean-reversion-nedir.html">Mean Reversion Nedir?<span>Tepeden dönüş mantığı</span></a>
-      <a href="kasa-yonetimi.html">Kasa Yönetimi<span>Pozisyon & risk</span></a>
+      <a href="kasa-yonetimi.html">Kasa Yönetimi<span>Pozisyon &amp; risk</span></a>
       <a href="/#terminal">Göktürk Radarı<span>Canlı tarayıcı — terminalde</span></a>
     </div>
 
