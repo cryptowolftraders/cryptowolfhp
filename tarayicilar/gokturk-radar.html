@@ -282,10 +282,10 @@ function drawDetail(sym,c3,sp,lp,pump4h){
         </table>
         <div class="dv-roe">Tam yüklü (1+1+1) stopta<span class="n">~-%${Math.round(P.loss)}</span>10x · cross · tepe %${P.gap.toFixed(1)} uzakta</div>
         <div class="dv-warn ${P.gap>=15?'show':''}">⚠️ Tepe çok uzak (%${P.gap.toFixed(0)}). Ekleme fiyatları liq üstünde kalabilir — sadece Giriş ile git.</div>
-        <div class="dv-note">4H +%${(pump4h||0).toFixed(1)} · fibo: son tepe → sinyal · canlı MEXC verisi</div>`
+        <div class="dv-note">4H +%${(pump4h||0).toFixed(1)} · fibo: son tepe → sinyal · canlı veri</div>`
     : `
         <div class="dv-pending">⏳ Bu coinde henüz 3dk <b>EMA13/60 kesişimi</b> yok.<br><br>Coin hâlâ pump / izleme aşamasında. Short sinyali (kesişim) oluştuğunda fibo katman planı ve stop tam burada çizilir.</div>
-        <div class="dv-note">4H +%${(pump4h||0).toFixed(1)} · güncel fiyat: ${fmt6(cur)} · canlı MEXC verisi</div>`;
+        <div class="dv-note">4H +%${(pump4h||0).toFixed(1)} · güncel fiyat: ${fmt6(cur)} · canlı veri</div>`;
   $('dvContent').innerHTML=`
     <div class="dv-body">
       <div>

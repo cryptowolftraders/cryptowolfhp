@@ -849,6 +849,12 @@ button{font-size:12.5px!important;font-weight:700!important;letter-spacing:.3px!
 
 /* başlık Göktürk gibi Cinzel */
 .logo-wordmark{font-family:'Cinzel',serif!important;font-weight:700!important;letter-spacing:.5px!important}
+
+/* mobil: butonlar ekrana sığsın, yatay kaymasın */
+@media(max-width:640px){
+  .controls,.ctrl-group,.stats-bar{display:flex!important;flex-wrap:wrap!important;overflow-x:visible!important;max-width:100%!important;gap:6px!important}
+  .filter-btn{flex:0 1 auto}
+}
 </style>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
 </head>
