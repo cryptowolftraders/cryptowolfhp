@@ -63,6 +63,45 @@
        max-height:130px; overflow:auto; line-height:1.7}
   .log .e{color:var(--red)} .log .ok{color:var(--green)} .log .w{color:var(--gold)}
   .foot{color:#475569; font-size:11px; margin-top:14px; text-align:center; line-height:1.6}
+  /* ===== sinyal detay modalı ===== */
+  .dv-overlay{position:fixed; inset:0; background:rgba(4,7,14,.80); display:none;
+    align-items:center; justify-content:center; z-index:9999; padding:16px}
+  .dv-overlay.show{display:flex}
+  .dv-modal{background:linear-gradient(180deg,var(--panel),var(--panel2)); border:1px solid var(--line);
+    border-radius:16px; width:min(940px,96vw); max-height:94vh; overflow:auto; padding:16px 18px}
+  .dv-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px}
+  .dv-title{font-family:'Cinzel',serif; font-weight:700; font-size:18px; color:#fff}
+  .dv-title .t{color:var(--teal)} .dv-title .g{color:var(--gold)}
+  .dv-x{cursor:pointer; background:#1f2937; border:1px solid var(--line); color:var(--dim);
+    border-radius:8px; width:32px; height:32px; font-size:15px; line-height:1}
+  .dv-x:hover{color:var(--red); border-color:var(--red)}
+  .dv-body{display:grid; grid-template-columns:1fr 296px; gap:14px; align-items:start}
+  @media(max-width:820px){.dv-body{grid-template-columns:1fr}}
+  .dv-chart{background:#070b14; border:1px solid var(--line); border-radius:12px; padding:8px}
+  .dv-chart canvas{width:100%; height:auto; display:block}
+  .dv-legend{display:flex; gap:14px; flex-wrap:wrap; padding:8px 4px 2px; color:var(--dim); font-size:11px}
+  .dv-legend i{display:inline-block; width:13px; height:0; border-top:3px solid; vertical-align:middle; margin-right:5px; border-radius:2px}
+  .dv-legend i.bx{height:10px; border:none; width:11px; border-radius:2px}
+  .dv-plan{width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums}
+  .dv-plan td{padding:8px 3px; border-bottom:1px solid var(--line); font-size:13.5px}
+  .dv-plan tr:last-child td{border-bottom:none}
+  .dv-plan .lbl{color:var(--dim)} .dv-plan .lbl .r{color:#475569; font-size:11px; margin-left:5px}
+  .dv-plan .px{text-align:right; font-weight:700}
+  .dv-giris .lbl,.dv-giris .px{color:var(--teal)}
+  .dv-ek .px{color:var(--gold)}
+  .dv-stopr td{border-top:1px solid var(--line)}
+  .dv-stopr .lbl,.dv-stopr .px{color:var(--red)}
+  .dv-roe{margin-top:12px; background:var(--panel2); border:1px solid var(--line); border-radius:10px;
+    padding:11px; text-align:center; font-size:12px; color:var(--dim)}
+  .dv-roe .n{display:block; font-family:'Cinzel',serif; font-weight:700; font-size:20px; color:var(--red); margin:2px 0}
+  .dv-warn{margin-top:10px; background:rgba(245,179,66,.09); border:1px solid rgba(245,179,66,.35);
+    color:var(--gold); border-radius:10px; padding:10px; font-size:11.5px; line-height:1.5; display:none}
+  .dv-warn.show{display:block}
+  .dv-note{margin-top:10px; color:#475569; font-size:11px; text-align:center; line-height:1.5}
+  .dv-loading{padding:56px 20px; text-align:center; color:var(--dim); font-size:13px}
+  .dv-pending{background:var(--panel2); border:1px solid var(--line); border-radius:10px;
+    padding:18px 14px; font-size:13px; color:var(--dim); line-height:1.65}
+  .dv-pending b{color:var(--gold)}
 </style>
 </head>
 <body>
@@ -122,6 +161,16 @@
   </div>
 </div>
 
+<div class="dv-overlay" id="dvOverlay" onclick="if(event.target===this)closeDetail()">
+  <div class="dv-modal">
+    <div class="dv-top">
+      <div class="dv-title" id="dvTitle">🐺 <span class="g">Göktürk</span> <span class="t">Sinyal Detayı</span></div>
+      <button class="dv-x" onclick="closeDetail()">✕</button>
+    </div>
+    <div id="dvContent"><div class="dv-loading">Yükleniyor…</div></div>
+  </div>
+</div>
+
 <script>
 const BASE = "https://web-production-2bdde.up.railway.app/wolfdata"; // nötr veri kaynağı (alias)
 const $ = id => document.getElementById(id);
@@ -133,6 +182,25 @@ const pretty = s => s.replace('_USDT','') + 'USDT';
 let coins = new Map();       // sym -> {pump4h, price, isPump, ema13, ema60, status, added, lastBucket, signalTime}
 let signalCount = 0, running = false;
 let screenTimer=null, watchTimer=null, busyS=false, busyW=false;
+
+// aktif sembol filtresi (worker ile ayni) — delist/yeni/cılız coinleri eler
+const MINVOL = 2e6, MIN_AGE_DAYS = 3;   // 24s min hacim USDT · min listelenme yaşı gün
+const SIGNAL_RETENTION = 4*3600;        // kesişen coin kaç sn listede kalsın (4 saat)
+let validSyms = null;
+async function refreshValid(){
+  try{
+    const d=(await getJSON(BASE+'/api/v1/contract/detail')).data||[];
+    const nowMs=Date.now(), s=new Set(); let skState=0, skNew=0;
+    for(const c of d){
+      const sym=c.symbol||''; if(!sym.endsWith('_USDT')) continue;
+      if(c.state!=null && c.state!==0){ skState++; continue; }          // delist/pause
+      const om=c.openingTime||c.createTime;
+      if(MIN_AGE_DAYS>0 && om && (nowMs-om)/86400000 < MIN_AGE_DAYS){ skNew++; continue; } // yeni
+      s.add(sym);
+    }
+    if(s.size){ validSyms=s; log(`Aktif liste: ${s.size} coin (elenen: ${skState} pasif, ${skNew} yeni)`,'ok'); }
+  }catch(e){ log('Aktif liste alınamadı: '+e.message,'w'); }
+}
 
 function log(m,cls=''){const el=$('log');const t=new Date().toLocaleTimeString('tr-TR');
   el.innerHTML=`<div class="${cls}">[${t}] ${m}</div>`+el.innerHTML; if(el.childNodes.length>100) el.removeChild(el.lastChild);}
@@ -147,16 +215,137 @@ function aggregate(d,sec){const b=new Map();
     else{o.high=Math.max(o.high,+d.high[i]);o.low=Math.min(o.low,+d.low[i]);o.close=+d.close[i];}}
   return [...b.values()].sort((a,b)=>a.t-b.t);}
 
+/* ===== sinyal detay grafiği (fibo katman planı) ===== */
+const FIB_A=0.786, FIB_B=0.889, STOP_BUF=1.005, LEV=10;
+const fmt6 = p => String(+(+p).toPrecision(6));
+function planOf(signal,peak){
+  const rng=peak-signal, ek1=signal+FIB_A*rng, ek2=signal+FIB_B*rng, stop=peak*STOP_BUF;
+  const gap=(peak-signal)/signal*100, e=[signal,ek1,ek2];
+  const loss=(LEV/e.length)*e.reduce((a,x)=>a+(stop/x-1),0)*100;
+  return {signal,ek1,ek2,stop,gap,loss};
+}
+let dvEsc=null;
+function closeDetail(){ $('dvOverlay').classList.remove('show'); if(dvEsc){document.removeEventListener('keydown',dvEsc);dvEsc=null;} }
+async function openDetail(sym){
+  const ov=$('dvOverlay'); ov.classList.add('show');
+  $('dvTitle').innerHTML=`🐺 <span class="g">${pretty(sym)}</span> <span class="t">Sinyal Detayı</span>`;
+  $('dvContent').innerHTML='<div class="dv-loading">Grafik yükleniyor…</div>';
+  dvEsc=e=>{ if(e.key==='Escape') closeDetail(); }; document.addEventListener('keydown',dvEsc);
+  const sp=+$('emaShort').value||13, lp=+$('emaLong').value||60, min1=(lp*3+5)*3;
+  try{
+    const j=await getJSON(BASE+`/api/v1/contract/kline/${sym}?interval=Min1&start=${now()-min1*60}`);
+    const d=j.data; if(!d||!d.time||!d.time.length) throw new Error('veri yok');
+    const c3=aggregate(d,180).filter(c=>now()>=c.t+180);
+    if(c3.length<sp+2) throw new Error('yeterli mum yok');
+    const r=coins.get(sym)||{};
+    drawDetail(sym,c3,sp,lp,r.pump4h||0);
+  }catch(e){ $('dvContent').innerHTML=`<div class="dv-loading">Detay yüklenemedi: ${e.message}</div>`; }
+}
+function drawDetail(sym,c3,sp,lp,pump4h){
+  const clAll=c3.map(c=>c.close), e13All=ema(clAll,sp), e60All=ema(clAll,lp);
+  const N=Math.min(90,c3.length);
+  const cs=c3.slice(-N), e13=e13All.slice(-N), e60=e60All.slice(-N);
+  const cur=cs[cs.length-1].close;
+  // görünen pencerede SON EMA13<EMA60 kesişimi
+  let crossIdx=-1;
+  for(let i=1;i<cs.length;i++){ if(e13[i]!=null&&e60[i]!=null&&e13[i-1]>=e60[i-1]&&e13[i]<e60[i]) crossIdx=i; }
+  const hasPlan=crossIdx>0;
+  let P=null, signal=cur, peak=cur, topIdx=cs.length-1;
+  if(hasPlan){
+    signal=cs[crossIdx].close;
+    peak=-Infinity; for(let i=0;i<=crossIdx;i++){ if(cs[i].high>peak){peak=cs[i].high; topIdx=i;} }
+    if(peak<=signal*1.006) peak=signal*1.006;
+    P=planOf(signal,peak);
+  } else {
+    peak=-Infinity; for(let i=0;i<cs.length;i++){ if(cs[i].high>peak){peak=cs[i].high; topIdx=i;} }
+  }
+  const panel = hasPlan ? `
+        <table class="dv-plan">
+          <tr class="dv-giris"><td class="lbl">Giriş</td><td class="px">${fmt6(P.signal)}</td></tr>
+          <tr class="dv-ek"><td class="lbl">Ekleme 1<span class="r">0.786</span></td><td class="px">${fmt6(P.ek1)}</td></tr>
+          <tr class="dv-ek"><td class="lbl">Ekleme 2<span class="r">0.889</span></td><td class="px">${fmt6(P.ek2)}</td></tr>
+          <tr class="dv-stopr"><td class="lbl">🛑 STOP<span class="r">tepe +%0.5</span></td><td class="px">${fmt6(P.stop)}</td></tr>
+        </table>
+        <div class="dv-roe">Tam yüklü (1+1+1) stopta<span class="n">~-%${Math.round(P.loss)}</span>10x · cross · tepe %${P.gap.toFixed(1)} uzakta</div>
+        <div class="dv-warn ${P.gap>=15?'show':''}">⚠️ Tepe çok uzak (%${P.gap.toFixed(0)}). Ekleme fiyatları liq üstünde kalabilir — sadece Giriş ile git.</div>
+        <div class="dv-note">4H +%${(pump4h||0).toFixed(1)} · fibo: son tepe → sinyal · canlı MEXC verisi</div>`
+    : `
+        <div class="dv-pending">⏳ Bu coinde henüz 3dk <b>EMA13/60 kesişimi</b> yok.<br><br>Coin hâlâ pump / izleme aşamasında. Short sinyali (kesişim) oluştuğunda fibo katman planı ve stop tam burada çizilir.</div>
+        <div class="dv-note">4H +%${(pump4h||0).toFixed(1)} · güncel fiyat: ${fmt6(cur)} · canlı MEXC verisi</div>`;
+  $('dvContent').innerHTML=`
+    <div class="dv-body">
+      <div>
+        <div class="dv-chart"><canvas id="dvcv" width="900" height="500"></canvas></div>
+        <div class="dv-legend">
+          <span><i class="bx" style="background:var(--green)"></i>Yükseliş</span>
+          <span><i class="bx" style="background:var(--red)"></i>Düşüş</span>
+          <span><i style="border-color:var(--gold)"></i>EMA13</span>
+          <span><i style="border-color:#5b7fb5"></i>EMA60</span>
+          ${hasPlan?'<span><i class="bx" style="background:rgba(245,179,66,.25);border:1px solid var(--gold)"></i>Ekleme bölgesi</span>':''}
+        </div>
+      </div>
+      <div class="dv-panel">${panel}</div>
+    </div>`;
+  requestAnimationFrame(()=>renderCanvas('dvcv',{cs,e13,e60,topIdx,crossIdx,hasPlan,P,signal,peak,cur}));
+}
+function renderCanvas(cid,o){
+  const cv=$(cid); if(!cv) return; const ctx=cv.getContext('2d'), LOGW=900, LOGH=500;
+  const dpr=window.devicePixelRatio||1; cv.width=LOGW*dpr; cv.height=LOGH*dpr;
+  cv.style.height=(cv.clientWidth*LOGH/LOGW)+'px'; ctx.setTransform(dpr,0,0,dpr,0,0);
+  const {cs,e13,e60,topIdx,crossIdx,hasPlan,P,signal,peak,cur}=o, n=cs.length;
+  const PAD={l:56,r:104,t:18,b:24}, x0=PAD.l,x1=LOGW-PAD.r,y0=PAD.t,y1=LOGH-PAD.b, plotW=x1-x0, plotH=y1-y0;
+  const pMax=(hasPlan?P.stop*1.006:peak*1.01), pMin=Math.min(...cs.map(k=>k.low))*0.997;
+  const Y=p=>y1-(p-pMin)/(pMax-pMin)*plotH, cx=i=>x0+(i+0.5)*plotW/n, cw=Math.max(2,(plotW/n)*0.62);
+  ctx.clearRect(0,0,LOGW,LOGH);
+  const hline=(price,color,dash,lw)=>{ctx.save();ctx.strokeStyle=color;ctx.lineWidth=lw||1;ctx.setLineDash(dash||[]);ctx.beginPath();ctx.moveTo(x0,Y(price));ctx.lineTo(x1,Y(price));ctx.stroke();ctx.restore();};
+  const rlabel=(price,text,color)=>{ctx.save();ctx.fillStyle=color;ctx.font='600 11px Segoe UI,sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText(text,x1+7,Y(price));ctx.restore();};
+  if(hasPlan){
+    ctx.save();ctx.fillStyle='rgba(245,179,66,.10)';ctx.fillRect(x0,Y(P.ek2),plotW,Y(P.ek1)-Y(P.ek2));ctx.restore();
+    hline(P.stop,'rgba(248,113,113,.9)',[6,4],1.3);
+    hline(peak,'rgba(148,163,184,.5)',[2,4],1);
+    hline(P.ek2,'rgba(245,179,66,.75)',[5,4],1);
+    hline(P.ek1,'rgba(245,179,66,.75)',[5,4],1);
+    hline(signal,'rgba(45,212,191,.9)',[],1.4);
+    rlabel(P.stop,'STOP '+fmt6(P.stop),'#f87171');
+    rlabel(peak,'tepe (1.0)','#94a3b8');
+    rlabel(P.ek2,'0.889 '+fmt6(P.ek2),'#f5b342');
+    rlabel(P.ek1,'0.786 '+fmt6(P.ek1),'#f5b342');
+    rlabel(signal,'giriş (0) '+fmt6(signal),'#2dd4bf');
+  } else {
+    hline(cur,'rgba(45,212,191,.7)',[4,4],1.2);
+    rlabel(cur,'güncel '+fmt6(cur),'#2dd4bf');
+  }
+  for(let i=0;i<n;i++){const k=cs[i],up=k.close>=k.open,col=up?'#34d399':'#f87171';ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(cx(i),Y(k.high));ctx.lineTo(cx(i),Y(k.low));ctx.stroke();const yo=Y(k.open),yc=Y(k.close),top=Math.min(yo,yc);let hh=Math.abs(yc-yo);if(hh<1)hh=1;ctx.fillRect(cx(i)-cw/2,top,cw,hh);}
+  const emaLine=(arr,color)=>{ctx.save();ctx.strokeStyle=color;ctx.lineWidth=1.6;ctx.beginPath();let st=false;for(let i=0;i<n;i++){if(arr[i]==null)continue;const px=cx(i),py=Y(arr[i]);if(!st){ctx.moveTo(px,py);st=true;}else ctx.lineTo(px,py);}ctx.stroke();ctx.restore();};
+  emaLine(e60,'#5b7fb5'); emaLine(e13,'#f5b342');
+  if(hasPlan){
+    const fx=x0-14;
+    ctx.save();ctx.strokeStyle='rgba(148,163,184,.7)';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(fx,Y(peak));ctx.lineTo(fx,Y(signal));ctx.stroke();
+    [peak,P.ek2,P.ek1,signal].forEach(p=>{ctx.beginPath();ctx.moveTo(fx-4,Y(p));ctx.lineTo(fx+4,Y(p));ctx.stroke();});
+    ctx.fillStyle='rgba(148,163,184,.85)';ctx.font='9px Segoe UI,sans-serif';ctx.textAlign='center';ctx.translate(fx-9,(Y(peak)+Y(signal))/2);ctx.rotate(-Math.PI/2);ctx.fillText('FİBO tepe→sinyal',0,0);ctx.restore();
+  }
+  ctx.save();ctx.fillStyle='#94a3b8';const tx=cx(topIdx),ty=Y(peak);ctx.beginPath();ctx.moveTo(tx,ty-2);ctx.lineTo(tx-5,ty-10);ctx.lineTo(tx+5,ty-10);ctx.closePath();ctx.fill();ctx.font='700 10px Cinzel,serif';ctx.textAlign='center';ctx.fillStyle='#aeb9d0';ctx.fillText('SON TEPE',tx,ty-15);ctx.restore();
+  if(hasPlan&&crossIdx>0){
+    const xX=cx(crossIdx);
+    ctx.save();ctx.strokeStyle='rgba(45,212,191,.55)';ctx.setLineDash([3,3]);ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(xX,y0);ctx.lineTo(xX,y1);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#2dd4bf';ctx.font='600 9.5px Segoe UI,sans-serif';ctx.textAlign='center';ctx.fillText('EMA13 ✗ EMA60',xX,y0+10);ctx.restore();
+    const sy=Y(signal);ctx.save();ctx.fillStyle='#2dd4bf';ctx.beginPath();ctx.moveTo(xX,sy+4);ctx.lineTo(xX-5,sy+12);ctx.lineTo(xX+5,sy+12);ctx.closePath();ctx.fill();ctx.font='700 10px Cinzel,serif';ctx.textAlign='center';ctx.fillText('SİNYAL',xX,sy+24);ctx.restore();
+  }
+}
+
 // STAGE 1 — canlı 4H hareket taraması
 async function screen(){
   const pump=+$('pumpPct').value||20, pre=+$('preFilter').value||6;
   let tk;
   try{ tk=(await getJSON(BASE+'/api/v1/contract/ticker')).data||[]; }
   catch(e){ log('Veri alınamadı: '+e.message,'e'); return; }
+  if(validSyms===null) await refreshValid();
   const uni=tk.filter(t=>(t.symbol||'').endsWith('_USDT'));
   $('cUniverse').textContent=uni.length;
-  const cands=uni.filter(t=>(parseFloat(t.riseFallRate)||0)*100>=pre);
-  log(`Tarama: ${uni.length} perp · ${cands.length} aday (24s ≥ %${pre})`,'w');
+  let cands=uni.filter(t=>(parseFloat(t.riseFallRate)||0)*100>=pre);
+  if(validSyms) cands=cands.filter(t=>validSyms.has(t.symbol));            // delist/yeni ele
+  let lowvol=0;
+  cands=cands.filter(t=>{ const v=parseFloat(t.amount24)||0; if(v>0 && v<MINVOL){lowvol++; return false;} return true; }); // cılız ele
+  log(`Tarama: ${uni.length} perp · ${cands.length} aday (24s ≥ %${pre}${lowvol?`, ${lowvol} cılız elendi`:''})`,'w');
   const seen=new Set(); let checked=0;
   for(const t of cands){
     if(!running) break; checked++;
@@ -174,8 +363,12 @@ async function screen(){
     }catch(e){}
     await sleep(105);
   }
-  // ekran listesini tazele: görünmeyen & pump olmayanları at
-  for(const s of [...coins.keys()]){ if(!seen.has(s) && !coins.get(s).isPump) coins.delete(s); }
+  // ekran listesini tazele: görünmeyen & pump olmayanları at + süresi dolan sinyalleri düşür
+  const nowT=now();
+  for(const s of [...coins.keys()]){ const c=coins.get(s);
+    if(c.status==='short' && c.signalTime && nowT-c.signalTime > SIGNAL_RETENTION){ coins.delete(s); log(`⏲ ${pretty(s)} süresi doldu (4s), listeden düştü`,'w'); continue; }
+    if(!seen.has(s) && !c.isPump) coins.delete(s);
+  }
   $('progress').textContent='';
   render();
 }
@@ -223,7 +416,7 @@ function render(){
       : r.isPump?'<span class="badge b-wait">🎯 PUMP · kesişim bekliyor</span>'
       : '<span class="badge b-watch">📈 İzlemede</span>';
     const tm=r.signalTime?fmtTime(r.signalTime):fmtTime(r.added);
-    return `<tr><td style="padding-left:16px"><span class="sym">${pretty(r.symbol||'')}</span></td>
+    return `<tr onclick="openDetail('${r.symbol}')" style="cursor:pointer" title="Fibo detay grafiğini aç"><td style="padding-left:16px"><span class="sym">${pretty(r.symbol||'')}</span></td>
       <td class="pump">+%${r.pump4h.toFixed(1)}</td><td>${fmtPrice(r.price)}</td>
       <td>${emaCell}</td><td>${badge}</td><td style="color:#94a3b8">${tm}</td></tr>`;
   }).join('');
