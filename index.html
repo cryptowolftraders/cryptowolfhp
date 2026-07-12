@@ -481,6 +481,14 @@
 .quick-group-head.tier-elite{color:#c084fc;}
 @media(max-width:760px){.tier-columns{grid-template-columns:1fr;}}
 </style>
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0a0e1a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CryptoWolf HP">
 </head>
 <body>
 
@@ -908,6 +916,60 @@ setInterval(fetchPrices, 30000);
   else renderToolLists();
 })();
 
+</script>
+
+<!-- Ana Ekrana Ekle -->
+<style>
+.a2hs{position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;display:none;align-items:center;gap:12px;background:#121826;border:1px solid #1f2740;border-radius:14px;padding:12px 14px;box-shadow:0 12px 40px rgba(0,0,0,.5);color:#e8edf5;font-family:'Segoe UI',system-ui,sans-serif;max-width:520px;margin:0 auto}
+.a2hs.show{display:flex}
+.a2hs img{width:44px;height:44px;border-radius:10px;flex:0 0 auto}
+.a2hs-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.a2hs-txt b{font-size:14px;font-family:'Cinzel',serif}
+.a2hs-txt span{font-size:12px;color:#94a3b8;line-height:1.35}
+.a2hs-btn{background:#f5b342;color:#1a1206;border:none;border-radius:9px;padding:9px 16px;font-weight:700;font-size:13px;cursor:pointer;flex:0 0 auto}
+.a2hs-x{background:none;border:none;color:#94a3b8;font-size:22px;line-height:1;cursor:pointer;padding:0 2px;flex:0 0 auto}
+@media(max-width:480px){.a2hs{gap:9px;padding:10px}.a2hs img{width:38px;height:38px}.a2hs-btn{padding:8px 12px;font-size:12px}}
+</style>
+<div id="a2hs" class="a2hs">
+  <img src="/icons/icon-192.png" alt="">
+  <div class="a2hs-txt">
+    <b>CryptoWolf HP'yi ana ekrana ekle</b>
+    <span id="a2hs-sub">Uygulama gibi tam ekran, tek dokunuşla.</span>
+  </div>
+  <button id="a2hs-install" class="a2hs-btn">Yükle</button>
+  <button id="a2hs-close" class="a2hs-x" aria-label="Kapat">&times;</button>
+</div>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});
+}
+(function(){
+  var banner=document.getElementById('a2hs'),
+      sub=document.getElementById('a2hs-sub'),
+      installBtn=document.getElementById('a2hs-install'),
+      closeBtn=document.getElementById('a2hs-close'),
+      deferred=null,
+      standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true,
+      isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent),
+      dismissed=false;
+  try{dismissed=localStorage.getItem('a2hs_dismiss')==='1';}catch(e){}
+  function show(){ if(!standalone && !dismissed) banner.classList.add('show'); }
+  function hide(){ banner.classList.remove('show'); }
+  closeBtn.onclick=function(){ hide(); try{localStorage.setItem('a2hs_dismiss','1');}catch(e){} };
+  window.addEventListener('beforeinstallprompt',function(e){
+    e.preventDefault(); deferred=e; installBtn.style.display='';
+    sub.textContent='Uygulama gibi tam ekran, tek dokunuşla.'; show();
+  });
+  installBtn.onclick=function(){
+    if(deferred){ deferred.prompt(); deferred.userChoice.finally(function(){ deferred=null; hide(); }); }
+  };
+  window.addEventListener('appinstalled',function(){ hide(); try{localStorage.setItem('a2hs_dismiss','1');}catch(e){} });
+  if(isIOS && !standalone){
+    installBtn.style.display='none';
+    sub.innerHTML='Safari\u2019de <b>Payla\u015f</b> (\u2b06\ufe0e) \u2192 <b>Ana Ekrana Ekle</b>';
+    setTimeout(show,1500);
+  }
+})();
 </script>
 </body>
 </html>
