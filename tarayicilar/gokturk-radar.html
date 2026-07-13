@@ -198,7 +198,7 @@ let signalCount = 0, running = false;
 let screenTimer=null, watchTimer=null, busyS=false, busyW=false;
 
 // aktif sembol filtresi (worker ile ayni) — delist/yeni/cılız coinleri eler
-const MINVOL = 2e6, MIN_AGE_DAYS = 1;   // 24s min hacim USDT · min listelenme yaşı gün
+const MINVOL = 500000, MIN_AGE_DAYS = 1;   // 24s min hacim USDT · min listelenme yaşı gün
 const SIGNAL_RETENTION = 4*3600;        // kesişen coin kaç sn listede kalsın (4 saat)
 let validSyms = null;
 async function refreshValid(){
