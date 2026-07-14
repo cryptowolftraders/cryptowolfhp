@@ -604,7 +604,7 @@ async function scan(){
     $('ptxt').innerHTML=`<span class="spin"></span> ${item.symbol} · ${done}/${total} coin`;
     const el=(Date.now()-t0)/1000; const eta=el/done*(total-done);
     $('petc').textContent=`geçen ${el.toFixed(0)}s · kalan ~${eta.toFixed(0)}s`;
-  }, 12);
+  }, 5);
 
   finishScan(done,total);
 }
