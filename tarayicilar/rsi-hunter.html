@@ -253,6 +253,17 @@ body::before{
 .price-up{color:var(--green);}
 .price-down{color:var(--red);}
 
+/* FUNDING RATE rozeti (MTF Dashboard mantığı) */
+.card-price .funding-badge{
+  display:inline-flex;align-items:center;gap:2px;
+  font-size:9px;font-weight:700;padding:1px 4px;border-radius:2px;
+  margin-left:5px;letter-spacing:.3px;
+  font-family:'JetBrains Mono',monospace;vertical-align:middle;
+}
+.funding-pos{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3);}
+.funding-neg{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3);}
+.funding-neu{background:rgba(245,179,66,.10);color:var(--gold);border:1px solid rgba(245,179,66,.2);}
+
 /* RSI MTF çubukları */
 .rsi-bars{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
 .rsi-row{display:flex;align-items:center;gap:8px;}
@@ -617,6 +628,22 @@ async function getTicker(symbol) {
   };
 }
 
+// ─── FUNDING RATE (MTF Dashboard mantığı) ────────────────────────────────────
+// premiumIndex → lastFundingRate (ondalık) × 100 = yüzde
+// Hata / timeout durumunda null döner, kart yine de basılır.
+async function getFunding(symbol) {
+  try {
+    const r = await fetch(`${API}/fapi/v1/premiumIndex?symbol=${symbol}`,
+                          { signal: AbortSignal.timeout(4000) });
+    if (!r.ok) return null;
+    const d = await r.json();
+    if (!d || d.lastFundingRate === undefined) return null;
+    return parseFloat(d.lastFundingRate) * 100;
+  } catch(e) {
+    return null;
+  }
+}
+
 // ─── RSI HESAPLAMA ────────────────────────────────────────────────────────────
 function calcRSI(closes, period = RSI_PERIOD) {
   if (closes.length < period + 1) return null;
@@ -663,7 +690,11 @@ async function checkUltraSignal(symbol, tf) {
 
     if (!ultraLong && !ultraShort) return null;
 
-    const ticker = await getTicker(symbol);
+    // Ticker + funding paralel — sadece sinyal doğrulanan coin için çekilir
+    const [ticker, fundingRate] = await Promise.all([
+      getTicker(symbol),
+      getFunding(symbol),
+    ]);
     if (!ticker) return null;
 
     return {
@@ -677,6 +708,7 @@ async function checkUltraSignal(symbol, tf) {
       price: ticker.price,
       change: ticker.change,
       vol24h: ticker.vol24h,
+      fundingRate,
       time: new Date(),
     };
   } catch(e) {
@@ -812,6 +844,17 @@ function signalCard(s) {
       </div>`;
   }).join('');
 
+  // Funding rozeti — MTF Dashboard ile birebir eşik: >0.01 kırmızı, <-0.01 yeşil, arası nötr
+  let fundingHtml = '';
+  if (s.fundingRate !== null && s.fundingRate !== undefined) {
+    const fr  = s.fundingRate;
+    const cls = fr > 0.01 ? 'funding-pos' : fr < -0.01 ? 'funding-neg' : 'funding-neu';
+    const tip = fr > 0 ? 'Pozitif funding — longlar ödüyor (short lehine)'
+                       : fr < 0 ? 'Negatif funding — shortlar ödüyor (long lehine)'
+                                : 'Nötr funding';
+    fundingHtml = `<span class="funding-badge ${cls}" title="${tip}">${fr>0?'🔴':'🟢'} ${fr>0?'+':''}${fr.toFixed(4)}%</span>`;
+  }
+
   const volStr = s.vol24h > 1e9 ? (s.vol24h/1e9).toFixed(1)+'B' :
                  s.vol24h > 1e6 ? (s.vol24h/1e6).toFixed(1)+'M' :
                  s.vol24h > 1e3 ? (s.vol24h/1e3).toFixed(1)+'K' : s.vol24h.toFixed(0);
@@ -830,6 +873,7 @@ function signalCard(s) {
     <div class="card-price">
       $${formatPrice(s.price)}
       <span class="${chgCls}">${chgStr}</span>
+      ${fundingHtml}
     </div>
     <div class="rsi-bars">${rsiBars}</div>
     <div class="card-footer">
