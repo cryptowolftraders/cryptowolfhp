@@ -439,6 +439,21 @@
       box-shadow: 2px 2px 12px rgba(0,0,0,.4); font-size: 20px; cursor: pointer;
     }
     .dashboard.drawer-open .drawer-toggle { left: 250px; }
+
+    /* --- MOBİL FIX: 'collapsed' sadece masaüstü ikon-rayı içindir. --------
+       Tarayıcı açılınca openTool() dashboard'a .collapsed ekliyor; mobilde
+       drawer 250px açıldığı halde etiketler/başlıklar gizli kalıyordu.
+       Mobilde collapsed'ın görsel etkileri iptal edilir.                    */
+    .dashboard.collapsed .sidebar { padding: 14px 0; }
+    .dashboard.collapsed .sidebar-section {
+      opacity: 1; height: auto; padding: 12px; margin-top: 8px;
+    }
+    .dashboard.collapsed .sidebar-item {
+      justify-content: flex-start; padding: 10px 12px;
+    }
+    .dashboard.collapsed .sidebar-item .label { opacity: 1; width: auto; }
+    .dashboard.collapsed .sidebar-item:hover::after { content: none; }
+    /* -------------------------------------------------------------------- */
     .dashboard-main { display: block; width: 100%; min-width: 0; box-sizing: border-box; padding: 16px 12px; overflow-x: hidden; }
     .dash-header { flex-wrap: wrap; gap: 8px; }
     .dash-header > div { min-width: 0; }
