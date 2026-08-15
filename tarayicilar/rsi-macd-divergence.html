@@ -97,6 +97,12 @@
   .price-chg{font-size:11px;font-weight:600;margin-top:2px}
   .up{color:var(--green)}.down{color:var(--red)}
 
+  /* FUNDING RATE rozeti (MTF Dashboard mantığı) */
+  .funding-badge{display:inline-flex;align-items:center;gap:2px;font-size:9px;font-weight:700;padding:1px 4px;border-radius:2px;letter-spacing:.3px;font-family:"SF Mono",Menlo,monospace;margin-top:3px}
+  .funding-pos{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+  .funding-neg{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+  .funding-neu{background:rgba(245,179,66,.10);color:var(--gold);border:1px solid rgba(245,179,66,.2)}
+
   .div-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
   .tag{font-size:10px;font-weight:700;padding:3px 7px;border-radius:5px;letter-spacing:.4px;text-transform:uppercase;display:inline-flex;align-items:center;gap:4px}
   .tag-bull{background:var(--green-soft);color:var(--green);border:1px solid rgba(34,197,94,.4)}
@@ -317,6 +323,8 @@ button{font-size:12.5px!important;font-weight:600!important;letter-spacing:.3px!
       <option value="symbol">Sembol (A-Z)</option>
       <option value="change_desc">Değişim ↓</option>
       <option value="rsi_desc">RSI ↓</option>
+      <option value="funding_desc">Funding ↓ (Long baskın)</option>
+      <option value="funding_asc">Funding ↑ (Short baskın)</option>
     </select>
   </div>
   <div class="min-score-input">
@@ -733,6 +741,30 @@ async function getKlines(symbol, interval, limit=200){
   if(!r.ok) throw new Error("klines "+r.status);
   return r.json();
 }
+
+/* ── FUNDING RATE (MTF Dashboard mantığı) ──
+   premiumIndex → lastFundingRate (ondalık) × 100 = yüzde.
+   Sadece divergence teyitli coin için çağrılır; hata/timeout'ta null döner. */
+async function getFunding(symbol){
+  try{
+    const r = await fetch(`${FAPI}/fapi/v1/premiumIndex?symbol=${symbol}`,
+                          { signal: AbortSignal.timeout(4000) });
+    if(!r.ok) return null;
+    const d = await r.json();
+    if(!d || d.lastFundingRate === undefined) return null;
+    return parseFloat(d.lastFundingRate) * 100;
+  }catch(e){ return null; }
+}
+
+/* Funding rozeti HTML — eşikler MTF ile birebir: >0.01 kırmızı, <-0.01 yeşil, arası nötr */
+function fundingBadge(fr){
+  if(fr === null || fr === undefined) return "";
+  const cls = fr > 0.01 ? "funding-pos" : fr < -0.01 ? "funding-neg" : "funding-neu";
+  const tip = fr > 0 ? "Pozitif funding — longlar ödüyor (short lehine)"
+            : fr < 0 ? "Negatif funding — shortlar ödüyor (long lehine)"
+                     : "Nötr funding";
+  return `<span class="funding-badge ${cls}" title="${tip}">${fr>0?"🔴":"🟢"} ${fr>0?"+":""}${fr.toFixed(4)}%</span>`;
+}
 async function runPool(items, worker, concurrency, onProgress){
   let idx=0, done=0;
   const total = items.length;
@@ -821,6 +853,10 @@ async function scan(isAuto=false){
     }
     if(!pass) return;
 
+    // Funding — filtreyi geçen coin için çekilir (tüm listeye yük binmesin)
+    const fundingRate = await getFunding(sym);
+    if(state.abort) return;
+
     const livePrice = closes[closes.length-1];
     const baseIdx = Math.max(0, closes.length-25);
     const chg = ((livePrice - closes[baseIdx]) / closes[baseIdx]) * 100;
@@ -851,6 +887,7 @@ async function scan(isAuto=false){
       sigArr: macdData.signal,
       histArr: macdData.hist,
       tf, pivotLen, maxAnchorAge, isNew, sigKey, isTriple,
+      fundingRate,
       score: primaryScore,
       allScores: scores
     };
@@ -962,6 +999,7 @@ function renderCard(r){
       <div class="price">
         <div class="price-val">${fmtPrice(r.price)}</div>
         <div class="price-chg ${r.change>=0?'up':'down'}">${r.change>=0?'+':''}${r.change.toFixed(2)}%</div>
+        ${fundingBadge(r.fundingRate)}
       </div>
     </div>
     ${tripleBadge ? `<div style="margin-bottom:8px">${tripleBadge}</div>`: ''}
@@ -1050,6 +1088,11 @@ function sortAndRender(){
     sorted.sort((a,b)=> b.change - a.change);
   } else if(mode === "rsi_desc"){
     sorted.sort((a,b)=> (b.rsi||0) - (a.rsi||0));
+  } else if(mode === "funding_desc"){
+    // null'lar en sona
+    sorted.sort((a,b)=> (b.fundingRate ?? -Infinity) - (a.fundingRate ?? -Infinity));
+  } else if(mode === "funding_asc"){
+    sorted.sort((a,b)=> (a.fundingRate ?? Infinity) - (b.fundingRate ?? Infinity));
   }
   // Re-render
   $("grid").innerHTML = "";
@@ -1068,6 +1111,7 @@ function openModal(r){
     <div class="info-cell"><div class="lab">Histogram</div><div class="val ${r.hist>=0?'up':'down'}">${histNow}</div></div>
     <div class="info-cell"><div class="lab">Timeframe</div><div class="val">${r.tf.toUpperCase()}</div></div>
     <div class="info-cell"><div class="lab">24h Değişim</div><div class="val ${r.change>=0?'up':'down'}">${r.change>=0?'+':''}${r.change.toFixed(2)}%</div></div>
+    <div class="info-cell"><div class="lab">Funding</div><div class="val ${r.fundingRate>0?'down':r.fundingRate<0?'up':''}">${r.fundingRate!=null?(r.fundingRate>0?'+':'')+r.fundingRate.toFixed(4)+'%':'-'}</div></div>
   `;
 
   // ===== Score breakdown panel =====
