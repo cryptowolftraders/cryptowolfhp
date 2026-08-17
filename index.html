@@ -986,5 +986,199 @@ if('serviceWorker' in navigator){
   }
 })();
 </script>
+
+<!--
+=====================================================================
+  WOLF TERMINAL ERISIM KODU
+  index.html icinde  </body>  etiketinden HEMEN ONCE yapistir.
+  Baska hicbir satiri degistirme.
+
+  Ne yapar : "Terminal" / "Terminale Git" / "Terminali Ac" / kart tiklama
+             ve  #terminal  adresinin TAMAMINI kod arkasina alir.
+  Ne yapmaz: Ana sayfa, /rehber/ sayfalari, Hakkinda bolumu ACIK kalir.
+             (SEO trafigi etkilenmez)
+=====================================================================
+-->
+<style>
+#wolfGate{position:fixed;inset:0;z-index:99999;background:rgba(10,14,26,.97);
+  backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px}
+#wolfGate.acik{display:flex}
+#wolfGateBox{width:100%;max-width:400px;background:#0f1524;border:1px solid rgba(45,212,191,.25);
+  border-radius:16px;padding:34px 28px;text-align:center;position:relative;
+  box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 40px rgba(45,212,191,.07)}
+#wolfGateClose{position:absolute;top:12px;right:16px;background:none;border:0;color:#5b7089;
+  font-size:24px;cursor:pointer;line-height:1;padding:4px}
+#wolfGateClose:hover{color:#e8f0fa}
+#wolfGateBox h2{font-family:'Cinzel',Georgia,serif;color:#f5b342;margin:0 0 8px;
+  font-size:21px;letter-spacing:.5px}
+#wolfGateBox p{color:#8fa3bd;font-size:13.5px;line-height:1.6;margin:0 0 22px}
+#wolfGateInput{width:100%;box-sizing:border-box;background:#070b14;
+  border:1px solid rgba(45,212,191,.3);border-radius:9px;padding:13px 15px;color:#e8f0fa;
+  font-size:15px;text-align:center;letter-spacing:2.5px;font-family:ui-monospace,monospace;outline:none}
+#wolfGateInput:focus{border-color:#2dd4bf;box-shadow:0 0 0 3px rgba(45,212,191,.12)}
+#wolfGateBtn{width:100%;margin-top:14px;background:linear-gradient(135deg,#2dd4bf,#14a89a);
+  border:0;border-radius:9px;padding:13px;color:#04121a;font-weight:700;font-size:15px;
+  cursor:pointer;letter-spacing:.4px;transition:opacity .2s}
+#wolfGateBtn:hover{opacity:.88}
+#wolfGateBtn:disabled{opacity:.45;cursor:wait}
+#wolfGateMsg{min-height:20px;margin-top:13px;font-size:13px;color:#ff6b6b}
+#wolfGateMsg.ok{color:#2dd4bf}
+#wolfGateFoot{margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.07);
+  font-size:12px;color:#5b7089}
+#wolfGateFoot a{color:#2dd4bf;text-decoration:none}
+</style>
+
+<div id="wolfGate">
+  <div id="wolfGateBox">
+    <button id="wolfGateClose" title="Kapat">&times;</button>
+    <h2>TERMINAL ERISIMI</h2>
+    <p>Tarayicilar davet usulüyle kullanima aciktir.<br>Size verilen erisim kodunu girin.</p>
+    <input id="wolfGateInput" placeholder="kodunuz" autocomplete="off" spellcheck="false">
+    <button id="wolfGateBtn">TERMINALI AC</button>
+    <div id="wolfGateMsg"></div>
+    <div id="wolfGateFoot">
+      Kodunuz yok mu? <a href="https://t.me/CryptoWolfHP" target="_blank">Telegram'dan ulasin</a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var PROXY = 'web-production-2bdde.up.railway.app';
+  var LS    = 'wolf_access_key';
+
+  function getKey(){ try{ return localStorage.getItem(LS)||''; }catch(e){ return ''; } }
+  function setKey(k){ try{ localStorage.setItem(LS,k); }catch(e){} }
+  function delKey(){ try{ localStorage.removeItem(LS); }catch(e){} }
+
+  var ov   = document.getElementById('wolfGate');
+  var inp  = document.getElementById('wolfGateInput');
+  var btn  = document.getElementById('wolfGateBtn');
+  var msg  = document.getElementById('wolfGateMsg');
+  var xBtn = document.getElementById('wolfGateClose');
+  var bekleyen = null;                 // dogrulama sonrasi calisacak islem
+
+  function ac(text){
+    if (ov.classList.contains('acik') && !text) { return; }   // cift acilmayi onle
+    msg.className=''; msg.textContent = text||'';
+    ov.classList.add('acik');
+    setTimeout(function(){ inp.focus(); }, 60);
+  }
+  function kapat(){ ov.classList.remove('acik'); }
+  window.wolfGateAc = ac;
+
+  xBtn.addEventListener('click', function(){
+    bekleyen = null;
+    kapat();
+    if (location.hash) { history.replaceState(null,'',location.pathname); }
+  });
+
+  function dogrula(kod){
+    return fetch('https://'+PROXY+'/wolf-check?wk='+encodeURIComponent(kod))
+      .then(function(r){ return r.json().then(function(j){ return {ok:r.ok, body:j}; }); });
+  }
+
+  btn.addEventListener('click', function(){
+    var kod = inp.value.trim();
+    if(!kod){ msg.className=''; msg.textContent='Lutfen kodu girin.'; return; }
+    btn.disabled=true; msg.className=''; msg.textContent='Kontrol ediliyor...';
+    dogrula(kod).then(function(r){
+      if(r.ok && r.body && r.body.ok){
+        setKey(kod);
+        msg.className='ok';
+        msg.textContent='Hos geldin, '+(r.body.kullanici||'')+'!';
+        setTimeout(function(){
+          kapat();
+          var f = bekleyen; bekleyen = null;
+          if (f) f();
+        }, 600);
+      }else{
+        msg.className=''; msg.textContent='Kod gecersiz veya iptal edilmis.';
+      }
+    }).catch(function(){
+      msg.className=''; msg.textContent='Sunucuya ulasilamadi, tekrar deneyin.';
+    }).then(function(){ btn.disabled=false; });
+  });
+
+  inp.addEventListener('keydown', function(e){ if(e.key==='Enter') btn.click(); });
+
+  // ---- 1) TERMINAL GIRISLERINI SARMALA ------------------------------
+  // navigate('dashboard') : navbar "Terminal", "Terminale Git",
+  //                         "Terminali Ac", #terminal hash yonlendirmesi
+  // openTool(key)         : tarayici kartlari, sidebar, quick-tool,
+  //                         rehber sayfalarindan gelen tarayici linkleri
+  var _navigate = window.navigate;
+  var _openTool = window.openTool;
+
+  window.navigate = function(page){
+    if (page === 'dashboard' && !getKey()){
+      bekleyen = function(){ _navigate('dashboard'); };
+      ac();
+      return;
+    }
+    return _navigate.apply(this, arguments);
+  };
+
+  window.openTool = function(key){
+    if (!getKey()){
+      // navigate zaten gate'i acmis olabilir; bekleyeni tarayiciya yukselt
+      bekleyen = function(){ _navigate('dashboard'); _openTool(key); };
+      ac();
+      return;              // iframe olusturulmasini tamamen durdurur
+    }
+    return _openTool.apply(this, arguments);
+  };
+
+  // ---- 2) Proxy'ye giden her istege kodu ekle ------------------------
+  function yamala(win){
+    if(!win) return;
+    try{ if(win.__wolfPatched) return; win.__wolfPatched = true; }catch(e){ return; }
+    var orig = win.fetch; if(!orig) return;
+    orig = orig.bind(win);
+    win.fetch = function(input, init){
+      try{
+        var url = (typeof input==='string') ? input : (input && input.url) || '';
+        if(url.indexOf(PROXY) !== -1){
+          if(typeof input !== 'string') input = url;
+          init = init ? Object.assign({}, init) : {};
+          var h = new Headers(init.headers || {});
+          h.set('X-Wolf-Key', getKey());
+          init.headers = h;
+        }
+      }catch(e){}
+      return orig(input, init).then(function(res){
+        try{
+          if(res.url && res.url.indexOf(PROXY)!==-1){
+            if(res.status===401){ delKey(); ac('Kodunuz gecersiz veya iptal edilmis.'); }
+            else if(res.status===429){ ac('Cok fazla istek gonderildi, bir dakika bekleyin.'); }
+          }
+        }catch(e){}
+        return res;
+      });
+    };
+  }
+  yamala(window);
+
+  // Tarayici dosyalari kendi fetch'ini wolf_key.js ile yamaliyor
+  // (yarisma durumu olmasin diye). Buradan sadece uyarilarini dinliyoruz.
+  window.addEventListener('message', function(e){
+    var d = e.data;
+    if(!d || !d.wolf) return;
+    if(d.wolf === 'gecersiz'){ delKey(); ac('Kodunuz gecersiz veya iptal edilmis.'); }
+    else if(d.wolf === 'limit'){ ac('Cok fazla istek gonderildi, bir dakika bekleyin.'); }
+    else if(d.wolf === 'mesgul'){ ac('Sunucu su an yogun, birkac saniye sonra deneyin.'); }
+  });
+
+  // ---- 3) #terminal ile dogrudan gelenler ---------------------------
+  window.addEventListener('load', function(){
+    var h = (location.hash||'').replace('#','').toLowerCase();
+    if((h==='terminal' || h==='dashboard') && !getKey()){
+      bekleyen = function(){ _navigate('dashboard'); };
+      ac();
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
