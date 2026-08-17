@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://cryptowolfhp.com/sitemap.xml
+# redeploy 2026-08-17
